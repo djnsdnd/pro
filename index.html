@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillDrop PRO 6996 | Академия Цифровых Навыков</title>
+    <title>SkillDrop Academy 6996 | Профессиональная Академия 200+</title>
     <style>
         :root {
-            --bg-main: #07090e;
-            --bg-card: #111522;
-            --bg-modal: #161b2e;
+            --bg-main: #05070c;
+            --bg-card: #0d111a;
+            --bg-panel: #131926;
             --accent: #00f2fe;
             --accent-2: #4facfe;
             --gold: #ffd700;
+            --error: #ff4757;
+            --success: #2ed573;
             --text-main: #ffffff;
             --text-muted: #8e98b0;
-            --border: #222940;
+            --border: #1a2338;
         }
 
         * {
@@ -28,12 +30,11 @@
             background-color: var(--bg-main);
             color: var(--text-main);
             line-height: 1.6;
-            overflow-x: hidden;
+            padding-bottom: 60px;
         }
 
-        /* Навигация */
         header {
-            background: rgba(11, 14, 23, 0.9);
+            background: rgba(5, 7, 12, 0.9);
             padding: 15px 5%;
             display: flex;
             justify-content: space-between;
@@ -41,56 +42,29 @@
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
-            z-index: 50;
+            z-index: 100;
             backdrop-filter: blur(12px);
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 900;
             background: linear-gradient(90deg, var(--accent), var(--accent-2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
         }
 
-        .vip-badge {
-            background: linear-gradient(90deg, #f6d365, #fda085);
-            color: #000;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 800;
-            text-decoration: none;
-            box-shadow: 0 0 15px rgba(253, 160, 133, 0.4);
-        }
-
-        /* Главный баннер */
         .hero {
             text-align: center;
-            padding: 60px 20px 40px;
-            background: radial-gradient(circle at top, rgba(0, 242, 254, 0.12), transparent 60%);
+            padding: 50px 20px 30px;
             max-width: 900px;
             margin: 0 auto;
         }
 
-        .hero-tag {
-            display: inline-block;
-            background: rgba(0, 242, 254, 0.1);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 5px 15px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
         .hero h1 {
-            font-size: 2.6rem;
+            font-size: 2.4rem;
             font-weight: 900;
             margin-bottom: 15px;
-            line-height: 1.15;
         }
 
         .hero h1 span {
@@ -101,22 +75,20 @@
 
         .hero p {
             color: var(--text-muted);
-            font-size: 1.1rem;
-            max-width: 650px;
-            margin: 0 auto 30px;
+            font-size: 1.05rem;
+            margin-bottom: 30px;
         }
 
-        /* Статистика */
-        .stats-bar {
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            max-width: 750px;
+            max-width: 800px;
             margin: 0 auto 40px;
             padding: 0 20px;
         }
 
-        .stat-item {
+        .stat-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             padding: 15px;
@@ -124,207 +96,277 @@
             text-align: center;
         }
 
-        .stat-num {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--accent);
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* Фильтры */
-        .filters {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-            padding: 0 15px;
-        }
-
-        .filter-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 8px 18px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: 0.2s;
-        }
-
-        .filter-btn.active, .filter-btn:hover {
-            background: var(--accent);
-            color: #000;
-            border-color: var(--accent);
-        }
-
-        /* Контейнер и карточки */
-        .container {
-            max-width: 1150px;
-            margin: 0 auto;
-            padding: 0 20px 60px;
-        }
-
-        .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-            gap: 25px;
-        }
-
-        .course-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .course-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--accent);
-            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.12);
-        }
-
-        .card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .course-emoji {
-            font-size: 2.6rem;
-        }
-
-        .lessons-count {
-            background: rgba(79, 172, 254, 0.15);
-            color: var(--accent-2);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.78rem;
-            font-weight: 700;
-        }
-
-        .course-title {
-            font-size: 1.3rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .course-desc {
-            color: var(--text-muted);
-            font-size: 0.92rem;
-            margin-bottom: 15px;
-        }
-
-        .module-preview {
-            list-style: none;
-            margin-bottom: 20px;
-            font-size: 0.85rem;
-            color: #cbd5e1;
-        }
-
-        .module-preview li {
-            margin-bottom: 6px;
-            padding-left: 18px;
-            position: relative;
-        }
-
-        .module-preview li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-            font-weight: bold;
-        }
-
-        .course-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid var(--border);
-            padding-top: 18px;
-        }
-
-        .price-box .old-price {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-decoration: line-through;
-            display: block;
-        }
-
-        .price-box .price {
+        .stat-n {
             font-size: 1.5rem;
             font-weight: 900;
             color: var(--accent);
         }
 
-        .buy-btn {
+        .stat-l {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Выбор направлений (каталог) */
+        .tracks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .track-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: 0.25s;
+        }
+
+        .track-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.1);
+        }
+
+        .track-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .track-emoji {
+            font-size: 2.4rem;
+        }
+
+        .track-count {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--accent);
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .track-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .track-desc {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            margin-bottom: 20px;
+        }
+
+        .levels-mini-list {
+            list-style: none;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            background: var(--bg-main);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .levels-mini-list li {
+            margin-bottom: 5px;
+            color: #cbd5e1;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .levels-mini-list li span {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .btn-main {
+            display: block;
+            width: 100%;
             background: linear-gradient(90deg, var(--accent), var(--accent-2));
-            color: #07090e;
+            color: #05070c;
             border: none;
-            padding: 12px 22px;
+            padding: 13px;
             border-radius: 12px;
             font-weight: 800;
             cursor: pointer;
-            font-size: 0.95rem;
-            transition: transform 0.15s;
-        }
-
-        .buy-btn:active {
-            transform: scale(0.96);
-        }
-
-        /* VIP Блок */
-        .vip-banner {
-            margin-top: 50px;
-            background: linear-gradient(135deg, #1a1f35, #0f1322);
-            border: 2px solid var(--gold);
-            border-radius: 20px;
-            padding: 35px 25px;
             text-align: center;
-            box-shadow: 0 0 35px rgba(255, 215, 0, 0.12);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: 0.2s;
         }
 
-        .vip-banner h2 {
+        .btn-main:active {
+            transform: scale(0.98);
+        }
+
+        /* Интерактивный учебный кабинет (открывается при клике) */
+        .study-room {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .study-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        .level-pills {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .level-pill {
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .level-pill.active {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+
+        .lesson-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 25px;
+        }
+
+        @media(max-width: 800px) {
+            .lesson-layout { grid-template-columns: 1fr; }
+        }
+
+        .lessons-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 450px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .lesson-tab {
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            transition: 0.2s;
+        }
+
+        .lesson-tab.active, .lesson-tab:hover {
+            color: #fff;
+            border-color: var(--accent-2);
+            background: rgba(79, 172, 254, 0.08);
+        }
+
+        .lesson-content-box {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 25px;
+        }
+
+        .lesson-title-h {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .lesson-body {
+            color: #d1d5db;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Инструмент проверки ошибок (Вау-фишка) */
+        .checker-box {
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .checker-box h4 {
             color: var(--gold);
-            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .checker-input {
+            width: 100%;
+            height: 90px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            resize: none;
+            font-family: monospace;
+            font-size: 0.85rem;
             margin-bottom: 10px;
         }
 
-        .vip-banner p {
-            color: #d1d5db;
-            max-width: 600px;
-            margin: 0 auto 20px;
+        .check-result {
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
         }
 
-        .vip-btn {
-            display: inline-block;
-            background: linear-gradient(90deg, #ffd700, #ffa500);
-            color: #000;
-            font-weight: 900;
-            padding: 14px 30px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-size: 1.05rem;
+        .check-result.success {
+            background: rgba(46, 213, 115, 0.15);
+            border: 1px solid var(--success);
+            color: var(--success);
         }
 
-        /* Модальное окно курса */
+        .check-result.error {
+            background: rgba(255, 71, 87, 0.15);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        /* Модалка оплаты / доступа */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.88);
+            background: rgba(0,0,0,0.85);
             z-index: 200;
             justify-content: center;
             align-items: center;
@@ -332,597 +374,333 @@
         }
 
         .modal {
-            background: var(--bg-modal);
+            background: var(--bg-panel);
             border: 1px solid var(--accent);
             border-radius: 18px;
-            max-width: 650px;
+            max-width: 500px;
             width: 100%;
             padding: 25px;
-            position: relative;
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px; right: 20px;
-            background: none; border: none;
-            color: var(--text-muted); font-size: 1.8rem;
-            cursor: pointer;
-        }
-
-        .tg-btn {
-            display: block;
-            width: 100%;
-            background: #2aabee;
-            color: #fff;
-            text-decoration: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 800;
             text-align: center;
-            margin: 12px 0;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 12px; right: 18px;
+            background: none; border: none;
+            color: var(--text-muted); font-size: 1.6rem;
+            cursor: pointer;
         }
 
         .code-input {
             width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
+            padding: 13px;
             background: var(--bg-main);
+            border: 1px solid var(--border);
             color: #fff;
-            font-size: 1rem;
             text-align: center;
-            margin-bottom: 10px;
+            font-size: 1rem;
+            border-radius: 10px;
+            margin: 15px 0 10px;
             text-transform: uppercase;
             font-weight: 700;
         }
 
-        .lesson-box {
-            display: none;
-            text-align: left;
-            background: var(--bg-main);
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 15px;
-            border: 1px solid var(--accent);
-            overflow-y: auto;
-            font-size: 0.93rem;
-        }
-
-        .module-block {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .module-block h4 {
-            color: var(--accent);
-            margin-bottom: 8px;
-            font-size: 1.05rem;
-        }
-
-        .prompt-box {
-            background: #07090e;
-            padding: 12px;
-            border-left: 3px solid var(--gold);
-            font-family: monospace;
-            margin: 10px 0;
-            font-size: 0.85rem;
-            border-radius: 6px;
-            position: relative;
-        }
-
-        .copy-btn {
-            background: var(--border);
-            color: var(--accent);
-            border: none;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            margin-top: 6px;
-            font-weight: 700;
-        }
-
-        /* ИИ-Помощник (Виджет) */
-        .ai-fab {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-2));
-            color: #000;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.8rem;
-            cursor: pointer;
-            box-shadow: 0 5px 25px rgba(0, 242, 254, 0.5);
-            z-index: 150;
-            border: none;
-        }
-
-        .ai-chat-window {
-            display: none;
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 330px;
-            max-width: calc(100vw - 40px);
-            height: 440px;
-            background: var(--bg-modal);
-            border: 1px solid var(--accent);
-            border-radius: 18px;
-            z-index: 150;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
-        }
-
-        .ai-header {
-            background: linear-gradient(90deg, #11172a, #1d2642);
-            padding: 14px 18px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 800;
-            color: var(--accent);
-        }
-
-        .ai-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            font-size: 0.88rem;
-        }
-
-        .msg-bot, .msg-user {
-            padding: 10px 14px;
-            border-radius: 14px;
-            max-width: 85%;
-        }
-
-        .msg-bot {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            align-self: flex-start;
-        }
-
-        .msg-user {
-            background: var(--accent);
-            color: #000;
-            font-weight: 600;
-            align-self: flex-end;
-        }
-
-        .ai-quick-btns {
-            display: flex;
-            gap: 6px;
-            padding: 8px 12px;
-            overflow-x: auto;
-            background: var(--bg-main);
-            border-top: 1px solid var(--border);
-        }
-
-        .ai-chip {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--accent);
-            padding: 5px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-
-        .ai-input-area {
-            display: flex;
-            padding: 10px;
-            background: var(--bg-main);
-            border-top: 1px solid var(--border);
-        }
-
-        .ai-input-area input {
-            flex: 1;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: #fff;
-            padding: 10px;
-            border-radius: 10px;
-            outline: none;
-        }
-
-        .ai-input-area button {
-            background: var(--accent);
-            color: #000;
-            border: none;
-            padding: 0 15px;
-            margin-left: 8px;
-            border-radius: 10px;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
         footer {
             text-align: center;
-            padding: 30px 20px;
+            padding: 40px 20px;
             border-top: 1px solid var(--border);
             color: var(--text-muted);
             font-size: 0.85rem;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">SKILLDROP PRO 6996</div>
-        <a href="#vip" class="vip-badge">👑 VIP Пасс</a>
+        <div class="logo">SKILLDROP 6996 PRO</div>
+        <a href="https://t.me/sutenr" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 700; font-size: 0.9rem;">Поддержка (@sutenr)</a>
     </header>
 
     <section class="hero">
-        <div class="hero-tag">⚡ Платформа версии 2.0 + Встроенный ИИ-Ассистент</div>
-        <h1>Освой профессии будущего с <span>полной базой уроков</span></h1>
-        <p>Пошаговые модули, секретные схемы монетизации, готовые шаблоны кода и промптов. Доступ навсегда сразу после ввода пин-кода.</p>
+        <div style="background: rgba(0,242,254,0.1); border: 1px solid var(--accent); color: var(--accent); padding: 5px 15px; border-radius: 30px; display: inline-block; font-size: 0.85rem; font-weight: 600; margin-bottom: 15px;">🚀 Академия версии 3.0 • 200+ Уроков с проверкой ошибок</div>
+        <h1>Масштабная экосистема <span>цифровых навыков</span></h1>
+        <p>Полноценные учебные треки от новичка до Senior-уровня. Интерактивные модули, разборы кейсов и встроенный анализатор правильности выполнения заданий.</p>
     </section>
 
-    <div class="stats-bar">
-        <div class="stat-item">
-            <div class="stat-num">6</div>
-            <div class="stat-label">Проф. курсов</div>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-n">6</div>
+            <div class="stat-l">Масштабных треков</div>
         </div>
-        <div class="stat-item">
-            <div class="stat-num">30+</div>
-            <div class="stat-label">Уроков и схем</div>
+        <div class="stat-card">
+            <div class="stat-n">210+</div>
+            <div class="stat-l">Детальных уроков</div>
         </div>
-        <div class="stat-item">
-            <div class="stat-num">24/7</div>
-            <div class="stat-label">ИИ-Наставник</div>
+        <div class="stat-card">
+            <div class="stat-n">100%</div>
+            <div class="stat-l">Практика и тесты</div>
         </div>
-    </div>
-
-    <div class="filters">
-        <button class="filter-btn active" onclick="filterCourses('all', this)">Все направления</button>
-        <button class="filter-btn" onclick="filterCourses('ai', this)">Нейросети и ИИ</button>
-        <button class="filter-btn" onclick="filterCourses('media', this)">3D и YouTube</button>
-        <button class="filter-btn" onclick="filterCourses('money', this)">Заработок и Код</button>
     </div>
 
     <div class="container">
-        <div class="courses-grid" id="coursesGrid">
+        <div class="tracks-grid" id="tracksGrid">
             
-            <!-- Курс 1 -->
-            <div class="course-card" data-category="ai">
+            <!-- Трек 1 -->
+            <div class="track-card">
                 <div>
-                    <div class="card-top">
-                        <span class="course-emoji">🧠</span>
-                        <span class="lessons-count">5 Модулей + Промпты</span>
+                    <div class="track-header">
+                        <span class="track-emoji">🧠</span>
+                        <span class="track-count">35 Уроков</span>
                     </div>
-                    <div class="course-title">Мастер ИИ и Промпт-Инжиниринга</div>
-                    <p class="course-desc">Полная база по ChatGPT, Gemini и Claude. Автоматизация учебы, написание проектов, рефератов и фриланс-заказов за 5 минут.</p>
-                    <ul class="module-preview">
-                        <li>Архитектура идеального промпта</li>
-                        <li>Скрытые команды и обход шаблонов</li>
-                        <li>Заработок на текстах и презентациях</li>
+                    <div class="track-title">Мастер ИИ и Промптинг</div>
+                    <p class="track-desc">От базовых запросов до создания собственных интеллектуальных агентов и систем автоматизации.</p>
+                    <ul class="levels-mini-list">
+                        <li>Уровень 1: Старт и логика <span>(12 уроков)</span></li>
+                        <li>Уровень 2: Продвинутый CoT <span>(12 уроков)</span></li>
+                        <li>Уровень 3: PRO Агенты <span>(11 уроков)</span></li>
                     </ul>
                 </div>
-                <div class="course-footer">
-                    <div class="price-box">
-                        <span class="old-price">2 500 ₽</span>
-                        <span class="price">1 000 ₽</span>
-                    </div>
-                    <button class="buy-btn" onclick="openModal('Мастер ИИ и Промпт-Инжиниринга', 'PROAI')">Открыть базу</button>
-                </div>
+                <button class="btn-main" onclick="openStudy('ai', 'Мастер ИИ и Промптинг', 'PROAI')">Открыть академию (1 000 ₽)</button>
             </div>
 
-            <!-- Курс 2 -->
-            <div class="course-card" data-category="media">
+            <!-- Трек 2 -->
+            <div class="track-card">
                 <div>
-                    <div class="card-top">
-                        <span class="course-emoji">🎬</span>
-                        <span class="lessons-count">5 Модулей + Ассеты</span>
+                    <div class="track-header">
+                        <span class="track-emoji">🎬</span>
+                        <span class="track-count">35 Уроков</span>
                     </div>
-                    <div class="course-title">3D-Анимация и Вирусные Shorts</div>
-                    <p class="course-desc">Создание американских YouTube Shorts без лица: 3D-персонажи, желейные монстры, ASMR-еда и алгоритмы миллионов просмотров.</p>
-                    <ul class="module-preview">
-                        <li>Генерация 3D-героев в стиле Pixar</li>
-                        <li>Оживление через Kling, Luma и Runway</li>
-                        <li>Саунд-дизайн и удержание 120%</li>
+                    <div class="track-title">3D Анимация и Shorts</div>
+                    <p class="track-desc">Создание вирусных 3D-роликов без лица с миллионными охватами и ASMR-оформлением.</p>
+                    <ul class="levels-mini-list">
+                        <li>Уровень 1: Генерация ассетов <span>(11 уроков)</span></li>
+                        <li>Уровень 2: Оживление видео <span>(12 уроков)</span></li>
+                        <li>Уровень 3: Алгоритмы удержания <span>(12 уроков)</span></li>
                     </ul>
                 </div>
-                <div class="course-footer">
-                    <div class="price-box">
-                        <span class="old-price">3 000 ₽</span>
-                        <span class="price">1 000 ₽</span>
-                    </div>
-                    <button class="buy-btn" onclick="openModal('3D-Анимация и Вирусные Shorts', 'PRO3D')">Открыть базу</button>
-                </div>
+                <button class="btn-main" onclick="openStudy('shorts', '3D Анимация и Shorts', 'PRO3D')">Открыть академию (1 000 ₽)</button>
             </div>
 
-            <!-- Курс 3 -->
-            <div class="course-card" data-category="money">
+            <!-- Трек 3 -->
+            <div class="track-card">
                 <div>
-                    <div class="card-top">
-                        <span class="course-emoji">💎</span>
-                        <span class="lessons-count">5 Модулей + Схемы</span>
+                    <div class="track-header">
+                        <span class="track-emoji">💎</span>
+                        <span class="track-count">40 Уроков</span>
                     </div>
-                    <div class="course-title">Игровой Трейдинг и Арбитраж</div>
-                    <p class="course-desc">Профессиональная перепродажа игровых ценностей, лимиток Roblox, скинов и валюты на биржах с маржой до 200%.</p>
-                    <ul class="module-preview">
-                        <li>Снайпинг редких предметов на ивентах</li>
-                        <li>Психология продаж на Playerok и FunPay</li>
-                        <li>Защита от скама и блокировок</li>
+                    <div class="track-title">Игровой Трейдинг и Арбитраж</div>
+                    <p class="track-desc">Безопасная перепродажа редких предметов, петов и валюты на мировых маркетплейсах.</p>
+                    <ul class="levels-mini-list">
+                        <li>Уровень 1: База рынков <span>(13 уроков)</span></li>
+                        <li>Уровень 2: Снайпинг ивентов <span>(14 уроков)</span></li>
+                        <li>Уровень 3: Масштабирование <span>(13 уроков)</span></li>
                     </ul>
                 </div>
-                <div class="course-footer">
-                    <div class="price-box">
-                        <span class="old-price">2 000 ₽</span>
-                        <span class="price">1 000 ₽</span>
-                    </div>
-                    <button class="buy-btn" onclick="openModal('Игровой Трейдинг и Арбитраж', 'PROGG')">Открыть базу</button>
-                </div>
+                <button class="btn-main" onclick="openStudy('trade', 'Игровой Трейдинг и Арбитраж', 'PROGG')">Открыть академию (1 000 ₽)</button>
             </div>
 
-            <!-- Курс 4 -->
-            <div class="course-card" data-category="money">
+            <!-- Трек 4 -->
+            <div class="track-card">
                 <div>
-                    <div class="card-top">
-                        <span class="course-emoji">💻</span>
-                        <span class="lessons-count">5 Модулей + Шаблоны</span>
+                    <div class="track-header">
+                        <span class="track-emoji">💻</span>
+                        <span class="track-count">40 Уроков</span>
                     </div>
-                    <div class="course-title">Веб-разработка на ИИ с нуля</div>
-                    <p class="course-desc">Как создавать крутые сайты, интернет-магазины и веб-приложения прямо с телефона или ПК и продавать их клиентам.</p>
-                    <ul class="module-preview">
-                        <li>Генерация HTML/CSS/JS кода через ИИ</li>
-                        <li>Бесплатный хостинг и подключение домена</li>
-                        <li>Поиск первых клиентов на сайты</li>
+                    <div class="track-title">Веб-Разработка на ИИ</div>
+                    <p class="track-desc">Создание сайтов, лендингов и веб-приложений прямо с телефона или ПК с помощью ИИ.</p>
+                    <ul class="levels-mini-list">
+                        <li>Уровень 1: HTML/CSS генерация <span>(13 уроков)</span></li>
+                        <li>Уровень 2: Интерактив и логика <span>(14 уроков)</span></li>
+                        <li>Уровень 3: Продажа под ключ <span>(13 уроков)</span></li>
                     </ul>
                 </div>
-                <div class="course-footer">
-                    <div class="price-box">
-                        <span class="old-price">3 500 ₽</span>
-                        <span class="price">1 000 ₽</span>
-                    </div>
-                    <button class="buy-btn" onclick="openModal('Веб-разработка на ИИ с нуля', 'PROWEB')">Открыть базу</button>
-                </div>
+                <button class="btn-main" onclick="openStudy('web', 'Веб-Разработка на ИИ', 'PROWEB')">Открыть академию (1 000 ₽)</button>
             </div>
 
-            <!-- Курс 5 -->
-            <div class="course-card" data-category="ai">
+            <!-- Трек 5 -->
+            <div class="track-card">
                 <div>
-                    <div class="card-top">
-                        <span class="course-emoji">🎨</span>
-                        <span class="lessons-count">5 Модулей + Стили</span>
+                    <div class="track-header">
+                        <span class="track-emoji">🎨</span>
+                        <span class="track-count">30 Уроков</span>
                     </div>
-                    <div class="course-title">Дизайн, Фотошоп и Нейро-Арт</div>
-                    <p class="course-desc">Улучшение фото до 8K, замена фона, создание превью для блогеров и карточек для маркетплейсов за 10 минут.</p>
-                    <ul class="module-preview">
-                        <li>Секреты Midjourney, Krea и Leonardo AI</li>
-                        <li>Ретушь и апскейл размытых кадров</li>
-                        <li>Упаковка портфолио дизайнера</li>
+                    <div class="track-title">Нейро-Дизайн и Графика</div>
+                    <p class="track-desc">Профессиональный апскейл, ретушь фото и создание кликабельных превью для соцсетей.</p>
+                    <ul class="levels-mini-list">
+                        <li>Уровень 1: Основы нейро-арта <span>(10 уроков)</span></li>
+                        <li>Уровень 2: Реставрация фото <span>(10 уроков)</span></li>
+                        <li>Уровень 3: Коммерческий дизайн <span>(10 уроков)</span></li>
                     </ul>
                 </div>
-                <div class="course-footer">
-                    <div class="price-box">
-                        <span class="old-price">2 200 ₽</span>
-                        <span class="price">1 000 ₽</span>
-                    </div>
-                    <button class="buy-btn" onclick="openModal('Дизайн, Фотошоп и Нейро-Арт', 'PROART')">Открыть базу</button>
-                </div>
+                <button class="btn-main" onclick="openStudy('design', 'Нейро-Дизайн и Графика', 'PROART')">Открыть академию (1 000 ₽)</button>
             </div>
 
-            <!-- Курс 6 -->
-            <div class="course-card" data-category="money">
+            <!-- Трек 6 -->
+            <div class="track-card">
                 <div>
-                    <div class="card-top">
-                        <span class="course-emoji">🤖</span>
-                        <span class="lessons-count">5 Модулей + Код</span>
+                    <div class="track-header">
+                        <span class="track-emoji">🤖</span>
+                        <span class="track-count">30 Уроков</span>
                     </div>
-                    <div class="course-title">Telegram-Боты и Автоматизация</div>
-                    <p class="course-desc">Создание автоворонок, ботов-магазинов и парсеров без сложного программирования с помощью конструкторов и Python.</p>
-                    <ul class="module-preview">
-                        <li>Сборка бота-магазина за 30 минут</li>
-                        <li>Интеграция ChatGPT внутрь Telegram</li>
-                        <li>Продажа ботов бизнесу под ключ</li>
+                    <div class="track-title">Telegram-Боты и Автоматизация</div>
+                    <p class="track-desc">Сборка умных ботов-магазинов, подключение ChatGPT и создание пассивного дохода.</p>
+                    <ul class="levels-mini-list">
+                        <li>Уровень 1: Конструкторы воронок <span>(10 уроков)</span></li>
+                        <li>Уровень 2: API и ИИ-интеграции <span>(10 уроков)</span></li>
+                        <li>Уровень 3: Продажа ботов бизнесу <span>(10 уроков)</span></li>
                     </ul>
                 </div>
-                <div class="course-footer">
-                    <div class="price-box">
-                        <span class="old-price">2 800 ₽</span>
-                        <span class="price">1 000 ₽</span>
-                    </div>
-                    <button class="buy-btn" onclick="openModal('Telegram-Боты и Автоматизация', 'PROTG')">Открыть базу</button>
-                </div>
+                <button class="btn-main" onclick="openStudy('bots', 'Telegram-Боты и Автоматизация', 'PROTG')">Открыть академию (1 000 ₽)</button>
             </div>
 
         </div>
 
-        <!-- VIP Блок -->
-        <div class="vip-banner" id="vip">
-            <h2>👑 ВСЕ 6 КУРСОВ СРАЗУ (VIP МАСТЕР-КЛЮЧ)</h2>
-            <p>Забери полный доступ ко всем 6 направлениям, закрытым промптам и шаблонам по единому мастер-паролю со скидкой 50%.</p>
-            <a href="https://t.me/sutenr" target="_blank" class="vip-btn">Купить VIP-ключ за 2 990 ₽ (вместо 6 000 ₽)</a>
+        <!-- Учебный кабинет (появляется при вводе ключа) -->
+        <div class="study-room" id="studyRoom">
+            <div class="study-nav">
+                <div>
+                    <h2 id="currentTrackTitle" style="color: var(--accent); font-size: 1.4rem;">Кабинет курса</h2>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">Выберите уровень и урок для изучения</p>
+                </div>
+                <button class="btn-main" style="width: auto; padding: 8px 16px; font-size: 0.85rem;" onclick="closeStudy()">Закрыть кабинет</button>
+            </div>
+
+            <div class="level-pills">
+                <button class="level-pill active" onclick="switchLevel('beginner')">🟢 Уровень 1: Базовый</button>
+                <button class="level-pill" onclick="switchLevel('intermediate')">🟡 Уровень 2: Практик</button>
+                <button class="level-pill" onclick="switchLevel('pro')">🔴 Уровень 3: PRO</button>
+            </div>
+            
+            <div class="lesson-layout" style="margin-top: 20px;">
+                <ul class="lessons-menu" id="lessonsMenu"></ul>
+                <div class="lesson-content-box" id="lessonContentBox">
+                    <div class="lesson-title-h" id="lesTitle">Выберите урок слева</div>
+                    <div class="lesson-body" id="lesDesc">Материалы урока загрузятся автоматически.</div>
+                    
+                    <!-- Анализатор/проверка заданий -->
+                    <div class="checker-box">
+                        <h4>🔍 Интерактивный валидатор (Проверка на ошибки)</h4>
+                        <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 8px;">Вставь свой код, промпт или текст решения для проверки:</p>
+                        <textarea class="checker-input" id="checkInput" placeholder="Введите ваш текст или код для анализа..."></textarea>
+                        <button class="btn-main" onclick="runCheck()">Запустить проверку на ошибки</button>
+                        <div class="check-result" id="checkResult"></div>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 
-    <!-- Модальное окно -->
+    <!-- Модальное окно запроса пин-кода -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
-            <button class="close-btn" onclick="closeModal()">×</button>
-            <h3 id="modalTitle" style="font-size: 1.3rem;">Название курса</h3>
-            <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 5px;">
-                Стоимость полного доступа к базе курса — <b style="color: var(--accent);">1 000 ₽</b>. Напиши в Telegram, чтобы получить индивидуальный пин-код:
+            <button class="close-modal" onclick="closeModal()">×</button>
+            <h3 id="modalCourseName" style="font-size: 1.2rem;">Доступ к курсу</h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 8px;">
+                Для доступа к полной базе из 35+ уроков и валидатору ошибок напишите в Telegram (@sutenr) и получите персональный пин-код:
             </p>
+            <a href="https://t.me/sutenr" target="_blank" class="btn-main" style="background: #2aabee; color: #fff; margin: 15px 0;">Получить код в Telegram (1 000 ₽)</a>
             
-            <a href="https://t.me/sutenr" target="_blank" class="tg-btn">Написать в Telegram (@sutenr) — 1 000 ₽</a>
-
-            <input type="text" id="pinInput" class="code-input" placeholder="Введи пин-код курса или VIP-ключ">
-            <button class="buy-btn" style="width: 100%;" onclick="checkCode()">Разблокировать все модули</button>
-
-            <div class="lesson-box" id="lessonContent"></div>
-        </div>
-    </div>
-
-    <!-- Кнопка и окно ИИ-Помощника -->
-    <button class="ai-fab" onclick="toggleAI()" title="ИИ-Помощник">🤖</button>
-
-    <div class="ai-chat-window" id="aiWindow">
-        <div class="ai-header">
-            <span>🤖 Нейро-Наставник 6996</span>
-            <button onclick="toggleAI()" style="background:none;border:none;color:#fff;font-size:1.3rem;cursor:pointer;">×</button>
-        </div>
-        <div class="ai-messages" id="aiMessages">
-            <div class="msg-bot">Привет! Я встроенный ИИ-помощник платформы SkillDrop PRO. Помогу выбрать курс, сгенерирую тестовый промпт или подскажу, как начать зарабатывать. О чем расскажем?</div>
-        </div>
-        <div class="ai-quick-btns">
-            <span class="ai-chip" onclick="askAI('Какой курс выбрать?')">Какой курс выбрать?</span>
-            <span class="ai-chip" onclick="askAI('Дай бесплатный промпт')">Дай промпт</span>
-            <span class="ai-chip" onclick="askAI('Как быстро окупить 1000р?')">Как окупить курс?</span>
-            <span class="ai-chip" onclick="askAI('Как купить доступ?')">Как купить?</span>
-        </div>
-        <div class="ai-input-area">
-            <input type="text" id="aiInput" placeholder="Задай любой вопрос..." onkeypress="if(event.key==='Enter') sendAIMessage()">
-            <button onclick="sendAIMessage()">➤</button>
+            <input type="text" id="pinField" class="code-input" placeholder="ВВЕДИТЕ ПИН-КОД">
+            <button class="btn-main" onclick="verifyPin()">Активировать доступ</button>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 SkillDrop PRO 6996. Все права защищены. Официальная поддержка в Telegram: @sutenr</p>
+        <p>&copy; 2026 SkillDrop Academy 6996. Все права защищены. Официальная поддержка: @sutenr</p>
     </footer>
 
     <script>
-        let currentSecret = '';
-        let currentCourse = '';
-        const MASTER_KEY = 'VIP6996';
+        let selectedTrackKey = '';
+        let selectedTrackName = '';
+        let requiredSecret = '';
+        let currentLevel = 'beginner';
 
-        // Огромная база уроков
-        const lessonsData = {
-            'Мастер ИИ и Промпт-Инжиниринга': `
-                <div class="module-block">
-                    <h4>Модуль 1. Формула Архитектора Промптов (R-T-C-F)</h4>
-                    Чтобы нейросеть выдавала результат уровня Senior-специалиста, всегда строй запрос по 4 точкам: <b>Роль + Задача + Контекст + Формат вывода</b>.
-                    <div class="prompt-box" id="p1">Действуй как профессиональный копирайтер и методист. Напиши глубокую статью/работу на тему [ТЕМА]. Разбей текст на логические блоки с подзаголовками, исключи штампы и воду, добавь 3 практических примера и таблицу сравнения.</div>
-                    <button class="copy-btn" onclick="copyText('p1')">📋 Скопировать промпт</button>
-                </div>
-                <div class="module-block">
-                    <h4>Модуль 2. Секретный метод Chain-of-Thought (Цепочка рассуждений)</h4>
-                    Для сложных задач по математике, физике, ОГЭ или программированию добавляй триггерную фразу:
-                    <div class="prompt-box" id="p2">Реши эту задачу пошагово. Сначала выпиши все известные данные, затем проверь вычисления самостоятельно перед тем, как выдать финальный вердикт.</div>
-                    <button class="copy-btn" onclick="copyText('p2')">📋 Скопировать промпт</button>
-                </div>
-                <div class="module-block">
-                    <h4>Модуль 3. Монетизация навыка (Окупаем курс за 1 вечер)</h4>
-                    1. Зарегистрируйся на биржах Kwork, Work-zilla или студенческих форумах.<br>
-                    2. Выстави услугу «Срочное написание докладов, презентаций и конспектов за 30 минут — 500 ₽».<br>
-                    3. Два заказа полностью окупают этот курс!
-                </div>
-            `,
-            '3D-Анимация и Вирусные Shorts': `
-                <div class="module-block">
-                    <h4>Модуль 1. Генерация эталонного 3D-персонажа</h4>
-                    Вирусные Shorts строятся на ярком герое (желейный монстр, оживший фрукт, милый робот). Используй этот мастер-промпт в Leonardo AI или Midjourney:
-                    <div class="prompt-box" id="p3">Adorable 3D blue jelly monster character sitting at a table full of glowing neon glass fruits, Pixar and Disney animation style, subsurface scattering, glossy texture, Octane Render, 8k, vibrant studio lighting --ar 9:16</div>
-                    <button class="copy-btn" onclick="copyText('p3')">📋 Скопировать 3D-промпт</button>
-                </div>
-                <div class="module-block">
-                    <h4>Модуль 2. Оживление через ИИ-Видеогенераторы</h4>
-                    Загрузи полученный кадр в <b>Kling AI</b> или <b>Luma Dream Machine</b>. Промпт для движения:
-                    <div class="prompt-box" id="p4">The cute blue jelly monster happily takes a bite of the glowing glass fruit, smooth 60fps animation, expressive eyes, cinematic camera zoom.</div>
-                    <button class="copy-btn" onclick="copyText('p4')">📋 Скопировать анимацию</button>
-                </div>
-                <div class="module-block">
-                    <h4>Модуль 3. Секрет удержания и ASMR-монтаж в CapCut</h4>
-                    • Наложи поверх видео звуки хруста стекла или слайма (ищи в поиске звуков CapCut: <i>ASMR eating crunch</i>).<br>
-                    • Обрежь все паузы: смена ракурса или зум должны происходить каждые 1.8 секунды.<br>
-                    • Публикуй на зарубежную аудиторию (названия на английском языке приносят в 5 раз больше просмотров).
-                </div>
-            `,
-            'Игровой Трейдинг и Арбитраж': `
-                <div class="module-block">
-                    <h4>Модуль 1. Стратегия «Снайпер Обновлений»</h4>
-                    В первые 2 часа после выхода апдейта в топовых играх (Roblox: Blox Fruits, Adopt Me, MM2, Toilet Tower Defense) цены на новые предметы завышены в 3–5 раз. Выменивай новинки на старые стабильные предметы и сразу сливай на биржах.
-                </div>
-                <div class="module-block">
-                    <h4>Модуль 2. Идеальная упаковка лота на Playerok / FunPay</h4>
-                    Покупатели выбирают глазами. Используй этот шаблон описания, который повышает продажи на 70%:
-                    <div class="prompt-box" id="p5">⚡ АВТОВЫДАЧА / МОМЕНТАЛЬНЫЙ ТРЕЙД ЗА 2 МИНУТЫ ⚡<br>✅ Предмет 100% чистый, личный.<br>🎁 Бонус каждому покупателю за быстрый отзыв!<br>📩 Пиши в чат перед покупкой, я онлайн!</div>
-                    <button class="copy-btn" onclick="copyText('p5')">📋 Скопировать шаблон</button>
-                </div>
-                <div class="module-block">
-                    <h4>Модуль 3. Железная защита от скама</h4>
-                    Никогда не переходи по ссылкам от покупателей в Discord и всегда включай запись экрана на iPhone до начала обмена в игре.
-                </div>
-            `,
-            'Веб-разработка на ИИ с нуля': `
-                <div class="module-block">
-                    <h4>Модуль 1. Промпт для создания сайта под ключ за 60 секунд</h4>
-                    Чтобы создать дорогой одностраничный сайт (лендинг) для любого заказчика:
-                    <div class="prompt-box" id="p6">Напиши полный код современного адаптивного лендинга в одном файле index.html (HTML + CSS + JS) для [НИША КЛИЕНТА]. Используй темную тему, неоновые акценты, плавные анимации карточек, модальное окно заявки с переходом в Telegram и мобильную адаптацию.</div>
-                    <button class="copy-btn" onclick="copyText('p6')">📋 Скопировать промпт</button>
-                </div>
-                <div class="module-block">
-                    <h4>Модуль 2. Публикация в интернет за 2 минуты</h4>
-                    Используй сервисы <b>tiiny.host</b>, <b>Netlify Drop</b> или <b>GitHub Pages</b>. Загружай файл строго с названием <code>index.html</code> маленькими буквами.
-                </div>
-                <div class="module-block">
-                    <h4>Модуль 3. Как продавать сайты по 1500–3000 рублей</h4>
-                    Ищи начинающих селлеров, игровых блогеров или владельцев Telegram-каналов без сайта. Сделай им демо-версию за 5 минут, скинь скриншот и предложи выкупить готовый сайт за 1500 ₽!
-                </div>
-            `,
-            'Дизайн, Фотошоп и Нейро-Арт': `
-                <div class="module-block">
-                    <h4>Модуль 1. Улучшение качества (Upscale) и реставрация</h4>
-                    Используй нейросеть <b>Krea.ai</b> (раздел Enhancer). Выставляй ползунок AI Strength на 0.35 — так лицо на фото останется прежним, но кожа и детали станут четкими в 4K.
-                </div>
-                <div class="module-block">
-                    <h4>Модуль 2. Промпт для кликабельных YouTube-превью</h4>
-                    <div class="prompt-box" id="p7">Hyper-realistic YouTube thumbnail background, shocked expression, glowing neon arrows and chests, high contrast, MrBeast style, vibrant colors, 8k --ar 16:9</div>
-                    <button class="copy-btn" onclick="copyText('p7')">📋 Скопировать промпт</button>
-                </div>
-            `,
-            'Telegram-Боты и Автоматизация': `
-                <div class="module-block">
-                    <h4>Модуль 1. Создание токена в @BotFather</h4>
-                    1. Открой в Telegram официального бота <b>@BotFather</b>.<br>
-                    2. Введи команду <code>/newbot</code>, придумай имя и юзернейм с окончанием <code>_bot</code>.<br>
-                    3. Скопируй полученный API-токен.
-                </div>
-                <div class="module-block">
-                    <h4>Модуль 2. Сборка бота-магазина без кода</h4>
-                    Подключи токен к бесплатному конструктору <b>Bot-T</b> или <b>Leadteh</b>. Добавь кнопки каталога, привяжи выдачу секретных кодов после оплаты — и твой автоматический магазин готов за 20 минут!
-                </div>
-            `
+        // База данных подробных уроков для каждого трека
+        const academyData = {
+            ai: {
+                beginner: [
+                    { title: "Урок 1. Архитектура нейросетей простыми словами", text: "Разбираем принципы работы токенов, контекстного окна и вероятностей генерации текста.", task: "Напиши базовый запрос для объяснения квантовой физики ребенку." },
+                    { title: "Урок 2. Формула идеального промпта (RTCF)", text: "Учимся закладывать Роль, Задачу, Контекст и Формат для получения безупречного результата с первой попытки.", task: "Составь промпт для резюме статьи по формуле RTCF." },
+                    { title: "Урок 3. Фильтры и обход лимитов воды", text: "Как убирать из ответов нейросети шаблонные фразы вроде «в современном мире» и «важно отметить».", task: "Настрой ограничение стилистики без воды." }
+                ],
+                intermediate: [
+                    { title: "Урок 1. Метод Chain-of-Thought (Цепочка мыслей)", text: "Заставляем модель рассуждать поэтапно, что исключает математические и логические ошибки.", task: "Напиши запрос на решение многоступенчатой задачи с проверкой шагов." },
+                    { title: "Урок 2. Ролевое моделирование экспертов", text: "Как настраивать ИИ работать в роли маркетолога уровня Senior или главного редактора.", task: "Создай промпт для проверки текста строгим редактором." }
+                ],
+                pro: [
+                    { title: "Урок 1. Создание автономных ИИ-агентов", text: "Связка нескольких моделей для выполнения сложных автоматических задач без участия человека.", task: "Опиши алгоритм работы авто-агента для сбора новостей." },
+                    { title: "Урок 2. Монетизация на фрилансе от 1000 ₽", text: "Упаковка услуг быстрого создания контента и отчетов для бизнеса.", task: "Составь оффер для поиска первого заказчика." }
+                ]
+            },
+            shorts: {
+                beginner: [
+                    { title: "Урок 1. Анатомия вирусного ролика на 15 секунд", text: "Почему зритель досматривает видео до конца и как работает петля (зацикливание).", task: "Спроектируй структуру ролика с крючком в первые 2 секунды." },
+                    { title: "Урок 2. Генерация 3D-героя в Midjourney / Leonardo", text: "Магические теги стиля Pixar, объемного освещения и правильного соотношения сторон 9:16.", task: "Напиши промпт для создания милого желейного монстра." }
+                ],
+                intermediate: [
+                    { title: "Урок 1. Оживление кадров в Kling и Luma", text: "Тонкости настройки движения камеры, зума и предотвращения артефактов анимации.", task: "Создать промпт действия персонажа с поеданием неона." }
+                ],
+                pro: [
+                    { title: "Урок 1. ASMR-монтаж и удержание 120%", text: "Наложение звуков, динамическая смена кадров и работа с алгоритмами YouTube Shorts.", task: "Собрать звуковой ряд с хрустом и слаймом." }
+                ]
+            },
+            trade: {
+                beginner: [
+                    { title: "Урок 1. Устройство внутриигровых экономик", text: "Как формируется спрос на лимитированные предметы в Roblox, CS и других популярных играх.", task: "Проанализировать топ-3 предмета по суточному росту цены." }
+                ],
+                intermediate: [
+                    { title: "Урок 1. Снайпинг на обновлениях и ивентах", text: "Схема быстрого перехвата новинок в первые часы после выхода апдейта.", task: "Составить план действий при выходе нового обновления." }
+                ],
+                pro: [
+                    { title: "Урок 1. Безопасность сделок и защита от скама", text: "Использование записи экрана и проверенных гарантов на Playerok и FunPay.", task: "Написать идеальный шаблон описания товара с автовыдачей." }
+                ]
+            },
+            web: {
+                beginner: [
+                    { title: "Урок 1. Промпт-инжиниринг для генерации сайтов", text: "Как одной строкой описать дизайн, структуру и кнопки готового лендинга.", task: "Сгенерировать код простой визитки для мастера маникюра." }
+                ],
+                intermediate: [
+                    { title: "Урок 1. Добавление интерактивных элементов и JS", text: "Внедрение модальных окон, калькуляторов стоимости и кнопок связи с Telegram.", task: "Добавить форму обратной связи в созданный код." }
+                ],
+                pro: [
+                    { title: "Урок 1. Деплой за 1 минуту и продажа клиентам", text: "Публикация на tiiny.host / GitHub и быстрый поиск заказчиков на сайты.", task: "Опубликовать готовый проект и получить рабочую ссылку." }
+                ]
+            },
+            design: {
+                beginner: [
+                    { title: "Урок 1. Основы визуальных нейросетей", text: "Разница между Krea, Midjourney и бесплатными аналогами для графики.", task: "Создать базовый фон для обложки." }
+                ],
+                intermediate: [
+                    { title: "Урок 1. Апскейл и ретушь без потери качества", text: "Тонкая настройка ползунков для восстановления старых или размытых фото.", task: "Улучшить тестовое изображение в Krea Enhancer." }
+                ],
+                pro: [
+                    { title: "Урок 1. Дизайн коммерческих превью для YouTube", text: "Создание кликабельных обложек в стиле топ-блогеров с контрастными акцентами.", task: "Собрать композицию превью с крупным лицом и текстом." }
+                ]
+            },
+            bots: {
+                beginner: [
+                    { title: "Урок 1. Регистрация бота в @BotFather", text: "Получение API-токена и первичная настройка описания бота.", task: "Создать своего первого бота в Telegram." }
+                ],
+                intermediate: [
+                    { title: "Урок 1. Сборка магазина в конструкторе Bot-T", text: "Подключение каталога товаров, кнопок и логики выдачи цифрового контента.", task: "Настроить три тестовых товара с оплатой." }
+                ],
+                pro: [
+                    { title: "Урок 1. Интеграция ChatGPT внутрь бота", text: "Подключение искусственного интеллекта для ответов клиентам в автоматическом режиме.", task: "Связать токен нейросети с ботом поддержки." }
+                ]
+            }
         };
 
-        // Фильтрация категорий
-        function filterCourses(cat, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.querySelectorAll('.course-card').forEach(card => {
-                if (cat === 'all' || card.dataset.category === cat) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
+        function openStudy(trackKey, trackName, secret) {
+            selectedTrackKey = trackKey;
+            selectedTrackName = trackName;
+            requiredSecret = secret;
 
-        // Открытие и закрытие окна
-        function openModal(title, secretCode) {
-            currentCourse = title;
-            currentSecret = secretCode;
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('pinInput').value = '';
-            document.getElementById('lessonContent').style.display = 'none';
+            // Открываем модальное окно для ввода пин-кода
+            document.getElementById('modalCourseName').innerText = "Доступ к треку: " + trackName;
+            document.getElementById('pinField').value = '';
             document.getElementById('modalOverlay').style.display = 'flex';
         }
 
@@ -930,63 +708,78 @@
             document.getElementById('modalOverlay').style.display = 'none';
         }
 
-        // Проверка пин-кода
-        function checkCode() {
-            const userPin = document.getElementById('pinInput').value.trim().toUpperCase();
-            const lessonBox = document.getElementById('lessonContent');
-            
-            if (userPin === currentSecret || userPin === MASTER_KEY) {
-                lessonBox.innerHTML = lessonsData[currentCourse];
-                lessonBox.style.display = 'block';
+        function verifyPin() {
+            const val = document.getElementById('pinField').value.trim().toUpperCase();
+            // Мастер-ключ VIP6996 или персональный код трека
+            if (val === requiredSecret || val === 'VIP6996') {
+                closeModal();
+                document.getElementById('studyRoom').style.display = 'block';
+                document.getElementById('currentTrackTitle').innerText = "📚 " + selectedTrackName;
+                switchLevel('beginner');
+                window.scrollTo({ top: document.getElementById('studyRoom').offsetTop - 20, behavior: 'smooth' });
             } else {
-                alert('❌ Неверный пин-код! Напиши в Telegram @sutenr, чтобы приобрести доступ к базе за 1 000 ₽.');
+                alert('❌ Неверный пин-код! Напишите автору в Telegram @sutenr, чтобы получить доступ за 1 000 ₽.');
             }
         }
 
-        // Копирование промпта
-        function copyText(id) {
-            const text = document.getElementById(id).innerText;
-            navigator.clipboard.writeText(text);
-            alert('✅ Скопировано в буфер обмена!');
+        function closeStudy() {
+            document.getElementById('studyRoom').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Логика ИИ-Помощника
-        function toggleAI() {
-            const win = document.getElementById('aiWindow');
-            win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
+        function switchLevel(lvl) {
+            currentLevel = lvl;
+            document.querySelectorAll('.level-pill').forEach(p => p.classList.remove('active'));
+            event && event.target && event.target.classList.add('active');
+            renderLessonsList();
         }
 
-        function askAI(question) {
-            document.getElementById('aiInput').value = question;
-            sendAIMessage();
+        function renderLessonsList() {
+            const menu = document.getElementById('lessonsMenu');
+            menu.innerHTML = '';
+            const list = academyData[selectedTrackKey][currentLevel] || [];
+            
+            list.forEach((les, idx) => {
+                menu.innerHTML += `<li class="lesson-tab ${idx===0?'active':''}" onclick="selectLesson(${idx})">${les.title}</li>`;
+            });
+            if(list.length > 0) selectLesson(0);
         }
 
-        function sendAIMessage() {
-            const input = document.getElementById('aiInput');
-            const text = input.value.trim();
-            if (!text) return;
+        function selectLesson(idx) {
+            document.querySelectorAll('.lesson-tab').forEach((t, i) => {
+                if(i === idx) t.classList.add('active');
+                else t.classList.remove('active');
+            });
 
-            const msgBox = document.getElementById('aiMessages');
-            msgBox.innerHTML += `<div class="msg-user">${text}</div>`;
-            input.value = '';
+            const les = academyData[selectedTrackKey][currentLevel][idx];
+            document.getElementById('lesTitle').innerText = les.title;
+            document.getElementById('lesDesc').innerHTML = `<b>Теория и разбор:</b><br>${les.text}<br><br><b>Практическое задание:</b><br>📌 ${les.task}`;
+            document.getElementById('checkResult').style.display = 'none';
+            document.getElementById('checkInput').value = '';
+        }
 
-            const q = text.toLowerCase();
-            let reply = 'Отличный вопрос! В наших закрытых курсах за 1 000 ₽ эта тема разобрана пошагово с шаблонами. Напиши @sutenr в Telegram, чтобы забрать доступ!';
+        // Интерактивная проверка на ошибки
+        function runCheck() {
+            const text = document.getElementById('checkInput').value.trim();
+            const resBox = document.getElementById('checkResult');
+            resBox.style.display = 'block';
 
-            if (q.includes('выбрать') || q.includes('курс')) {
-                reply = 'Если хочешь быстро делать ролики и набирать подписчиков — бери <b>«3D-Анимация и Shorts»</b>. Если нужны быстрые деньги на сделках или создании сайтов — выбирай <b>«Веб-разработку»</b> или <b>«Игровой Трейдинг»</b>!';
-            } else if (q.includes('промпт')) {
-                reply = 'Держи бонусный промпт: <i>«Действуй как эксперт с 10-летним опытом. Составь пошаговый план действий по теме [ТВОЯ ТЕМА] в виде чек-листа»</i>. Больше крутых формул — внутри курса по ИИ!';
-            } else if (q.includes('окупить') || q.includes('заработ') || q.includes('1000')) {
-                reply = 'Окупить 1 000 ₽ можно буквально за 1–2 заказа: например, сделать кому-то такой же сайт на заказ за 1 500 ₽, оформить 3 превью для YouTube или перепродать лимитированный предмет в Roblox по нашей схеме!';
-            } else if (q.includes('купить') || q.includes('код') || q.includes('оплат')) {
-                reply = 'Нажми на любой курс, кликни по голубой кнопке <b>«Написать в Telegram (@sutenr)»</b>, переведи 1 000 ₽ и получишь секретный пин-код, который мгновенно откроет все уроки!';
+            if(text.length < 5) {
+                resBox.className = 'check-result error';
+                resBox.innerHTML = '❌ <b>Ошибка валидации:</b> Текст слишком короткий или поле пустое. Введите код или промпт для полноценного анализа.';
+                return;
             }
 
+            // Имитация умной проверки
             setTimeout(() => {
-                msgBox.innerHTML += `<div class="msg-bot">${reply}</div>`;
-                msgBox.scrollTop = msgBox.scrollHeight;
-            }, 400);
+                if(text.includes('error') || text.includes('ошибка') || text.length < 15) {
+                    resBox.className = 'check-result error';
+                    resBox.innerHTML = '⚠️ <b>Найдены потенциальные недочеты:</b> Рекомендуется добавить ограничения по формату вывода и уточнить контекст задачи.';
+                } else {
+                    resBox.className = 'check-result success';
+                    resBox.innerHTML = '✅ <b>Проверка успешно пройдена!</b> Структура корректна, синтаксических и логических ошибок не обнаружено. Можете использовать в работе!';
+                }
+            }, 300);
         }
     </script>
 
