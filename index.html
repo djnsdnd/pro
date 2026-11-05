@@ -3,19 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTRA AI // Next-Gen Neural Assistant</title>
+    <title>AI ANIME WAIFU // Neural Companion Core</title>
     <style>
         :root {
-            --bg-deep: #020408;
-            --bg-surface: #070b19;
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --border-glow: rgba(0, 242, 254, 0.4);
+            --bg-deep: #030408;
+            --bg-glass: rgba(10, 14, 28, 0.65);
+            --border-neon: rgba(255, 105, 180, 0.4);
+            --neon-pink: #ff69b4;
             --neon-cyan: #00f2fe;
-            --neon-blue: #4facfe;
-            --accent-purple: #a855f7;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --success: #2ed573;
         }
 
         * {
@@ -29,395 +26,309 @@
         body {
             background-color: var(--bg-deep);
             color: var(--text-main);
-            min-height: 100vh;
-            overflow-x: hidden;
+            height: 100vh;
+            overflow: hidden;
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
-                linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 50px 50px, 50px 50px;
+                radial-gradient(circle at 20% 20%, rgba(255, 105, 180, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 80% 80%, rgba(0, 242, 254, 0.08) 0%, transparent 45%);
         }
 
-        header {
-            background: rgba(7, 11, 25, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-subtle);
-            padding: 20px 8%;
+        /* Главный контейнер сетки */
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            height: 100vh;
+            padding: 24px;
+            gap: 24px;
+        }
+
+        @media(max-width: 1000px) {
+            .app-container { grid-template-columns: 1fr; overflow-y: auto; height: auto; }
+        }
+
+        /* Левая часть: Сцена с Аниме-моделью */
+        .stage-container {
+            background: var(--bg-glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--border-neon);
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .stage-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            z-index: 10;
         }
 
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 900;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #fff 30%, var(--neon-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .waifu-status {
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--neon-pink);
+            background: rgba(255, 105, 180, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 105, 180, 0.3);
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
-            background: var(--success);
+            background: var(--neon-pink);
+            border- головые: 50%;
             border-radius: 50%;
-            box-shadow: 0 0 12px var(--success);
+            box-shadow: 0 0 12px var(--neon-pink);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.6; }
+            50% { transform: scale(1.4); opacity: 0.5; }
             100% { transform: scale(1); opacity: 1; }
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 60px auto;
-            padding: 0 24px;
-        }
-
-        /* Главный экран */
-        .hero {
-            text-align: center;
-            margin-bottom: 70px;
-        }
-
-        .badge-top {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0, 242, 254, 0.08);
-            border: 1px solid var(--border-glow);
-            color: var(--neon-cyan);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 25px;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4.2rem);
-            font-weight: 900;
-            letter-spacing: -1.5px;
-            line-height: 1.1;
-            margin-bottom: 20px;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--neon-cyan), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            color: var(--text-muted);
-            font-size: 1.15rem;
-            max-width: 680px;
-            margin: 0 auto 35px;
-            line-height: 1.6;
-        }
-
-        .hero-actions {
+        /* 3D / Аниме персонаж (Холст + Аватара) */
+        .character-viewport {
+            flex: 1;
             display: flex;
             justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 16px 32px;
-            border-radius: 14px;
-            font-weight: 800;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            text-decoration: none;
-            display: inline-flex;
             align-items: center;
-            gap: 10px;
+            position: relative;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
-            color: var(--bg-deep);
-            border: none;
-            box-shadow: 0 15px 35px rgba(0, 242, 254, 0.25);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px rgba(0, 242, 254, 0.4);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border-subtle);
-            color: var(--text-main);
-        }
-
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: var(--text-muted);
-        }
-
-        /* Интерактивная демонстрация / Терминал */
-        .core-interface {
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 30px;
-            align-items: stretch;
-        }
-
-        @media(max-width: 900px) {
-            .core-interface { grid-template-columns: 1fr; }
-        }
-
-        .terminal-box {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: 24px;
-            padding: 28px;
+        /* Красивый голографический аватар аниме-девушки в стиле хай-тек */
+        .anime-avatar-card {
+            width: 280px;
+            height: 380px;
+            background: linear-gradient(135deg, rgba(255,105,180,0.15), rgba(0,242,254,0.05));
+            border: 2px solid var(--neon-pink);
+            border-radius: 140px 140px 40px 40px;
+            box-shadow: 0 0 50px rgba(255,105,180,0.3), inset 0 0 30px rgba(255,105,180,0.2);
             display: flex;
             flex-direction: column;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: floatAnime 4s ease-in-out infinite;
         }
 
-        .terminal-header {
+        @keyframes floatAnime {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1deg); }
+        }
+
+        .anime-face {
+            font-size: 5rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 20px var(--neon-pink));
+        }
+
+        .speech-bubble {
+            background: rgba(6, 9, 19, 0.85);
+            border: 1px solid var(--border-neon);
+            padding: 12px 20px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            color: #fff;
+            max-width: 240px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: absolute;
+            bottom: -30px;
+        }
+
+        /* Правая панель: Нейро-Чат с Вайфу */
+        .chat-container {
+            background: var(--bg-glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            padding: 26px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+        }
+
+        .chat-header {
+            font-size: 1.1rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: -0.3px;
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 20px;
         }
 
-        .t-dot { width: 10px; height: 10px; border-radius: 50%; }
-        .t-dot-red { background: #ff4757; }
-        .t-dot-yellow { background: #ffa502; }
-        .t-dot-green { background: #2ed573; }
-
-        .terminal-screen {
+        .chat-stream {
             flex: 1;
-            background: #010204;
-            border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 20px;
-            font-family: 'SF Mono', Monaco, monospace;
-            font-size: 0.9rem;
-            min-height: 280px;
-            max-height: 350px;
+            background: rgba(1, 2, 4, 0.6);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 18px;
+            padding: 16px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
         }
 
-        .t-msg-ai { color: var(--neon-cyan); line-height: 1.5; }
-        .t-msg-user { color: #fff; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; align-self: flex-end; }
+        .msg-waifu {
+            background: rgba(255, 105, 180, 0.12);
+            border: 1px solid rgba(255, 105, 180, 0.3);
+            color: #fbcfe8;
+            padding: 12px 16px;
+            border-radius: 14px;
+            align-self: flex-start;
+            max-width: 90%;
+            line-height: 1.5;
+        }
 
-        .terminal-input-row {
+        .msg-user {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-cyan));
+            color: #030408;
+            font-weight: 800;
+            padding: 12px 16px;
+            border-radius: 14px;
+            align-self: flex-end;
+            max-width: 90%;
+        }
+
+        .chat-input-row {
             display: flex;
             gap: 8px;
         }
 
-        .terminal-input {
+        .chat-field {
             flex: 1;
-            background: #010204;
-            border: 1px solid var(--border-subtle);
+            background: rgba(1, 2, 4, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
             padding: 14px 18px;
-            border-radius: 12px;
+            border-radius: 14px;
             color: #fff;
             font-size: 0.9rem;
             outline: none;
             transition: 0.2s;
         }
 
-        .terminal-input:focus {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.15);
+        .chat-field:focus {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2);
         }
 
-        .terminal-btn {
-            background: var(--neon-cyan);
-            color: var(--bg-deep);
+        .chat-send {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-cyan));
+            color: #030408;
             border: none;
-            padding: 0 22px;
-            border-radius: 12px;
+            padding: 0 20px;
+            border-radius: 14px;
             font-weight: 900;
             cursor: pointer;
             transition: 0.2s;
         }
 
-        .terminal-btn:hover { opacity: 0.9; }
-
-        /* Инфо-панель справа */
-        .features-panel {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: 24px;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .feature-item {
-            margin-bottom: 24px;
-        }
-
-        .feature-item:last-child { margin-bottom: 0; }
-
-        .feature-item h4 {
-            font-size: 1.05rem;
-            font-weight: 800;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .feature-item p {
-            color: var(--text-muted);
-            font-size: 0.88rem;
-            line-height: 1.5;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 80px;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            border-top: 1px solid var(--border-subtle);
-            padding-top: 30px;
-        }
+        .chat-send:hover { opacity: 0.9; transform: scale(1.02); }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">
-            <div class="status-dot"></div>
-            ASTRA // CORE
-        </div>
-        <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700;">v2.6 LIVE</div>
-    </header>
-
-    <div class="container">
+    <div class="app-container">
         
-        <!-- Главный экран -->
-        <div class="hero">
-            <div class="badge-top">⚡ Neural Voice & Task Assistant</div>
-            <h1>Ваш персональный <span>ИИ-Ассистент</span> нового поколения</h1>
-            <p>Интеллектуальная система автоматизации для ПК и облака. Полный контроль окружения, мгновенная обработка запросов и автономные алгоритмы.</p>
-            <div class="hero-actions">
-                <a href="#terminal" class="btn btn-primary">Запустить терминал</a>
-                <a href="https://github.com" target="_blank" class="btn btn-outline">Исходный код</a>
+        <!-- Левая сцена с аниме-вайфу -->
+        <div class="stage-container">
+            <div class="stage-header">
+                <div class="waifu-status">
+                    <div class="status-dot"></div>
+                    AI CORE // ACTIVE
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">MODEL: ASTRA-CHAN v3.0</div>
+            </div>
+
+            <!-- Персонаж -->
+            <div class="character-viewport">
+                <div class="anime-avatar-card">
+                    <div class="anime-face">🌸✨</div>
+                    <div class="speech-bubble" id="waifuBubble">Привет, Сэмпай! Я готова общаться. 💕</div>
+                </div>
+            </div>
+
+            <div style="text-align: center; color: var(--text-muted); font-size: 0.82rem;">
+                Интерактивный нейро-компаньон с поддержкой голосовых эмоций и динамического ответа.
             </div>
         </div>
 
-        <!-- Интерфейс и Терминал -->
-        <div class="core-interface" id="terminal">
-            
-            <!-- Интерактивный терминал -->
-            <div class="terminal-box">
-                <div class="terminal-header">
-                    <div class="t-dot t-dot-red"></div>
-                    <div class="t-dot t-dot-yellow"></div>
-                    <div class="t-dot t-dot-green"></div>
-                    <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 8px; font-family: monospace;">astra_terminal_v2.6</span>
-                </div>
-                
-                <div class="terminal-screen" id="termScreen">
-                    <div class="t-msg-ai">[ASTRA SYSTEM]: Нейро-ядро инициализировано. Введите команду или задайте вопрос системе. (Например: "статус", "помощь", или любой вопрос).</div>
-                </div>
-
-                <div class="terminal-input-row">
-                    <input type="text" id="termInput" class="terminal-input" placeholder="Введите команду для Астры..." onkeypress="if(event.key==='Enter') handleCommand()">
-                    <button class="terminal-btn" onclick="handleCommand()">→</button>
-                </div>
+        <!-- Правая панель чата -->
+        <div class="chat-container">
+            <div class="chat-header">
+                💬 Нейро-диалог с Вайфу
             </div>
 
-            <!-- Характеристики -->
-            <div class="features-panel">
-                <div>
-                    <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 22px;">Модули системы</h3>
-                    
-                    <div class="feature-item">
-                        <h4>⚡ Нулевая задержка</h4>
-                        <p>Оптимизированные алгоритмы выполнения задач в реальном времени без задержек.</p>
-                    </div>
-
-                    <div class="feature-item">
-                        <h4>🛡️ Полная безопасность</h4>
-                        <p>Шифрование сессий и локальное управление данными на вашем устройстве.</p>
-                    </div>
-
-                    <div class="feature-item">
-                        <h4>🧠 Адаптивный ИИ</h4>
-                        <p>Самообучающиеся нейро-веса для решения сложных архитектурных задач.</p>
-                    </div>
-                </div>
-
-                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-subtle);">
-                    <p style="font-size: 0.78rem; color: var(--text-muted);">Статус облачного узла: <span style="color: var(--success); font-weight: 700;">ONLINE</span></p>
-                </div>
+            <div class="chat-stream" id="chatStream">
+                <div class="msg-waifu">Привет-привет! Сэмпай, о чем поговорим сегодня? Можешь спросить меня о чем угодно! ✨</div>
             </div>
 
+            <div class="chat-input-row">
+                <input type="text" id="userInputField" class="chat-field" placeholder="Напиши сообщение аниме-девушке..." onkeypress="if(event.key==='Enter') sendWaifuMessage()">
+                <button class="chat-send" onclick="sendWaifuMessage()">➤</button>
+            </div>
         </div>
 
     </div>
 
-    <footer>
-        <p>&copy; 2026 ASTRA TECHNOLOGIES. All rights reserved.</p>
-    </footer>
-
     <script>
-        async function handleCommand() {
-            const input = document.getElementById('termInput');
-            const query = input.value.trim();
-            if (!query) return;
+        async function sendWaifuMessage() {
+            const input = document.getElementById('userInputField');
+            const text = input.value.trim();
+            if (!text) return;
 
-            const screen = document.getElementById('termScreen');
-            screen.innerHTML += `<div class="t-msg-user">> ${query}</div>`;
+            const stream = document.getElementById('chatStream');
+            const bubble = document.getElementById('waifuBubble');
+
+            stream.innerHTML += `<div class="msg-user">${text}</div>`;
             input.value = '';
 
             const loadId = 'load_' + Date.now();
-            screen.innerHTML += `<div class="t-msg-ai" id="${loadId}">Обработка запроса нейро-ядром...</div>`;
-            screen.scrollTop = screen.scrollHeight;
+            stream.innerHTML += `<div class="msg-waifu" id="${loadId}">Думает... (๑>◡<๑)</div>`;
+            stream.scrollTop = stream.scrollHeight;
 
             try {
-                // Запрос к живому публичному ИИ-прокси для генерации ответа
-                const res = await fetch("https://text.pollinations.ai/", {
+                // Запрос к живому ИИ с характером аниме-девушки
+                const response = await fetch("https://text.pollinations.ai/", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         messages: [
-                            { role: "system", content: "Ты — Астра, элитный футуристичный ИИ-ассистент. Отвечай кратко, технологично, умно и по делу на русском языке." },
-                            { role: "user", content: query }
+                            { 
+                                role: "system", 
+                                content: "Ты — милая, умная и преданная аниме-девушка по имени Астра-чан, виртуальный ИИ-компаньон. Отвечай с теплотой, используя милые эмодзи (✨, 💕, (｡♥‿♥｡)), будь дружелюбной, поддерживающей и технологичной на русском языке." 
+                            },
+                            { role: "user", content: text }
                         ],
                         model: "openai"
                     })
                 });
 
-                const answer = await res.text();
+                const reply = await response.text();
                 document.getElementById(loadId).remove();
-                screen.innerHTML += `<div class="t-msg-ai">${answer}</div>`;
+                
+                stream.innerHTML += `<div class="msg-waifu">${reply}</div>`;
+                bubble.innerText = reply.length > 50 ? reply.substring(0, 47) + '...' : reply;
             } catch (e) {
                 document.getElementById(loadId).remove();
-                screen.innerHTML += `<div class="t-msg-ai" style="color: #ff4757;">[ ОШИБКА СЕТИ ]: Не удалось связаться с нейро-ядром.</div>`;
+                stream.innerHTML += `<div class="msg-waifu" style="color: #ff4757;">Ой, сэмпай, сеть моргнула... Попробуй еще раз! 🥺</div>`;
             }
-            screen.scrollTop = screen.scrollHeight;
+            stream.scrollTop = stream.scrollHeight;
         }
     </script>
 </body>
