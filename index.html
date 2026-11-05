@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOBLDZHON SCHOOL // AI STUDIO HUB [v6.5]</title>
+    <title>KOBLDZHON SCHOOL // REAL AI MENTOR [v7.0]</title>
     <style>
         :root {
             --bg-deep: #010204;
@@ -293,7 +293,7 @@
         .pill-badge.unlocked { background: rgba(46, 213, 115, 0.12); color: var(--success); border: 1px solid rgba(46, 213, 115, 0.3); }
         .pill-badge.locked { background: rgba(246, 211, 101, 0.12); color: var(--gold-accent); border: 1px solid rgba(246, 211, 101, 0.3); }
 
-        /* AI Studio Hub стили */
+        /* AI Hub */
         .ai-hub-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -389,7 +389,7 @@
             overflow-x: auto;
         }
 
-        /* ИИ Консоль Наставника */
+        /* Настоящая ИИ Консоль Наставника */
         .ai-terminal-panel {
             background: var(--bg-surface);
             border: 1px solid var(--border-neon);
@@ -414,8 +414,8 @@
             font-size: 0.9rem;
             margin-bottom: 16px;
         }
-        .msg-bot { background: var(--bg-surface); border: 1px solid var(--border-color); padding: 14px 18px; border-radius: 14px; color: var(--text-muted); align-self: flex-start; max-width: 92%; line-height: 1.5; }
-        .msg-user { background: var(--neon-cyan); color: var(--bg-deep); font-weight: 800; padding: 14px 18px; border-radius: 14px; align-self: flex-end; max-width: 92%; }
+        .msg-bot { background: var(--bg-surface); border: 1px solid var(--border-color); padding: 14px 18px; border-radius: 14px; color: var(--text-muted); align-self: flex-start; max-width: 92%; line-height: 1.5; white-space: pre-wrap; }
+        .msg-user { background: var(--neon-cyan); color: var(--bg-deep); font-weight: 800; padding: 14px 18px; border-radius: 14px; align-self: flex-end; max-width: 92%; white-space: pre-wrap; }
         
         .terminal-input-row { display: flex; gap: 8px; }
         .terminal-field { flex: 1; background: #010204; border: 1px solid var(--border-color); padding: 14px 18px; border-radius: 14px; color: #fff; font-size: 0.9rem; outline: none; }
@@ -426,7 +426,7 @@
 <body>
 
     <header>
-        <div class="brand-logo">KOBLDZHON SCHOOL <span>AI STUDIO HUB</span></div>
+        <div class="brand-logo">KOBLDZHON SCHOOL <span>REAL AI v7.0</span></div>
         <div id="headerStatusWidget"></div>
     </header>
 
@@ -466,29 +466,29 @@
                 </div>
             </div>
 
-            <!-- Переключатель вкладок Дашборда -->
+            <!-- Вкладки дашборда -->
             <div class="nav-tabs-bar">
                 <button class="nav-tab-btn active" id="tabBtnTracks" onclick="switchDashboardTab('tracks')">📚 Учебные треки</button>
                 <button class="nav-tab-btn" id="tabBtnHub" onclick="switchDashboardTab('hub')">⚡ AI Studio Hub (Генераторы)</button>
             </div>
 
-            <!-- Вкладка 1: Матрица треков -->
+            <!-- Секция 1: Треки -->
             <div id="sectionTracks">
                 <h2 style="font-size: 1.45rem; font-weight: 900; margin-bottom: 30px; letter-spacing: -0.5px;">Матрица учебных направлений Kobldzhon</h2>
                 <div class="tracks-matrix" id="matrixTracksGrid"></div>
             </div>
 
-            <!-- Вкладка 2: AI Studio Hub -->
+            <!-- Секция 2: AI Hub -->
             <div id="sectionHub" style="display: none;">
                 <h2 style="font-size: 1.45rem; font-weight: 900; margin-bottom: 15px; letter-spacing: -0.5px;">Облачный AI Studio Hub</h2>
-                <p style="color: var(--text-muted); margin-bottom: 30px;">Лучшие проверенные облачные инструменты и бесплатные движки для генерации фото, видео и текстов без ограничений.</p>
+                <p style="color: var(--text-muted); margin-bottom: 30px;">Прямой доступ к лучшим облачным инструментам и бесплатным движкам генерации.</p>
                 
                 <div class="ai-hub-grid">
                     <div class="ai-tool-card">
                         <div>
                             <div style="font-size: 2.2rem; margin-bottom: 12px;">🎨</div>
-                            <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 8px;">Hugging Face Spaces (Art)</h3>
-                            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">Запуск открытых моделей Stable Diffusion и Flux для генерации графики без цензуры и подписок.</p>
+                            <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 8px;">Hugging Face Spaces</h3>
+                            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">Запуск открытых моделей Stable Diffusion и Flux без подписок.</p>
                         </div>
                         <a href="https://huggingface.co/spaces" target="_blank" class="btn-main" style="text-align:center; text-decoration:none; margin:0;">Открыть студию</a>
                     </div>
@@ -497,18 +497,9 @@
                         <div>
                             <div style="font-size: 2.2rem; margin-bottom: 12px;">🎬</div>
                             <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 8px;">Kling & Luma Cloud</h3>
-                            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">Облачные генераторы кинематографичных видео по текстовым промптам и картинкам.</p>
+                            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">Облачные генераторы кинематографичных видео по промптам.</p>
                         </div>
                         <a href="https://klingai.com" target="_blank" class="btn-main" style="text-align:center; text-decoration:none; margin:0;">Перейти к видео</a>
-                    </div>
-
-                    <div class="ai-tool-card">
-                        <div>
-                            <div style="font-size: 2.2rem; margin-bottom: 12px;">🧠</div>
-                            <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 8px;">OpenAI & Claude API Sandbox</h3>
-                            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">Интерактивные песочницы для тестирования сложных системных промптов и ИИ-агентов.</p>
-                        </div>
-                        <a href="https://chatgpt.com" target="_blank" class="btn-main" style="text-align:center; text-decoration:none; margin:0;">Запустить чат</a>
                     </div>
                 </div>
             </div>
@@ -539,18 +530,18 @@
                     <div id="activeLessonBodyDisplay" style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.85;">Синхронизация данных...</div>
                 </div>
 
-                <!-- Консоль ИИ Наставника -->
+                <!-- Настоящая ИИ Консоль Наставника -->
                 <div class="ai-terminal-panel">
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
-                        <span style="width: 10px; height: 10px; background: var(--neon-cyan); border-radius: 50%; box-shadow: 0 0 15px var(--neon-cyan);"></span>
-                        <h4 style="font-size: 1rem; font-weight: 900; letter-spacing: -0.3px;">ИИ-Терминал Наставника</h4>
+                        <span style="width: 10px; height: 10px; background: var(--success); border-radius: 50%; box-shadow: 0 0 15px var(--success);"></span>
+                        <h4 style="font-size: 1rem; font-weight: 900; letter-spacing: -0.3px;">Настоящий ИИ-Наставник</h4>
                     </div>
                     <div class="terminal-stream" id="terminalChatStream">
-                        <div class="msg-bot">Нейро-сеть инициализирована. Введите свой запрос или задайте вопрос по текущему модулю обучения.</div>
+                        <div class="msg-bot">Привет! Я твой полноценный ИИ-наставник в Kobldzhon School. Задавай любые вопросы по текущему уроку, коду или промптам — я отвечаю по существу в реальном времени!</div>
                     </div>
                     <div class="terminal-input-row">
-                        <input type="text" id="terminalInputQuery" class="terminal-field" placeholder="Спросить ИИ-агента..." onkeypress="if(event.key==='Enter') submitTerminalQuery()">
-                        <button class="terminal-send" onclick="submitTerminalQuery()">→</button>
+                        <input type="text" id="terminalInputQuery" class="terminal-field" placeholder="Спроси ИИ..." onkeypress="if(event.key==='Enter') submitRealAiQuery()">
+                        <button class="terminal-send" onclick="submitRealAiQuery()">→</button>
                     </div>
                 </div>
             </div>
@@ -848,11 +839,12 @@
             document.getElementById('activeLessonBodyDisplay').innerHTML = `
                 <p style="margin-bottom: 24px;">${text}</p>
                 <div class="code-box">${code}</div>
-                <p style="color: var(--gold-accent); font-size: 0.92rem; font-weight: 800; margin-top: 26px;">⚡ Практическая задача: протестируйте данный шаблон через ИИ-терминал справа.</p>
+                <p style="color: var(--gold-accent); font-size: 0.92rem; font-weight: 800; margin-top: 26px;">⚡ Практическая задача: спросите у настоящего ИИ-наставника справа пояснения по этому коду!</p>
             `;
         }
 
-        function submitTerminalQuery() {
+        // НАСТОЯЩИЙ ИИ-НАСТАВНИК (Интеграция с публичным бесплатным API-прокси нейросети)
+        async function submitRealAiQuery() {
             const inputField = document.getElementById('terminalInputQuery');
             const queryText = inputField.value.trim();
             if (!queryText) return;
@@ -861,15 +853,41 @@
             streamBox.innerHTML += `<div class="msg-user">${queryText}</div>`;
             inputField.value = '';
 
-            setTimeout(() => {
-                let botAnswer = `[AI Studio]: Анализ запроса по теме «${currentActiveLessonHeading}» завершен. Нейро-сеть работает стабильно.`;
-                const cleanQuery = queryText.toLowerCase();
-                if (cleanQuery.includes('код') || cleanQuery.includes('пример') || cleanQuery.includes('шаблон')) {
-                    botAnswer = `Синтаксический разбор выполнен успешно. Ошибок в структурах данных не обнаружено.`;
-                }
-                streamBox.innerHTML += `<div class="msg-bot">${botAnswer}</div>`;
-                streamBox.scrollTop = streamBox.scrollHeight;
-            }, 450);
+            // Добавляем индикатор загрузки
+            const loadingId = 'loading_' + Date.now();
+            streamBox.innerHTML += `<div class="msg-bot" id="${loadingId}">🧠 ИИ думает над ответом...</div>`;
+            streamBox.scrollTop = streamBox.scrollHeight;
+
+            try {
+                // Используем стабильный публичный прокси-эндпоинт для генерации текста
+                const response = await fetch("https://text.pollinations.ai/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        messages: [
+                            { 
+                                role: "system", 
+                                content: `Ты — главный ИИ-наставник элитной онлайн-школы Kobldzhon School. Твоя задача — помогать ученику осваивать урок "${currentActiveLessonHeading}". Отвечай четко, профессионально, с примерами кода или промптов, по-дружески и по делу на русском языке.` 
+                            },
+                            { role: "user", content: queryText }
+                        ],
+                        model: "openai",
+                        jsonMode: false
+                    })
+                });
+
+                if (!response.ok) throw new Error("Ошибка связи с нейросетью");
+
+                const replyText = await response.text();
+                
+                // Убираем индикатор загрузки и выводим реальный ответ модели
+                document.getElementById(loadingId).remove();
+                streamBox.innerHTML += `<div class="msg-bot">${replyText}</div>`;
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                streamBox.innerHTML += `<div class="msg-bot" style="color: var(--danger);">⚠️ Ошибка ответа нейросети. Проверьте интернет-соединение и повторите попытку.</div>`;
+            }
+            streamBox.scrollTop = streamBox.scrollHeight;
         }
 
         function promptVipActivationModal() { document.getElementById('modalVipOverlay').style.display = 'flex'; }
