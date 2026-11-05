@@ -302,8 +302,13 @@ footer {
 </footer>
 
 <script>
+const API_URL = "https://astra-ai.fotopsh24.workers.dev/chat";
+
 const messages = document.getElementById("messages");
 const input = document.getElementById("input");
+
+let history = [];
+let isSending = false;
 
 function addMessage(text, type) {
     const div = document.createElement("div");
@@ -321,42 +326,84 @@ function speak(text) {
     const voice = new SpeechSynthesisUtterance(text);
     voice.lang = "ru-RU";
     voice.rate = 1;
-    voice.pitch = 1.25;
+    voice.pitch = 1.15;
 
     speechSynthesis.speak(voice);
 }
 
-function sendMessage() {
+async function sendMessage() {
     const text = input.value.trim();
 
-    if (!text) return;
+    if (!text || isSending) return;
 
-    addMessage(text, "user");
     input.value = "";
+    addMessage(text, "user");
 
-    setTimeout(() => {
-        const answer = "Я пока учусь общаться! 💗 Скоро у меня появится настоящий искусственный интеллект!";
-        addMessage(answer, "bot");
-        speak(answer);
-    }, 500);
+    isSending = true;
+    const button = document.querySelector(".controls button");
+    button.disabled = true;
+
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: text,
+                history: history
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.reply) {
+            throw new Error(data.error || "Ошибка сервера");
+        }
+
+        addMessage(data.reply, "bot");
+        speak(data.reply);
+
+        history.push(
+            { role: "user", content: text },
+            { role: "assistant", content: data.reply }
+        );
+
+        history = history.slice(-10);
+
+    } catch (error) {
+        addMessage(
+            "Ой! Не получилось подключиться к моему ИИ. Попробуй ещё раз. 💗",
+            "bot"
+        );
+        console.error(error);
+
+    } finally {
+        isSending = false;
+        button.disabled = false;
+        input.focus();
+    }
 }
 
-input.addEventListener("keydown", e => {
-    if (e.key === "Enter") sendMessage();
+input.addEventListener("keydown", event => {
+    if (event.key === "Enter") sendMessage();
 });
 
 function listen() {
-    const Recognition = window.SpeechRecognition ||
-                        window.webkitSpeechRecognition;
+    const Recognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
 
     if (!Recognition) {
-        addMessage("Твой браузер не поддерживает распознавание речи.", "bot");
+        addMessage(
+            "Твой браузер не поддерживает распознавание речи.",
+            "bot"
+        );
         return;
     }
 
     const recognition = new Recognition();
     recognition.lang = "ru-RU";
-    recognition.start();
 
     recognition.onresult = event => {
         input.value = event.results[0][0].transcript;
@@ -364,8 +411,13 @@ function listen() {
     };
 
     recognition.onerror = () => {
-        addMessage("Не удалось распознать речь. Попробуй ещё раз.", "bot");
+        addMessage(
+            "Не удалось распознать речь. Попробуй ещё раз.",
+            "bot"
+        );
     };
+
+    recognition.start();
 }
 </script>
 
