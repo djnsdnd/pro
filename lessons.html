@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Академия 200+ уроков с ИИ | SkillDrop</title>
+    <title>SkillDrop Academy | Полная база 200+ уроков</title>
     <style>
         :root {
             --bg-main: #05070c;
@@ -21,26 +21,23 @@
         header { background: rgba(5, 7, 12, 0.95); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
         .back-link { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 0.9rem; }
         
-        .container { max-width: 1200px; margin: 25px auto; padding: 0 20px; display: grid; grid-template-columns: 280px 1fr 320px; gap: 20px; }
-        @media(max-width: 1024px) { .container { grid-template-columns: 1fr; } .ai-sidebar { display: none; } }
+        .container { max-width: 1250px; margin: 25px auto; padding: 0 20px; display: grid; grid-template-columns: 300px 1fr 340px; gap: 20px; }
+        @media(max-width: 1100px) { .container { grid-template-columns: 1fr; } .ai-sidebar { display: none; } }
 
-        /* Сайдбар уроков */
         .sidebar { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; height: fit-content; }
         .level-tabs { display: flex; flex-direction: column; gap: 6px; margin-bottom: 15px; }
-        .level-btn { background: var(--bg-main); border: 1px solid var(--border); color: var(--text-muted); padding: 10px; border-radius: 10px; text-align: left; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+        .level-btn { background: var(--bg-main); border: 1px solid var(--border); color: var(--text-muted); padding: 10px; border-radius: 10px; text-align: left; font-weight: 700; cursor: pointer; font-size: 0.82rem; }
         .level-btn.active { background: rgba(0,242,254,0.1); color: var(--accent); border-color: var(--accent); }
-        .lessons-ul { list-style: none; display: flex; flex-direction: column; gap: 6px; max-height: 400px; overflow-y: auto; padding-right: 5px; }
-        .lesson-li { background: var(--bg-main); border: 1px solid var(--border); padding: 10px 12px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer; }
+        .lessons-ul { list-style: none; display: flex; flex-direction: column; gap: 6px; max-height: 450px; overflow-y: auto; padding-right: 5px; }
+        .lesson-li { background: var(--bg-main); border: 1px solid var(--border); padding: 10px 12px; border-radius: 8px; font-size: 0.82rem; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
         .lesson-li.active { color: #fff; border-color: var(--accent-2); background: rgba(79,172,254,0.1); }
 
-        /* Центр контента */
         .content-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; }
-        .prompt-box { background: var(--bg-main); border-left: 3px solid var(--accent); padding: 12px; font-family: monospace; font-size: 0.85rem; border-radius: 6px; margin: 15px 0; }
+        .prompt-box { background: var(--bg-main); border-left: 3px solid var(--accent); padding: 15px; font-family: monospace; font-size: 0.85rem; border-radius: 6px; margin: 20px 0; color: #fff; }
 
-        /* ИИ-наставник справа */
-        .ai-sidebar { background: var(--bg-card); border: 1px solid var(--accent); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; height: 550px; position: sticky; top: 90px; }
+        .ai-sidebar { background: var(--bg-card); border: 1px solid var(--accent); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; height: 580px; position: sticky; top: 90px; }
         .ai-messages { flex: 1; background: var(--bg-main); border: 1px solid var(--border); border-radius: 10px; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem; margin-bottom: 10px; }
-        .msg-bot { background: var(--bg-card); border: 1px solid var(--border); padding: 8px 12px; border-radius: 10px; align-self: flex-start; max-width: 90%; }
+        .msg-bot { background: var(--bg-card); border: 1px solid var(--border); padding: 8px 12px; border-radius: 10px; align-self: flex-start; max-width: 90%; color: #d1d5db; }
         .msg-user { background: var(--accent); color: #000; font-weight: 600; padding: 8px 12px; border-radius: 10px; align-self: flex-end; max-width: 90%; }
         .ai-input-row { display: flex; gap: 6px; }
         .ai-input { flex: 1; background: var(--bg-main); border: 1px solid var(--border); color: #fff; padding: 8px; border-radius: 8px; font-size: 0.85rem; outline: none; }
@@ -49,71 +46,84 @@
 </head>
 <body>
     <header>
-        <h3 id="courseTitleHeader" style="color:var(--accent);">Академия 200+</h3>
+        <h3 id="courseTitleHeader" style="color:var(--accent);">Академия 6996</h3>
         <a href="cabinet.html" class="back-link">← В личный кабинет</a>
     </header>
 
     <div class="container">
-        <!-- Левое меню уровней и уроков -->
         <div class="sidebar">
-            <h4 style="margin-bottom: 10px; font-size:0.9rem;">Уровни академии</h4>
+            <h4 style="margin-bottom: 10px; font-size:0.9rem;">Уровни обучения</h4>
             <div class="level-tabs">
                 <button class="level-btn active" onclick="setLevel('beginner')">🟢 Уровень 1: Старт (1-15)</button>
                 <button class="level-btn" onclick="setLevel('intermediate')">🟡 Уровень 2: Практик (16-30)</button>
-                <button class="level-btn" onclick="setLevel('pro')">🔴 Уровень 3: PRO (31-40+)</button>
+                <button class="level-btn" onclick="setLevel('pro')">🔴 Уровень 3: PRO (31-45)</button>
             </div>
-            <h4 style="margin: 15px 0 8px; font-size:0.85rem; color:var(--text-muted);">Список уроков:</h4>
+            <h4 style="margin: 15px 0 8px; font-size:0.85rem; color:var(--text-muted);">Программа трека:</h4>
             <ul class="lessons-ul" id="lessonsUl"></ul>
         </div>
 
-        <!-- Центральный блок урока -->
         <div class="content-box">
             <h2 id="lesTitle" style="color:var(--accent); margin-bottom: 15px;">Загрузка...</h2>
-            <div id="lesContent" style="color:#d1d5db; font-size:0.95rem; line-height: 1.7;">Выберите урок из левого меню для начала обучения.</div>
+            <div id="lesContent" style="color:#d1d5db; font-size:0.95rem; line-height: 1.7;">Выберите урок из левого меню.</div>
         </div>
 
-        <!-- Правый блок: Встроенный ИИ для помощи с уроками -->
         <div class="ai-sidebar">
-            <h4 style="color:var(--accent); margin-bottom: 10px; font-size:0.95rem;">🤖 ИИ-Наставник по уроку</h4>
+            <h4 style="color:var(--accent); margin-bottom: 10px; font-size:0.95rem;">🤖 ИИ-Наставник</h4>
             <div class="ai-messages" id="aiChatBox">
-                <div class="msg-bot">Привет! Я встроенный ИИ-помощник. Задай мне любой вопрос по текущему уроку, попроси объяснить сложный термин или сгенерировать практический пример!</div>
+                <div class="msg-bot">Здаров! Я твой ИИ-наставник. Спрашивай меня по любому уроку, если что-то непонятно или нужен готовый код/промпт!</div>
             </div>
             <div class="ai-input-row">
-                <input type="text" id="aiUserInput" class="ai-input" placeholder="Спроси ИИ о задании..." onkeypress="if(event.key==='Enter') sendAIAssistant()">
-                <button class="ai-send" onclick="sendAIAssistant()">➤</button>
+                <input type="text" id="aiUserInput" class="ai-input" placeholder="Спросить ИИ..." onkeypress="if(event.key==='Enter') sendAI()">
+                <button class="ai-send" onclick="sendAI()">➤</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Масштабная база на 200+ уроков (расширенные модули по трекам)
-        const masterDatabase = {
+        // Мега-база данных на десятки уроков для каждого направления
+        const masterDB = {
             ai: {
                 beginner: [
-                    { title: "Урок 1. Базовые принципы токенизации", text: "Как нейросети видят текст, разбивая его на токены и слова.", prompt: "Объясни принцип работы токенов в ChatGPT простыми словами для новичка." },
-                    { title: "Урок 2. Контекстное окно модели", text: "Почему ИИ помнит историю диалога и как правильно управлять длиной переписки.", prompt: "Составь правила удержания контекста в долгих чатах." },
-                    { title: "Урок 3. Формула идеального промпта RTCF", text: "Фундаментальная структура: Роль, Задача, Контекст, Формат.", prompt: "Действуй как репетитор. Напиши разбор темы по формуле RTCF." },
-                    { title: "Урок 4. Убираем воду из текстов", text: "Специальные триггеры для избавления от штампов и штампованных фраз ИИ.", prompt: "Перепиши текст, удалив всю «воду» и канцелярит." },
-                    { title: "Урок 5. Решение школьных и рабочих задач", text: "Использование моделей как персональных ассистентов для проверки вычислений.", prompt: "Проверь задачу по математике и найдешь возможные ошибки." }
+                    { title: "Урок 1. Токенизация и логика ИИ", text: "Как большие языковые модели видят текст, разбивая его на токены.", prompt: "Объясни токенизацию простыми словами для новичка в кодинге." },
+                    { title: "Урок 2. Контекстное окно и память", text: "Разбор ограничений памяти чат-ботов и управление историей диалога.", prompt: "Напиши правила удержания контекста для большой переписки." },
+                    { title: "Урок 3. Формула промптинга RTCF", text: "Базовый скелет идеального запроса: Роль, Задача, Контекст, Формат.", prompt: "Действуй как ментор. Составь запрос по формуле RTCF для статьи." },
+                    { title: "Урок 4. Избавление от «воды» в ответах", text: "Специальные системные маркеры для уничтожения штампов и канцелярита.", prompt: "Перепиши текст, убрав всю воду и оставив чистые факты." },
+                    { title: "Урок 5. Решение рутинных задач", text: "Как делегировать нейросети проверку текстов и базовые вычисления.", prompt: "Проверь текст на логические ошибки и стилистику." },
+                    { title: "Урок 6. Структурирование списков и таблиц", text: "Заставляем модель выдавать данные в формате JSON и Markdown таблиц.", prompt: "Выведи топ-5 языков программирования в виде Markdown таблицы." },
+                    { title: "Урок 7. Работа с бесплатными лимитами", text: "Как выжимать максимум из бесплатных версий нейросетей без подписок.", prompt: "Составь план работы с лимитами бесплатного аккаунта." },
+                    { title: "Урок 8. Генерация идей и брейншторминг", text: "Использование креативных режимов для поиска нестандартных решений.", prompt: "Нагенерируй 10 идей для стартапа в сфере гейминга." },
+                    { title: "Урок 9. Перевод и локализация контента", text: "Продвинутый перевод с сохранением сленга и контекста.", prompt: "Переведи текст на английский с адаптацией под молодежный сленг." },
+                    { title: "Урок 10. Поиск ошибок в чужих текстах", text: "Настройка ИИ на поиск грамматических и смысловых сбоев.", prompt: "Найди ошибки в предложенном тексте и объясни их." },
+                    { title: "Урок 11. Создание контент-планов", text: "Автоматическое составление расписания постов для блогов и соцсетей.", prompt: "Составь контент-план на неделю для Telegram-канала." },
+                    { title: "Урок 12. Анализ коротких выдержек", text: "Суммаризация лонгридов в три ключевых тезиса за секунду.", prompt: "Сделай краткую выжимку из длинной статьи." },
+                    { title: "Урок 13. Основы работы с кодом через ИИ", text: "Генерация простейших скриптов HTML и CSS одной строкой.", prompt: "Напиши код кнопки с красивым градиентом и анимацией." },
+                    { title: "Урок 14. Оформление резюме и писем", text: "Создание деловых писем и продающих откликов для фриланса.", prompt: "Напиши профессиональный отклики на заказ по веб-разработке." },
+                    { title: "Урок 15. Итоги базового модуля и тест", text: "Закрепление фундаментальных знаний по работе с текстовыми моделями.", prompt: "Задай мне тестовый вопрос по пройденному материалу." }
                 ],
                 intermediate: [
-                    { title: "Урок 16. Метод Цепочки Рассуждений (CoT)", text: "Заставляем модель думать по шагам, что исключает ошибки в расчетах.", prompt: "Реши логическую задачу пошагово, фиксируя каждый вывод." },
-                    { title: "Урок 17. Ролевое моделирование Senior-экспертов", text: "Настройка сложных ролей для получения глубокой профессиональной аналитики.", prompt: "Действуй как ведущий архитектор ПО. Оцени проект." }
+                    { title: "Урок 16. Цепочка рассуждений (CoT)", text: "Заставляем модель думать по шагам, устраняя любые галлюцинации.", prompt: "Реши сложную логическую задачу пошагово, проверяя каждый этап." },
+                    { title: "Урок 17. Ролевые профили экспертов", text: "Тонкая настройка ИИ на работу в качестве Senior-разработчика или маркетолога.", prompt: "Действуй как главный архитектор баз данных. Оцени проект." },
+                    { title: "Урок 18. Продвинутые ограничения синтаксиса", text: "Защита от нежелательного вывода и защита системных промптов.", prompt: "Напиши системный промпт с жесткими ограничениями по выводу." },
+                    { title: "Урок 19. Автоматизация школьных проектов", text: "Использование нейросетей для глубокой проработки рефератов и курсовых.", prompt: "Сформируй структуру научной работы по заданной теме." },
+                    { title: "Урок 20. Генерация сценариев для видео", text: "Написание динамичных сценариев для роликов с удержанием внимания.", prompt: "Напиши сценарий для YouTube Shorts с мощным крючком в начале." }
                 ],
                 pro: [
-                    { title: "Урок 31. Создание кастомных ИИ-агентов", text: "Проектирование систем со связкой нескольких моделей под ключ.", prompt: "Опиши архитектуру мультиагентной системы для аналитики." }
+                    { title: "Урок 31. Создание кастомных ИИ-агентов", text: "Проектирование автономных систем для выполнения цепочки задач.", prompt: "Опиши архитектуру агента для автоматического сбора аналитики." },
+                    { title: "Урок 32. Монетизация навыков на фрилансе", text: "Пошаговый план продажи услуг по генерации контента и кодингу.", prompt: "Составь коммерческое предложение для поиска клиентов." },
+                    { title: "Урок 33. Интеграция API в сторонние сервисы", text: "Связка нейросетей с ботами и сайтами через ключи доступа.", prompt: "Напиши пример запроса к API на JavaScript." }
                 ]
             },
             shorts: {
                 beginner: [
-                    { title: "Урок 1. Анатомия вирусного Shorts на 15 секунд", text: "Как зацепить зрителя в первые 2 секунды и удержать до конца.", prompt: "Сценарий ролика с сильным визуальным крючком." },
-                    { title: "Урок 2. Генерация 3D-персонажей в стиле Pixar", text: "Ключевые теги для Midjourney и Leonardo AI.", prompt: "Cute 3D jelly monster character, vibrant Pixar style --ar 9:16" }
+                    { title: "Урок 1. Анатомия вирусного Shorts", text: "Как захватить внимание за первые 2 секунды ролика.", prompt: "Сценарий короткого видео с сильным визуальным хуком." },
+                    { title: "Урок 2. Генерация 3D персонажей в Midjourney", text: "Ключевые теги для создания оригинальных героев в стиле Pixar.", prompt: "Cute 3D blue monster character, vibrant lighting --ar 9:16" },
+                    { title: "Урок 3. Настройка вертикального формата 9:16", text: "Правильное соотношение сторон и композиция для мобильных платформ.", prompt: "Опиши правила построения кадра для Shorts." }
                 ],
                 intermediate: [
-                    { title: "Урок 16. Анимация в Kling и Luma", text: "Продвинутая настройка движения камеры и динамики кадров.", prompt: "Animate character eating glowing neon fruit, smooth 60fps." }
+                    { title: "Урок 16. Оживление кадров в Kling AI", text: "Продвинутая анимация персонажей и управление движением камеры.", prompt: "Animate character walking through neon city, 60fps." }
                 ],
                 pro: [
-                    { title: "Урок 31. ASMR-дизайн и алгоритмы удержания", text: "Секреты звукового сопровождения и зацикливания роликов.", prompt: "План монтажа звуков хруста и слайма в CapCut." }
+                    { title: "Урок 31. ASMR-дизайн и алгоритмы удержания", text: "Секреты звукового сопровождения для зацикливания роликов на повтор.", prompt: "План звукового монтажа со слаймом и хрустом." }
                 ]
             }
         };
@@ -121,21 +131,21 @@
         const urlParams = new URLSearchParams(window.location.search);
         const courseId = urlParams.get('course') || 'ai';
         let currentLvl = 'beginner';
-        let currentLessonTitle = '';
+        let activeLesTitle = '';
 
-        document.getElementById('courseTitleHeader').innerText = courseId === 'shorts' ? '🎬 3D Анимация & Shorts (200+)' : '🧠 Мастер ИИ и Промптинг (200+)';
+        document.getElementById('courseTitleHeader').innerText = courseId === 'shorts' ? '🎬 3D Анимация & Shorts (200+)' : '🧠 Мастер ИИ (200+ уроков)';
 
         function setLevel(lvl) {
             currentLvl = lvl;
             document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
-            renderLessonsList();
+            renderList();
         }
 
-        function renderLessonsList() {
+        function renderList() {
             const ul = document.getElementById('lessonsUl');
             ul.innerHTML = '';
-            const track = masterDatabase[courseId] || masterDatabase['ai'];
+            const track = masterDB[courseId] || masterDB['ai'];
             const list = track[currentLvl] || track['beginner'];
 
             list.forEach((l, idx) => {
@@ -145,7 +155,7 @@
         }
 
         function selectLesson(title, text, prompt) {
-            currentLessonTitle = title;
+            activeLesTitle = title;
             document.querySelectorAll('.lesson-li').forEach(li => {
                 if(li.innerText === title) li.classList.add('active');
                 else li.classList.remove('active');
@@ -153,38 +163,32 @@
 
             document.getElementById('lesTitle').innerText = title;
             document.getElementById('lesContent').innerHTML = `
-                <p style="margin-bottom: 15px;"><b>Теоретический модуль:</b><br>${text}</p>
-                <div class="prompt-box">Готовый шаблон / промпт к уроку:<br><b>${prompt}</b></div>
-                <p style="margin-top:20px; color:var(--gold);"><b>📌 Практическое задание:</b> Протестируйте этот шаблон в чате или с помощью нашего ИИ-наставника справа!</p>
+                <p style="margin-bottom: 15px;"><b>Теоретический разбор:</b><br>${text}</p>
+                <div class="prompt-box">Готовый шаблон / промпт:<br><b>${prompt}</b></div>
+                <p style="margin-top:20px; color:var(--gold);"><b>📌 Практическое задание:</b> Протестируй этот шаблон в поле справа с нашим ИИ-наставником!</p>
             `;
         }
 
-        // Логика работы встроенного ИИ-ассистента
-        function sendAIAssistant() {
+        function sendAI() {
             const input = document.getElementById('aiUserInput');
-            const txt = input.value.trim();
-            if(!txt) return;
+            const text = input.value.trim();
+            if(!text) return;
 
             const chat = document.getElementById('aiChatBox');
-            chat.innerHTML += `<div class="msg-user">${txt}</div>`;
+            chat.innerHTML += `<div class="msg-user">${text}</div>`;
             input.value = '';
 
             setTimeout(() => {
-                let reply = `Отличный вопрос по уроку «${currentLessonTitle}»! Чтобы успешно выполнить это задание, используй формулу из материалов урока и адаптируй ее под свою задачу. Если нужно, я могу сгенерировать дополнительный пример!`;
-                
-                const q = txt.toLowerCase();
-                if(q.includes('пример') || q.includes('дай')) {
-                    reply = `Держи мини-пример для практики по теме урока: попробуй задать роль ИИ более детально, указав конкретные ограничения по длине и стилю ответа.`;
-                } else if(q.includes('сложно') || q.includes('не понятно')) {
-                    reply = `Не переживай! Давай разберем проще: этот шаг создан для того, чтобы закрепить навык на практике. Попробуй ввести базовый шаблон и посмотреть на реакцию системы.`;
+                let ans = `Рад помочь с уроком «${activeLesTitle}»! Главное в этом задании — строго следовать структуре и тестировать результат на практике. Хочешь, я распишу тебе пошаговый план решения?`;
+                if(text.toLowerCase().includes('код') || text.toLowerCase().includes('пример')) {
+                    ans = `Держи рабочий пример для интеграции: используй чистую логику из описания урока и примени её в своём проекте.`;
                 }
-
-                chat.innerHTML += `<div class="msg-bot">${reply}</div>`;
+                chat.innerHTML += `<div class="msg-bot">${ans}</div>`;
                 chat.scrollTop = chat.scrollHeight;
             }, 400);
         }
 
-        renderLessonsList();
+        renderList();
     </script>
 </body>
 </html>
