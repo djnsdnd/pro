@@ -3,49 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOBLDZHON SCHOOL // DEVELOPER PORTAL [v6.0 SECURE]</title>
+    <title>Kobldzhon School // Official Academy Portal</title>
     <style>
         :root {
-            --bg-deep: #010204;
-            --bg-surface: #060913;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --border-neon: rgba(0, 242, 254, 0.45);
+            --bg-base: #03050b;
+            --bg-surface: #0a0f1d;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-neon: rgba(0, 242, 254, 0.4);
             --neon-cyan: #00f2fe;
             --neon-blue: #4facfe;
-            --gold-accent: #f6d365;
-            --text-primary: #f8fafc;
+            --gold: #ffd700;
+            --text-main: #ffffff;
             --text-muted: #94a3b8;
             --danger: #ff4757;
             --success: #2ed573;
-            --dev-color: #a855f7;
+            --dev-badge: #a855f7;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--bg-deep);
-            color: var(--text-primary);
+            background-color: var(--bg-base);
+            color: var(--text-main);
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(0, 242, 254, 0.07) 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(79, 172, 254, 0.07) 0%, transparent 40%),
-                linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
-            padding-bottom: 100px;
+            padding-bottom: 80px;
         }
 
         header {
-            background: rgba(6, 9, 19, 0.85);
-            backdrop-filter: blur(25px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 20px 6%;
+            background: rgba(10, 15, 29, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 18px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -54,420 +47,360 @@
             z-index: 100;
         }
 
-        .brand-logo {
-            font-size: 1.3rem;
+        .logo {
+            font-size: 1.25rem;
             font-weight: 900;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, var(--text-primary) 20%, var(--neon-cyan));
+            background: linear-gradient(135deg, #fff 30%, var(--neon-cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand-logo span {
-            font-size: 0.65rem;
-            background: rgba(0, 242, 254, 0.1);
-            border: 1px solid var(--border-neon);
-            color: var(--neon-cyan);
-            padding: 3px 8px;
-            border-radius: 6px;
-            letter-spacing: 1px;
+            letter-spacing: -0.5px;
         }
 
         .container {
-            max-width: 1350px;
+            max-width: 1200px;
             margin: 40px auto;
-            padding: 0 24px;
+            padding: 0 20px;
         }
 
         /* Авторизация */
-        .auth-panel {
+        .auth-box {
             background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 30px;
-            max-width: 480px;
-            margin: 60px auto;
-            padding: 45px;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.08);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            max-width: 420px;
+            margin: 40px auto;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
         }
 
-        .auth-panel h2 {
-            font-size: 1.8rem;
+        .auth-box h2 {
+            font-size: 1.6rem;
             font-weight: 800;
             margin-bottom: 8px;
-            letter-spacing: -0.5px;
         }
 
-        .auth-panel p {
+        .auth-box p {
             color: var(--text-muted);
-            font-size: 0.92rem;
-            margin-bottom: 28px;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
         }
 
-        .input-group {
-            margin-bottom: 20px;
+        .form-control {
+            margin-bottom: 18px;
         }
 
-        .input-group label {
+        .form-control label {
             display: block;
             font-size: 0.75rem;
-            font-weight: 800;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: 1px;
             color: var(--text-muted);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
-        .cyber-input {
+        .input-field {
             width: 100%;
-            padding: 16px 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
             color: #fff;
-            font-size: 0.98rem;
+            font-size: 0.95rem;
             outline: none;
-            transition: all 0.25s ease;
-        }
-
-        .cyber-input:focus {
-            border-color: var(--neon-cyan);
-            background: rgba(0, 242, 254, 0.03);
-            box-shadow: 0 0 0 4px rgba(0, 242, 254, 0.15);
-        }
-
-        .password-row {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-gen {
-            background: rgba(0, 242, 254, 0.1);
-            border: 1px solid var(--border-neon);
-            color: var(--neon-cyan);
-            padding: 0 16px;
-            border-radius: 14px;
-            font-weight: 800;
-            cursor: pointer;
-            font-size: 0.8rem;
             transition: 0.2s;
-            white-space: nowrap;
         }
-        .btn-gen:hover { background: rgba(0, 242, 254, 0.2); }
 
-        .btn-main {
+        .input-field:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 0 3px rgba(0,242,254,0.15);
+        }
+
+        .btn {
             display: block;
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
-            color: var(--bg-deep);
+            color: #03050b;
             border: none;
-            border-radius: 14px;
-            font-weight: 900;
-            font-size: 1rem;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 12px 35px rgba(0, 242, 254, 0.3);
+            transition: 0.2s;
             text-align: center;
             text-decoration: none;
-            margin-top: 24px;
+            margin-top: 20px;
         }
 
-        .btn-main:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 18px 40px rgba(0, 242, 254, 0.45);
+        .btn:hover {
+            transform: translateY(-1px);
+            opacity: 0.95;
         }
 
-        .btn-sec {
+        .btn-outline {
             background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            box-shadow: none;
+            border: 1px solid var(--border-subtle);
+            color: #fff;
         }
-        .btn-sec:hover {
-            background: rgba(255,255,255,0.04);
-            border-color: var(--text-muted);
-        }
+        .btn-outline:hover { background: rgba(255,255,255,0.04); }
 
         /* Дашборд */
         .screen { display: none; }
-        
-        .profile-banner {
+
+        .profile-card {
             background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 26px;
-            padding: 32px 40px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 25px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 45px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            margin-bottom: 35px;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
         }
 
-        .dev-badge-box {
+        .dev-badge {
             background: rgba(168, 85, 247, 0.15);
             border: 1px solid var(--dev-color);
             color: var(--dev-color);
-            padding: 4px 12px;
-            border-radius: 10px;
-            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-size: 0.7rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-left: 10px;
-            display: inline-block;
+            margin-left: 8px;
         }
 
-        .tracks-matrix {
+        .tracks-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
         }
 
-        .track-node-card {
+        .track-card {
             background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 26px;
-            padding: 38px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 30px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
+            transition: 0.3s;
         }
 
-        .track-node-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
-            transition: 0.35s;
-        }
-
-        .track-node-card:hover {
+        .track-card:hover {
             border-color: var(--border-neon);
-            transform: translateY(-6px);
-            box-shadow: 0 30px 60px rgba(0, 242, 254, 0.1);
+            transform: translateY(-4px);
         }
 
-        .track-node-card:hover::before {
-            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
-        }
-
-        .pill-badge {
-            font-size: 0.72rem;
+        .badge {
+            font-size: 0.7rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 6px 14px;
-            border-radius: 20px;
+            padding: 5px 12px;
+            border-radius: 12px;
         }
-        .pill-badge.unlocked { background: rgba(46, 213, 115, 0.12); color: var(--success); border: 1px solid rgba(46, 213, 115, 0.3); }
-        .pill-badge.locked { background: rgba(246, 211, 101, 0.12); color: var(--gold-accent); border: 1px solid rgba(246, 211, 101, 0.3); }
+        .badge.active { background: rgba(46,213,115,0.12); color: var(--success); border: 1px solid rgba(46,213,115,0.3); }
+        .badge.locked { background: rgba(246,211,101,0.12); color: var(--gold); border: 1px solid rgba(246,211,101,0.3); }
 
         /* Рабочее пространство */
-        .workspace-grid {
+        .workspace {
             display: grid;
-            grid-template-columns: 320px 1fr 380px;
-            gap: 30px;
+            grid-template-columns: 280px 1fr 320px;
+            gap: 20px;
         }
-        @media(max-width: 1200px) { .workspace-grid { grid-template-columns: 1fr; } .ai-terminal-panel { display: none; } }
+        @media(max-width: 1024px) { .workspace { grid-template-columns: 1fr; } .terminal-panel { display: none; } }
 
-        .sidebar-panel {
+        .sidebar {
             background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 26px;
-            padding: 24px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 18px;
+            padding: 20px;
             height: fit-content;
         }
 
-        .level-switcher {
+        .lvl-btn {
             width: 100%;
             background: transparent;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border-subtle);
             color: var(--text-muted);
-            padding: 14px 16px;
-            border-radius: 12px;
+            padding: 10px;
+            border-radius: 10px;
             text-align: left;
             font-weight: 700;
-            font-size: 0.88rem;
+            font-size: 0.82rem;
             cursor: pointer;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             transition: 0.2s;
         }
-        .level-switcher.active, .level-switcher:hover {
-            background: rgba(0, 242, 254, 0.06);
+        .lvl-btn.active, .lvl-btn:hover {
+            background: rgba(0,242,254,0.06);
             color: var(--neon-cyan);
             border-color: var(--border-neon);
         }
 
-        .lessons-tree {
+        .lessons-list {
             list-style: none;
-            margin-top: 16px;
-            max-height: 480px;
+            margin-top: 12px;
+            max-height: 400px;
             overflow-y: auto;
-            padding-right: 6px;
         }
-        .lesson-branch {
-            padding: 14px 16px;
+
+        .lesson-item {
+            padding: 10px 12px;
             background: rgba(255,255,255,0.01);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 0.9rem;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            font-size: 0.85rem;
             color: var(--text-muted);
             cursor: pointer;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             transition: 0.2s;
         }
-        .lesson-branch.active, .lesson-branch:hover {
-            background: rgba(79, 172, 254, 0.06);
+        .lesson-item.active, .lesson-item:hover {
+            background: rgba(79,172,254,0.06);
             color: #fff;
-            border-color: rgba(79, 172, 254, 0.4);
+            border-color: rgba(79,172,254,0.3);
         }
 
-        .content-canvas {
+        .content-box {
             background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 26px;
-            padding: 50px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 35px;
         }
 
-        .code-box {
+        .code-snippet {
             background: #010204;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border-subtle);
             border-left: 3px solid var(--neon-cyan);
-            padding: 22px;
-            border-radius: 14px;
-            font-family: 'SF Mono', Monaco, monospace;
-            font-size: 0.92rem;
+            padding: 16px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.88rem;
             color: #e2e8f0;
-            margin: 30px 0;
+            margin: 20px 0;
             overflow-x: auto;
         }
 
-        /* ИИ Консоль Наставника */
-        .ai-terminal-panel {
+        /* Терминал ИИ */
+        .terminal-panel {
             background: var(--bg-surface);
             border: 1px solid var(--border-neon);
-            border-radius: 26px;
-            padding: 26px;
+            border-radius: 20px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
-            height: 700px;
+            height: 550px;
             position: sticky;
-            top: 100px;
+            top: 90px;
         }
-        .terminal-stream {
+
+        .terminal-feed {
             flex: 1;
             background: #010204;
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 18px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 12px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            font-size: 0.9rem;
-            margin-bottom: 16px;
+            gap: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
         }
-        .msg-bot { background: var(--bg-surface); border: 1px solid var(--border-color); padding: 14px 18px; border-radius: 14px; color: var(--text-muted); align-self: flex-start; max-width: 92%; line-height: 1.5; }
-        .msg-user { background: var(--neon-cyan); color: var(--bg-deep); font-weight: 800; padding: 14px 18px; border-radius: 14px; align-self: flex-end; max-width: 92%; }
-        
-        .terminal-input-row { display: flex; gap: 8px; }
-        .terminal-field { flex: 1; background: #010204; border: 1px solid var(--border-color); padding: 14px 18px; border-radius: 14px; color: #fff; font-size: 0.9rem; outline: none; }
-        .terminal-field:focus { border-color: var(--neon-cyan); }
-        .terminal-send { background: var(--neon-cyan); color: var(--bg-deep); border: none; padding: 0 22px; border-radius: 14px; font-weight: 900; cursor: pointer; }
+
+        .msg-bot { background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 8px 12px; border-radius: 8px; color: var(--text-muted); align-self: flex-start; max-width: 90%; }
+        .msg-user { background: var(--neon-cyan); color: #03050b; font-weight: 700; padding: 8px 12px; border-radius: 8px; align-self: flex-end; max-width: 90%; }
+
+        .terminal-row { display: flex; gap: 6px; }
+        .terminal-input { flex: 1; background: #010204; border: 1px solid var(--border-subtle); padding: 10px; border-radius: 8px; color: #fff; font-size: 0.85rem; outline: none; }
+        .terminal-input:focus { border-color: var(--neon-cyan); }
+        .terminal-send { background: var(--neon-cyan); color: #03050b; border: none; padding: 0 14px; border-radius: 8px; font-weight: 800; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand-logo">KOBLDZHON SCHOOL <span>DEVELOPER HUB</span></div>
-        <div id="headerStatusWidget"></div>
+        <div class="logo">KOBLDZHON SCHOOL // PORTAL</div>
+        <div id="headerWidget"></div>
     </header>
 
     <div class="container">
 
-        <!-- Авторизация -->
-        <div class="auth-panel" id="screenAuth">
-            <h2 id="authHeadingTitle">Авторизация узла</h2>
-            <p id="authHeadingDesc">Введите учетные данные или сгенерируйте индивидуальный защищенный пароль.</p>
+        <!-- Экран авторизации -->
+        <div class="auth-box" id="authScreen">
+            <h2 id="authTitle">Авторизация</h2>
+            <p id="authDesc">Введите логин и пароль для доступа к платформе.</p>
             
-            <div class="input-group">
-                <label>Пользовательский никнейм</label>
-                <input type="text" id="fieldLogin" class="cyber-input" placeholder="например: sutenr или alex">
+            <div class="form-control">
+                <label>Никнейм</label>
+                <input type="text" id="loginField" class="input-field" placeholder="например: sutenr или ваш ник">
             </div>
-            <div class="input-group">
-                <label>Секретный пароль</label>
-                <div class="password-row">
-                    <input type="text" id="fieldPass" class="cyber-input" placeholder="••••••••">
-                    <button class="btn-gen" onclick="generateSecurePassword()" title="Сгенерировать сложный пароль">🎲 Генератор</button>
+            <div class="form-control">
+                <label>Пароль</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="password" id="passField" class="input-field" placeholder="••••••••">
+                    <button type="button" class="btn btn-outline" style="margin-top:0; width:auto; padding:0 14px; font-size:0.75rem;" onclick="genPass()">🎲</button>
                 </div>
             </div>
-            
-            <button class="btn-main" id="authSubmitActionBtn" onclick="processAuthSubmission()">Инициализировать сессию</button>
-            <button class="btn-main btn-sec" style="margin-top: 12px;" onclick="switchAuthModeType()"><span id="authSwitchTextNode">Создать новый аккаунт</span></button>
+
+            <button class="btn" id="authSubmitBtn" onclick="handleAuth()">Войти в систему</button>
+            <button class="btn btn-outline" style="margin-top: 10px;" onclick="toggleRegMode()"><span id="switchText">Создать новый аккаунт</span></button>
         </div>
 
         <!-- Главный дашборд -->
-        <div class="screen" id="screenDashboard">
-            <div class="profile-banner">
+        <div class="screen" id="dashScreen">
+            <div class="profile-card">
                 <div>
-                    <h3 id="dashUsernameDisplay" style="font-size: 1.5rem; font-weight: 900; margin-bottom: 6px;">Ученик</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;" id="dashTierStatusDisplay">Уровень доступа: Standard Node</p>
+                    <h3 id="profileName" style="font-size: 1.3rem; font-weight: 800;">Ученик</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;" id="profileStatus">Статус: Стандартный узел</p>
                 </div>
-                <div style="display: flex; gap: 12px;">
-                    <button class="btn-main" style="margin:0; width:auto; padding: 14px 28px; font-size: 0.9rem;" onclick="promptVipActivationModal()">Активировать Ключ</button>
-                    <button class="btn-main btn-sec" style="margin:0; width:auto; padding: 14px 28px; font-size: 0.9rem; color: var(--danger); border-color: rgba(255,71,87,0.3);" onclick="destroySession()">Завершить сеанс</button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" style="margin:0; width:auto; padding: 10px 20px; font-size: 0.85rem;" onclick="openKeyModal()">Активировать ключ</button>
+                    <button class="btn btn-outline" style="margin:0; width:auto; padding: 10px 20px; font-size: 0.85rem; color: var(--danger); border-color: rgba(255,71,87,0.3);" onclick="logout()">Выйти</button>
                 </div>
             </div>
 
-            <h2 style="font-size: 1.45rem; font-weight: 900; margin-bottom: 30px; letter-spacing: -0.5px;">Матрица учебных направлений Kobldzhon</h2>
-            <div class="tracks-matrix" id="matrixTracksGrid"></div>
+            <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 20px;">Направления Kobldzhon School</h2>
+            <div class="tracks-grid" id="tracksGrid"></div>
         </div>
 
         <!-- Рабочее пространство урока -->
-        <div class="screen" id="screenWorkspace">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                <h2 id="workspaceHeaderTitleText" style="font-size: 1.6rem; font-weight: 900;">Модуль обучения</h2>
-                <button class="btn-main btn-sec" style="width: auto; margin: 0; padding: 12px 24px; font-size: 0.9rem;" onclick="returnToDashboardMatrix()">← Вернуться в матрицу</button>
+        <div class="screen" id="roomScreen">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 id="roomTitle" style="font-size: 1.4rem; font-weight: 800;">Урок</h2>
+                <button class="btn btn-outline" style="width: auto; margin: 0; padding: 8px 16px; font-size: 0.85rem;" onclick="closeRoom()">← Назад к трекам</button>
             </div>
 
-            <div class="workspace-grid">
-                <!-- Сайдбар уровней -->
-                <div class="sidebar-panel">
-                    <p style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 14px; font-weight: 900;">Ступени освоения</p>
-                    <button class="level-switcher active" onclick="changeLevelTier('beginner')">🟢 1. Фундамент и Логика</button>
-                    <button class="level-switcher" onclick="changeLevelTier('intermediate')">🟡 2. Практикум и Архитектура</button>
-                    <button class="level-switcher" onclick="changeLevelTier('pro')">🔴 3. PRO Спецификация</button>
-                    
-                    <p style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin: 26px 0 10px; font-weight: 900;">Дерево уроков</p>
-                    <ul class="lessons-tree" id="lessonsTreeContainer"></ul>
+            <div class="workspace">
+                <div class="sidebar">
+                    <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px; font-weight: 800;">Ступени</p>
+                    <button class="lvl-btn active" onclick="setLevel('beginner')">🟢 1. Старт и База</button>
+                    <button class="lvl-btn" onclick="setLevel('pro')">🔴 2. PRO Практика</button>
+
+                    <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin: 20px 0 8px; font-weight: 800;">Уроки</p>
+                    <ul class="lessons-list" id="lessonsList"></ul>
                 </div>
 
-                <!-- Холст контента -->
-                <div class="content-canvas">
-                    <h3 id="activeLessonTitleDisplay" style="font-size: 1.8rem; font-weight: 900; color: var(--neon-cyan); margin-bottom: 20px;">Выберите урок</h3>
-                    <div id="activeLessonBodyDisplay" style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.85;">Синхронизация данных...</div>
+                <div class="content-box">
+                    <h3 id="lesTitle" style="font-size: 1.5rem; font-weight: 800; color: var(--neon-cyan); margin-bottom: 15px;">Выберите урок</h3>
+                    <div id="lesBody" style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7;">Загрузка данных...</div>
                 </div>
 
-                <!-- Консоль ИИ Наставника -->
-                <div class="ai-terminal-panel">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
-                        <span style="width: 10px; height: 10px; background: var(--neon-cyan); border-radius: 50%; box-shadow: 0 0 15px var(--neon-cyan);"></span>
-                        <h4 style="font-size: 1rem; font-weight: 900; letter-spacing: -0.3px;">ИИ-Терминал Наставника</h4>
+                <div class="terminal-panel">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                        <span style="width: 8px; height: 8px; background: var(--neon-cyan); border-radius: 50%; box-shadow: 0 0 10px var(--neon-cyan);"></span>
+                        <h4 style="font-size: 0.9rem; font-weight: 800;">ИИ-Терминал Наставника</h4>
                     </div>
-                    <div class="terminal-stream" id="terminalChatStream">
-                        <div class="msg-bot">Нейро-сеть инициализирована. Введите свой запрос или задайте вопрос по текущему модулю обучения.</div>
+                    <div class="terminal-feed" id="termFeed">
+                        <div class="msg-bot">Система на связи. Задавай вопрос по материалу урока!</div>
                     </div>
-                    <div class="terminal-input-row">
-                        <input type="text" id="terminalInputQuery" class="terminal-field" placeholder="Спросить ИИ-агента..." onkeypress="if(event.key==='Enter') submitTerminalQuery()">
-                        <button class="terminal-send" onclick="submitTerminalQuery()">→</button>
+                    <div class="terminal-row">
+                        <input type="text" id="termInp" class="terminal-input" placeholder="Спросить..." onkeypress="if(event.key==='Enter') sendTerm()">
+                        <button class="terminal-send" onclick="sendTerm()">→</button>
                     </div>
                 </div>
             </div>
@@ -475,349 +408,311 @@
 
     </div>
 
-    <!-- Модалка активации Ключей -->
-    <div id="modalVipOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(1,2,4,0.9); backdrop-filter: blur(15px); z-index:200; justify-content:center; align-items:center; padding:20px;">
-        <div class="auth-panel" style="margin:0; width:100%;">
-            <h3>Активация доступа по ключу</h3>
-            <p>Введите персональный секретный ключ, выданный при покупке направления.</p>
-            <input type="text" id="vipCodeFieldInput" class="cyber-input" placeholder="ВВЕДИТЕ КЛЮЧ" style="text-align:center; text-transform:uppercase; font-weight:900; letter-spacing:2px; margin-bottom: 20px;">
-            <button class="btn-main" onclick="verifyAndApplyCode()">Активировать доступ</button>
-            <button class="btn-main btn-sec" style="margin-top: 12px;" onclick="closeVipModalOverlay()">Закрыть окно</button>
+    <!-- Модальное окно активации ключа -->
+    <div id="keyModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(3,5,11,0.85); backdrop-filter: blur(10px); z-index:200; justify-content:center; align-items:center; padding:20px;">
+        <div class="auth-box" style="margin:0; width:100%;">
+            <h3>Активация ключа доступа</h3>
+            <p>Введите секретный ключ, полученный при покупке направления.</p>
+            <input type="text" id="keyCodeInp" class="input-field" placeholder="KBLD-XXXX-XXXX" style="text-align:center; text-transform:uppercase; font-weight:800; letter-spacing:1px; margin-bottom: 15px;">
+            <button class="btn" onclick="applyKey()">Разблокировать</button>
+            <button class="btn btn-outline" style="margin-top:10px;" onclick="closeKeyModal()">Закрыть</button>
         </div>
     </div>
 
     <script>
-        let registrationModeActive = false;
-        let sessionUserObject = null;
-        let selectedTrackKey = '';
-        let selectedLevelKey = 'beginner';
-        let currentActiveLessonHeading = '';
+        let isReg = false;
+        let currentUser = null;
+        let currentTrack = '';
+        let currentLvl = 'beginner';
+        let activeLessonName = '';
 
-        // База данных знаний Kobldzhon School с уникальными сложными ключами для каждого трека
-        const globalSuperAcademyDB = {
+        // Защита и жесткая резервация твоего ника sutenr в системе
+        const SYSTEM_DEV_NICK = "sutenr";
+
+        // База данных направлений и ключей
+        const schoolDB = {
             ai: {
-                title: "Мастер ИИ & Промптинг [PRO]",
+                title: "Мастер ИИ & Промптинг",
                 emoji: "🧠",
-                desc: "Глубокая архитектура языковых моделей, системный промптинг, оптимизация токенов и проектирование автономных авто-агентов.",
-                free: false,
-                requiredKey: "KBLD-AI-9984-X7Z",
+                desc: "Глубокая архитектура языковых моделей, системный промптинг и создание автономных агентов.",
+                key: "KBLD-AI-9984-X7Z",
                 beginner: [
-                    { title: "Модуль 1.1: Физика токенизации текста", text: "Нейросети не видят буквы — они оперируют числовыми векторными токенами. Понимание этого механизма избавляет от 90% логических ошибок при построении больших запросов.", code: "Token_Vector = Model.tokenize('Hello Kobldzhon'); print(Token_Vector);" },
-                    { title: "Модуль 1.2: Золотой стандарт RTCF", text: "Универсальный фреймворк построения запросов: Роль (кем выступает нейросеть), Контекст (в каких условиях), Задача (что именно сделать), Формат (структура выдачи).", code: "PROMPT_TEMPLATE = 'ROLE: Expert\nCONTEXT: Fintech\nTASK: Audit\nFORMAT: JSON'" }
-                ],
-                intermediate: [
-                    { title: "Модуль 2.1: Контекстное окно и управление памятью", text: "Как обходить ограничения памяти моделей, сжимать историю переписки и сохранять критически важные данные сессии.", code: "Memory_Buffer = summarize_history(chat_stream, max_tokens=2048);" }
+                    { title: "Урок 1. Физика токенизации", text: "Как нейросети видят текст на уровне токенов и векторных эмбеддингов.", code: "tokens = model.tokenize('Kobldzhon School'); print(tokens);" },
+                    { title: "Урок 2. Формула RTCF", text: "Роль, Контекст, Задача и Формат для построения безупречных запросов.", code: "PROMPT = Role(Expert) + Context(SaaS) + Task(Code) + Format(JSON)" }
                 ],
                 pro: [
-                    { title: "Модуль 3.1: Цепочки рассуждений (Chain-of-Thought)", text: "Принудительное разделение мыслительного процесса модели на логические узлы для абсолютного исключения математических сбоев.", code: "Execution_Flow: Step_1_Deconstruct -> Step_2_Validate -> Step_3_Synthesize" }
+                    { title: "Урок 1. Цепочки рассуждений (CoT)", text: "Разделение мыслительного процесса модели для полного устранения галлюцинаций.", code: "Execute: Step_1_Analyze -> Step_2_Validate -> Step_3_Synthesize" }
                 ]
             },
             shorts: {
-                title: "3D Анимация & Вирусные Shorts",
+                title: "3D Анимация & Shorts",
                 emoji: "🎬",
-                desc: "Создание роликов с миллионными органическими охватами без показа лица, продвинутый монтаж и генерация в Kling/Midjourney.",
-                free: false,
-                requiredKey: "KBLD-3D-5512-Q9W",
+                desc: "Создание вирусных роликов без лица, ASMR-монтаж и генерация персонажей в Midjourney/Kling.",
+                key: "KBLD-3D-5512-Q9W",
                 beginner: [
-                    { title: "Модуль 1.1: Психология первых 2 секунд (Retention)", text: "Крючок (hook) в вертикальном видео определяет его судьбу. Зритель принимает решение о скролле за доли секунды.", code: "Retention_Formula = Visual_Hook + Open_Loop + ASMR_Trigger" }
-                ],
-                intermediate: [
-                    { title: "Модуль 2.1: Динамика движения камеры в Kling AI", text: "Тонкая настройка траектории виртуальной камеры, масштабирования и стабилизации фона в генеративных видео.", prompt: "Cinematic drone orbit, 60fps, raytraced subsurface scattering" }
+                    { title: "Урок 1. Крючок первых 2 секунд", text: "Удержание внимания зрителя и механики зацикливания вертикальных роликов.", code: "Retention = Visual_Hook + Open_Loop + Fast_Cut" }
                 ],
                 pro: [
-                    { title: "Модуль 3.1: Зацикливание и алгоритмы платформ", text: "Технические секреты бесшовного лупа для многократного просмотра роликов и взлома рекомендательных алгоритмов.", code: "Loop_Script: Final_Frame matches First_Frame alpha blend 100ms." }
+                    { title: "Урок 1. Продвинутая генерация в Kling", text: "Тонкая настройка камеры и движения объектов в генеративном видео.", code: "Camera: Dynamic orbit, 60fps, raytraced lighting." }
                 ]
             },
             trade: {
                 title: "Игровой Трейдинг & Арбитраж",
                 emoji: "💎",
-                desc: "Безопасная перепродажа цифровых лимиток, инвентаря, скинов и валюты на глобальных маркетплейсах.",
-                free: false,
-                requiredKey: "KBLD-TRD-7731-M2V",
+                desc: "Безопасная перепродажа цифровых лимиток, скинов и активов на маркетплейсах.",
+                key: "KBLD-TRD-7731-M2V",
                 beginner: [
-                    { title: "Модуль 1.1: Расчет ликвидности и комиссий", text: "Формулы чистой маржинальности с учетом комиссий торговых площадок и рисков заморозки средств.", code: "Net_Margin = (Sale_Price * (1 - Platform_Fee)) - Purchase_Cost;" }
-                ],
-                intermediate: [
-                    { title: "Модуль 2.1: Мониторинг ивентов и обновлений", text: "Стратегии прогнозирования скачков цен на редкие предметы в момент выхода патчей.", code: "Event_Trigger_Alert = Market_Volume > 300% AND Price_Dip < 15%;" }
+                    { title: "Модуль 1. Расчет ликвидности", text: "Формулы чистой маржинальности с учетом комиссий платформ.", code: "Margin = (Sale_Price * (1 - Fee)) - Buy_Cost;" }
                 ],
                 pro: [
-                    { title: "Модуль 3.1: Автоматизированный снайпинг ордеров", text: "Алгоритмический перехват выгодных лотов в первые секунды после выставления продавцом.", code: "Sniper_Bot_Filter: Float_Index < 0.0005 AND Instant_Checkout = true;" }
+                    { title: "Модуль 2. Снайпинг ордеров", text: "Алгоритмы перехвата выгодных лотов сразу после падения цены.", code: "Filter: Float < 0.0005 AND Instant_Buy = true;" }
                 ]
             },
             web: {
-                title: "AI Веб-Разработка под ключ",
+                title: "AI Веб-Разработка",
                 emoji: "💻",
-                desc: "Создание элитных интерфейсов, адаптивных лендингов и SaaS-платформ с помощью ИИ за считанные часы.",
-                free: false,
-                requiredKey: "KBLD-WEB-4409-K8L",
+                desc: "Создание сайтов и SaaS-платформ с помощью ИИ за считанные часы.",
+                key: "KBLD-WEB-4409-K8L",
                 beginner: [
-                    { title: "Модуль 1.1: Современный CSS и переменные темы", text: "Построение гибких сеток на Grid/Flexbox и оформление глубоких темных палитр.", code: ":root { --bg: #010204; --neon: #00f2fe; --radius: 20px; font-family: system-ui; }" }
-                ],
-                intermediate: [
-                    { title: "Модуль 2.1: Клиентское состояние и localStorage", text: "Управление профилями пользователей и сохранение данных в браузере без тяжелых баз данных.", code: "localStorage.setItem('user_session', JSON.stringify(payload));" }
+                    { title: "Урок 1. Архитектура интерфейсов", text: "Чистый CSS, гибкие сетки и адаптивные темные темы.", code: ":root { --bg: #03050b; --neon: #00f2fe; }" }
                 ],
                 pro: [
-                    { title: "Модуль 3.1: Автоматический деплой и монетизация", text: "Публикация готовых проектов через GitHub Pages и упаковка услуг под ключ для клиентов.", code: "Deploy_Pipeline: Build -> Lint -> Push to Origin/Main -> Live URL." }
+                    { title: "Урок 1. Локальные базы данных", text: "Управление сессиями и сохранение данных через localStorage.", code: "localStorage.setItem('session', JSON.stringify(data));" }
                 ]
             },
             design: {
                 title: "Нейро-Дизайн & Графика",
                 emoji: "🎨",
-                desc: "Создание коммерческой графики, апскейл изображений и разработка кликабельных превью для топ-блогов.",
-                free: false,
-                requiredKey: "KBLD-DSG-8823-J4H",
+                desc: "Коммерческая графика, апскейл изображений и превью для топ-блогов.",
+                key: "KBLD-DSG-8823-J4H",
                 beginner: [
-                    { title: "Модуль 1.1: Основы работы с генераторами изображений", text: "Понимание весов промптов, влияния сидов и разрешающей способности моделей.", code: "Weights: [Subject::1.5] [Lighting::1.2] [Background::-0.5]" }
-                ],
-                intermediate: [
-                    { title: "Модуль 2.1: Детальная ретушь и апскейл в Krea", text: "Восстановление текстур, улучшение резкости и работа с искусственным освещением.", code: "Enhancer_Config: Denoise_Strength = 0.2, Fidelity = 0.9;" }
+                    { title: "Урок 1. Веса и сиды промптов", text: "Управление детализацией и композицией изображений.", code: "Prompt: [Subject::1.5] [Lighting::1.2]" }
                 ],
                 pro: [
-                    { title: "Модуль 3.1: Коммерческие превью для YouTube", text: "Сборка композиций с крупными контрастными акцентами для максимального CTR.", code: "Composition: Rule_of_Thirds + High_Saturation_Faces + Bold_Typography;" }
+                    { title: "Урок 1. Апскейл в Krea", text: "Восстановление текстур и коммерческая ретушь кадров.", code: "Config: Denoise = 0.2, Fidelity = 0.9" }
                 ]
             },
             bots: {
                 title: "Telegram-Боты & Автоматизация",
                 emoji: "🤖",
-                desc: "Сборка умных ботов-магазинов, интеграция ChatGPT API и создание пассивного дохода на автоворонках.",
-                free: false,
-                requiredKey: "KBLD-BOT-1195-N6P",
+                desc: "Сборка умных ботов-магазинов и интеграция ChatGPT API.",
+                key: "KBLD-BOT-1195-N6P",
                 beginner: [
-                    { title: "Модуль 1.1: Проектирование структуры в BotFather", text: "Получение API-токенов, настройка описания и первичное структурирование команд.", code: "Bot_Config = { token: 'API_KEY_HERE', drop_pending_updates: true };" }
-                ],
-                intermediate: [
-                    { title: "Модуль 2.1: Сборка каталога и воронок продаж", text: "Подключение платежных шлюзов, кнопок и логики выдачи цифровых товаров.", code: "Funnel_State: Step_1_Welcome -> Step_2_Catalog -> Step_3_Checkout;" }
+                    { title: "Урок 1. Настройка в BotFather", text: "Получение токенов и базовая структура команд бота.", code: "BotConfig = { token: 'API_KEY', updates: true };" }
                 ],
                 pro: [
-                    { title: "Модуль 3.1: Интеграция OpenAI API в бота", text: "Подключение нейросети для автоматической техподдержки и генерации ответов клиентам в реальном времени.", code: "Endpoint: POST https://api.openai.com/v1/chat/completions; Model: gpt-4o;" }
+                    { title: "Модуль 1. Интеграция OpenAI API", text: "Подключение нейросети для ответов клиентам в реальном времени.", code: "Endpoint: POST https://api.openai.com/v1/chat/completions" }
                 ]
             }
         };
 
         window.onload = function() {
-            const savedProfile = localStorage.getItem('kobldzhon_profile');
-            if (savedProfile) {
-                sessionUserObject = JSON.parse(savedProfile);
-                initializeDashboardScreen();
+            const saved = localStorage.getItem('kobldzhon_session');
+            if (saved) {
+                currentUser = JSON.parse(saved);
+                bootDashboard();
             }
         }
 
-        function generateSecurePassword() {
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$!%&?";
-            let password = "";
-            for (let i = 0; i < 14; i++) {
-                password += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            document.getElementById('fieldPass').value = password;
-            alert('🔐 Сгенерирован защищенный пароль:\n\n' + password);
+        function genPass() {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$!";
+            let p = "";
+            for (let i = 0; i < 12; i++) p += chars.charAt(Math.floor(Math.random() * chars.length));
+            document.getElementById('passField').value = p;
+            alert('🔐 Сгенерирован сложный пароль:\n\n' + p);
         }
 
-        function switchAuthModeType() {
-            registrationModeActive = !registrationModeActive;
-            document.getElementById('authHeadingTitle').innerText = registrationModeActive ? 'Регистрация узла' : 'Авторизация узла';
-            document.getElementById('authHeadingDesc').innerText = registrationModeActive ? 'Создайте защищенный аккаунт в системе.' : 'Введите учетные данные для инициализации сессии.';
-            document.getElementById('authSubmitActionBtn').innerText = registrationModeActive ? 'Зарегистрировать узел' : 'Инициализировать сессию';
-            document.getElementById('authSwitchTextNode').innerText = registrationModeActive ? 'Уже зарегистрированы? Войти' : 'Создать новый аккаунт';
+        function toggleRegMode() {
+            isReg = !isReg;
+            document.getElementById('authTitle').innerText = isReg ? 'Регистрация' : 'Авторизация';
+            document.getElementById('authDesc').innerText = isReg ? 'Создайте новый защищенный профиль.' : 'Введите логин и пароль для доступа к платформе.';
+            document.getElementById('authSubmitBtn').innerText = isReg ? 'Зарегистрироваться' : 'Войти в систему';
+            document.getElementById('switchText').innerText = isReg ? 'Уже есть аккаунт? Войти' : 'Создать новый аккаунт';
         }
 
-        function processAuthSubmission() {
-            const loginVal = document.getElementById('fieldLogin').value.trim();
-            const passVal = document.getElementById('fieldPass').value.trim();
-            if (!loginVal || !passVal) { alert('Заполните обязательные поля авторизации.'); return; }
+        function handleAuth() {
+            const login = document.getElementById('loginField').value.trim().toLowerCase();
+            const pass = document.getElementById('passField').value.trim();
 
-            let globalDb = JSON.parse(localStorage.getItem('kobldzhon_db') || '{}');
+            if (!login || !pass) { alert('Заполните все поля!'); return; }
 
-            if (registrationModeActive) {
-                if (globalDb[loginVal]) { alert('Узел с таким именем уже существует.'); return; }
-                globalDb[loginVal] = { password: passVal, unlockedTracks: [] };
-                localStorage.setItem('kobldzhon_db', JSON.stringify(globalDb));
-                alert('Регистрация прошла успешно! Теперь авторизуйтесь.');
-                switchAuthModeType();
-            } else {
-                if (!globalDb[loginVal] || globalDb[loginVal].password !== passVal) { alert('Неверный логин или пароль.'); return; }
-                
-                // Проверяем, является ли пользователь разработчиком sutenr
-                let userTracks = globalDb[loginVal].unlockedTracks || [];
-                if (loginVal.toLowerCase() === 'sutenr') {
-                    userTracks = ['ai', 'shorts', 'trade', 'web', 'design', 'bots', 'DEV_ALL'];
+            let db = JSON.parse(localStorage.getItem('kobldzhon_users_db') || '{}');
+
+            if (isReg) {
+                if (login === SYSTEM_DEV_NICK && db[SYSTEM_DEV_NICK]) {
+                    alert('❌ Ошибка: Этот ник разработчика зарезервирован системой!');
+                    return;
                 }
-
-                sessionUserObject = { login: loginVal, unlockedTracks: userTracks };
-                localStorage.setItem('kobldzhon_profile', JSON.stringify(sessionUserObject));
-                initializeDashboardScreen();
-            }
-        }
-
-        function initializeDashboardScreen() {
-            document.getElementById('screenAuth').style.display = 'none';
-            document.getElementById('screenDashboard').style.display = 'block';
-
-            let globalDb = JSON.parse(localStorage.getItem('kobldzhon_db') || '{}');
-            if (globalDb[sessionUserObject.login]) {
-                sessionUserObject.unlockedTracks = globalDb[sessionUserObject.login].unlockedTracks || [];
-            }
-
-            // Автоматически даем полный доступ разработчику sutenr
-            if (sessionUserObject.login.toLowerCase() === 'sutenr') {
-                sessionUserObject.unlockedTracks = ['ai', 'shorts', 'trade', 'web', 'design', 'bots', 'DEV_ALL'];
-            }
-
-            document.getElementById('dashUsernameDisplay').innerHTML = sessionUserObject.login + (sessionUserObject.login.toLowerCase() === 'sutenr' ? '<span class="dev-badge-box">Developer Node</span>' : '');
-            
-            const activeCount = sessionUserObject.unlockedTracks.length;
-            if (sessionUserObject.login.toLowerCase() === 'sutenr') {
-                document.getElementById('dashTierStatusDisplay').innerText = 'Статус: 🛠️ Главный Разработчик (Все треки и контроль прогресса активны)';
+                if (db[login]) { alert('Такой ник уже занят!'); return; }
+                
+                db[login] = { pass: pass, unlocked: [] };
+                localStorage.setItem('kobldzhon_users_db', JSON.stringify(db));
+                alert('Регистрация успешна! Теперь вождите под своими данными.');
+                toggleRegMode();
             } else {
-                document.getElementById('dashTierStatusDisplay').innerText = activeCount > 0 ? `Активных треков разблокировано: ${activeCount}` : 'Уровень доступа: Базовый';
+                if (login === SYSTEM_DEV_NICK) {
+                    // Жесткий допуск разработчика sutenr независимо от локальной базы
+                    currentUser = { login: SYSTEM_DEV_NICK, unlocked: ['ai', 'shorts', 'trade', 'web', 'design', 'bots'] };
+                } else {
+                    if (!db[login] || db[login].pass !== pass) { alert('Неверный логин или пароль!'); return; }
+                    currentUser = { login: login, unlocked: db[login].unlocked || [] };
+                }
+                localStorage.setItem('kobldzhon_session', JSON.stringify(currentUser));
+                bootDashboard();
             }
-
-            renderMatrixGrid();
         }
 
-        function destroySession() {
-            localStorage.removeItem('kobldzhon_profile');
+        function bootDashboard() {
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('dashScreen').style.display = 'block';
+
+            let db = JSON.parse(localStorage.getItem('kobldzhon_users_db') || '{}');
+            if (currentUser.login !== SYSTEM_DEV_NICK && db[currentUser.login]) {
+                currentUser.unlocked = db[currentUser.login].unlocked || [];
+            } else if (currentUser.login === SYSTEM_DEV_NICK) {
+                currentUser.unlocked = ['ai', 'shorts', 'trade', 'web', 'design', 'bots'];
+            }
+
+            const isDev = currentUser.login === SYSTEM_DEV_NICK;
+            document.getElementById('profileName').innerHTML = currentUser.login + (isDev ? '<span class="dev-badge">Главный Разработчик</span>' : '');
+            document.getElementById('profileStatus').innerText = isDev ? 'Статус: Администратор (Все курсы и контроль активны)' : `Активных треков: ${currentUser.unlocked.length}`;
+
+            renderTracks();
+        }
+
+        function logout() {
+            localStorage.removeItem('kobldzhon_session');
             location.reload();
         }
 
-        function renderMatrixGrid() {
-            const container = document.getElementById('matrixTracksGrid');
-            container.innerHTML = '';
+        function renderTracks() {
+            const grid = document.getElementById('tracksGrid');
+            grid.innerHTML = '';
+            const isDev = currentUser.login === SYSTEM_DEV_NICK;
 
-            const isDev = sessionUserObject.login.toLowerCase() === 'sutenr';
+            Object.keys(schoolDB).forEach(key => {
+                const tr = schoolDB[key];
+                const unlocked = isDev || currentUser.unlocked.includes(key);
 
-            Object.keys(globalSuperAcademyDB).forEach(key => {
-                const nodeData = globalSuperAcademyDB[key];
-                const isUnlocked = isDev || sessionUserObject.unlockedTracks.includes(key) || sessionUserObject.unlockedTracks.includes('DEV_ALL');
-
-                container.innerHTML += `
-                    <div class="track-node-card">
+                grid.innerHTML += `
+                    <div class="track-card">
                         <div>
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px;">
-                                <span style="font-size: 2.6rem;">${nodeData.emoji}</span>
-                                <span class="pill-badge ${isUnlocked ? 'unlocked' : 'locked'}">${isUnlocked ? (isDev ? 'Разработчик (Доступно)' : 'Доступно') : '🔒 Трек заблокирован'}</span>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+                                <span style="font-size: 2.2rem;">${tr.emoji}</span>
+                                <span class="badge ${unlocked ? 'active' : 'locked'}">${unlocked ? 'Доступно' : '🔒 Заблокировано'}</span>
                             </div>
-                            <h3 style="font-size: 1.35rem; font-weight: 900; margin-bottom: 8px; letter-spacing: -0.3px;">${nodeData.title}</h3>
-                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 26px;">${nodeData.desc}</p>
+                            <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 6px;">${tr.title}</h3>
+                            <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 20px;">${tr.desc}</p>
                         </div>
-                        <button class="btn-main" style="margin:0;" onclick="openWorkspaceNode('${key}', ${isUnlocked})">${isUnlocked ? 'Запустить обучение' : 'Ввести ключ доступа'}</button>
+                        <button class="btn" style="margin:0;" onclick="openTrack('${key}', ${unlocked})">${unlocked ? 'Открыть уроки' : 'Ввести ключ'}</button>
                     </div>
                 `;
             });
         }
 
-        function openWorkspaceNode(trackKey, isUnlocked) {
-            if (!isUnlocked) {
-                promptVipActivationModal();
+        function openTrack(key, unlocked) {
+            if (!unlocked) {
+                openKeyModal();
                 return;
             }
-            selectedTrackKey = trackKey;
-            document.getElementById('screenDashboard').style.display = 'none';
-            document.getElementById('screenWorkspace').style.display = 'block';
+            currentTrack = key;
+            document.getElementById('dashScreen').style.display = 'none';
+            document.getElementById('roomScreen').style.display = 'block';
 
-            const nodeData = globalSuperAcademyDB[trackKey];
-            document.getElementById('workspaceHeaderTitleText').innerText = nodeData.emoji + ' ' + nodeData.title;
-            changeLevelTier('beginner');
+            const tr = schoolDB[key];
+            document.getElementById('roomTitle').innerText = tr.emoji + ' ' + tr.title;
+            setLevel('beginner');
         }
 
-        function returnToDashboardMatrix() {
-            document.getElementById('screenWorkspace').style.display = 'none';
-            document.getElementById('screenDashboard').style.display = 'block';
+        function closeRoom() {
+            document.getElementById('roomScreen').style.display = 'none';
+            document.getElementById('dashScreen').style.display = 'block';
         }
 
-        function changeLevelTier(tierKey) {
-            selectedLevelKey = tierKey;
-            document.querySelectorAll('.level-switcher').forEach(el => el.classList.remove('active'));
+        function setLevel(lvl) {
+            currentLvl = lvl;
+            document.querySelectorAll('.lvl-btn').forEach(b => b.classList.remove('active'));
             event && event.target && event.target.classList.add('active');
-            renderLessonsTreeMenu();
+            renderLessons();
         }
 
-        function renderLessonsTreeMenu() {
-            const menuContainer = document.getElementById('lessonsTreeContainer');
-            menuContainer.innerHTML = '';
-            const nodeData = globalSuperAcademyDB[selectedTrackKey];
-            const list = nodeData[selectedLevelKey] || [];
+        function renderLessons() {
+            const list = document.getElementById('lessonsList');
+            list.innerHTML = '';
+            const tr = schoolDB[currentTrack];
+            const items = tr[currentLvl] || [];
 
-            list.forEach((les, idx) => {
-                menuContainer.innerHTML += `<li class="lesson-branch ${idx===0?'active':''}" onclick="selectLessonBranch('${les.title.replace(/'/g, "\\'")}', '${les.text.replace(/'/g, "\\'")}', '${les.code.replace(/'/g, "\\'")}')">${les.title}</li>`;
+            items.forEach((les, idx) => {
+                list.innerHTML += `<li class="lesson-item ${idx===0?'active':''}" onclick="selectLesson('${les.title.replace(/'/g, "\\'")}', '${les.text.replace(/'/g, "\\'")}', '${les.code.replace(/'/g, "\\'")}')">${les.title}</li>`;
             });
-            if (list.length > 0) selectLessonBranch(list[0].title, list[0].text, list[0].code);
+            if (items.length > 0) selectLesson(items[0].title, items[0].text, items[0].code);
         }
 
-        function selectLessonBranch(title, text, code) {
-            currentActiveLessonHeading = title;
-            document.querySelectorAll('.lesson-branch').forEach(br => {
-                if (br.innerText === title) br.classList.add('active');
-                else br.classList.remove('active');
+        function selectLesson(title, text, code) {
+            activeLessonName = title;
+            document.querySelectorAll('.lesson-item').forEach(el => {
+                if (el.innerText === title) el.classList.add('active');
+                else el.classList.remove('active');
             });
 
-            document.getElementById('activeLessonTitleDisplay').innerText = title;
-            document.getElementById('activeLessonBodyDisplay').innerHTML = `
-                <p style="margin-bottom: 24px;">${text}</p>
-                <div class="code-box">${code}</div>
-                <p style="color: var(--gold-accent); font-size: 0.92rem; font-weight: 800; margin-top: 26px;">⚡ Практическая задача: протестируйте данный шаблон через ИИ-терминал справа.</p>
+            document.getElementById('lesTitle').innerText = title;
+            document.getElementById('lesBody').innerHTML = `
+                <p style="margin-bottom: 15px;">${text}</p>
+                <div class="code-snippet">${code}</div>
+                <p style="color: var(--gold); font-size: 0.85rem; font-weight: 700; margin-top: 15px;">⚡ Задание: протестируйте этот шаблон в ИИ-терминале справа.</p>
             `;
         }
 
-        function submitTerminalQuery() {
-            const inputField = document.getElementById('terminalInputQuery');
-            const queryText = inputField.value.trim();
-            if (!queryText) return;
+        function sendTerm() {
+            const inp = document.getElementById('termInp');
+            const txt = inp.value.trim();
+            if (!txt) return;
 
-            const streamBox = document.getElementById('terminalChatStream');
-            streamBox.innerHTML += `<div class="msg-user">${queryText}</div>`;
-            inputField.value = '';
+            const feed = document.getElementById('termFeed');
+            feed.innerHTML += `<div class="msg-user">${txt}</div>`;
+            inp.value = '';
 
             setTimeout(() => {
-                let botAnswer = `[DEV MODE] Анализ запроса по теме «${currentActiveLessonHeading}» завершен. Нейро-сеть работает стабильно.`;
-                const cleanQuery = queryText.toLowerCase();
-                if (cleanQuery.includes('код') || cleanQuery.includes('пример') || cleanQuery.includes('шаблон')) {
-                    botAnswer = `Синтаксический разбор выполнен успешно. Ошибок в структурах данных не обнаружено.`;
+                let ans = `[ИИ Наставник]: Отличный вопрос по уроку «${activeLessonName}». Применяй этот паттерн на практике и следи за синтаксисом.`;
+                if (txt.toLowerCase().includes('код') || txt.toLowerCase().includes('пример')) {
+                    ans = `[ИИ Наставник]: Вот пример реализации: используй чистые переменные и не усложняй структуру кода.`;
                 }
-                streamBox.innerHTML += `<div class="msg-bot">${botAnswer}</div>`;
-                streamBox.scrollTop = streamBox.scrollHeight;
-            }, 450);
+                feed.innerHTML += `<div class="msg-bot">${ans}</div>`;
+                feed.scrollTop = feed.scrollHeight;
+            }, 350);
         }
 
-        function promptVipActivationModal() { document.getElementById('modalVipOverlay').style.display = 'flex'; }
-        function closeVipModalOverlay() { document.getElementById('modalVipOverlay').style.display = 'none'; }
+        function openKeyModal() { document.getElementById('keyModal').style.display = 'flex'; }
+        function closeKeyModal() { document.getElementById('keyModal').style.display = 'none'; }
 
-        // Проверка уникальных индивидуальных ключей покупателей
-        function verifyAndApplyCode() {
-            const inputCode = document.getElementById('vipCodeFieldInput').value.trim();
-            if (!inputCode) return;
+        function applyKey() {
+            const code = document.getElementById('keyCodeInp').value.trim();
+            if (!code) return;
 
-            let globalDb = JSON.parse(localStorage.getItem('kobldzhon_db') || '{}');
-            let unlockedList = globalDb[sessionUserObject.login].unlockedTracks || [];
-
-            let activatedName = "";
-            let foundTrack = null;
-
-            // Ищем, какому треку принадлежит введенный ключ покупателя
-            Object.keys(globalSuperAcademyDB).forEach(tKey => {
-                if (globalSuperAcademyDB[tKey].requiredKey === inputCode) {
-                    foundTrack = tKey;
-                }
+            let foundKeyTrack = null;
+            Object.keys(schoolDB).forEach(tKey => {
+                if (schoolDB[tKey].key === code) foundKeyTrack = tKey;
             });
 
-            if (foundTrack) {
-                if (!unlockedList.includes(foundTrack)) {
-                    unlockedList.push(foundTrack);
-                }
-                activatedName = globalSuperAcademyDB[foundTrack].title;
-            } else {
-                alert('❌ Ошибка: Неверный или несуществующий ключ доступа!');
+            if (!foundKeyTrack) {
+                alert('❌ Неверный ключ доступа!');
                 return;
             }
 
-            globalDb[sessionUserObject.login].unlockedTracks = unlockedList;
-            sessionUserObject.unlockedTracks = unlockedList;
+            if (!currentUser.unlocked.includes(foundKeyTrack)) {
+                currentUser.unlocked.push(foundKeyTrack);
+            }
 
-            localStorage.setItem('kobldzhon_db', JSON.stringify(globalDb));
-            localStorage.setItem('kobldzhon_profile', JSON.stringify(sessionUserObject));
+            let db = JSON.parse(localStorage.getItem('kobldzhon_users_db') || '{}');
+            if (db[currentUser.login]) {
+                db[currentUser.login].unlocked = currentUser.unlocked;
+                localStorage.setItem('kobldzhon_users_db', JSON.stringify(db));
+            }
 
-            closeVipModalOverlay();
-            alert('🎉 Успешно! Активирован доступ к направлению: ' + activatedName);
-            initializeDashboardScreen();
+            localStorage.setItem('kobldzhon_session', JSON.stringify(currentUser));
+            closeKeyModal();
+            alert('🎉 Успешно! Направление разблокировано: ' + schoolDB[foundKeyTrack].title);
+            bootDashboard();
         }
     </script>
 </body>
