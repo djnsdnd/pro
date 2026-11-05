@@ -3,262 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Модуль обучения | SkillDrop Academy</title>
+    <title>Обучение | SkillDrop Academy</title>
     <style>
         :root {
-            --bg-main: #06080f;
-            --bg-card: #0f1322;
-            --bg-panel: #141b2d;
+            --bg-main: #05070c;
+            --bg-card: #0d111a;
             --accent: #00f2fe;
             --accent-2: #4facfe;
             --text-main: #ffffff;
             --text-muted: #8e98b0;
-            --border: #1e2640;
+            --border: #1a2338;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            line-height: 1.6;
-        }
-
-        header {
-            background: rgba(6, 8, 15, 0.9);
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            backdrop-filter: blur(12px);
-        }
-
-        .back-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 25px;
-        }
-
-        @media (max-width: 850px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Сайдбар с уровнями */
-        .sidebar {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 20px;
-            height: fit-content;
-        }
-
-        .level-tabs {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .level-btn {
-            background: var(--bg-main);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            padding: 12px 15px;
-            border-radius: 12px;
-            text-align: left;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.95rem;
-            transition: 0.2s;
-        }
-
-        .level-btn.active, .level-btn:hover {
-            background: rgba(0, 242, 254, 0.1);
-            color: var(--accent);
-            border-color: var(--accent);
-        }
-
-        .lessons-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .lesson-item {
-            background: var(--bg-main);
-            border: 1px solid var(--border);
-            padding: 12px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            transition: 0.2s;
-        }
-
-        .lesson-item.active, .lesson-item:hover {
-            color: #fff;
-            border-color: var(--accent-2);
-            background: rgba(79, 172, 254, 0.08);
-        }
-
-        /* Область просмотра урока */
-        .content-panel {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 30px;
-        }
-
-        .lesson-title {
-            font-size: 1.8rem;
-            font-weight: 900;
-            margin-bottom: 15px;
-            color: var(--accent);
-        }
-
-        .lesson-text {
-            color: #cbd5e1;
-            font-size: 1rem;
-            margin-bottom: 20px;
-            line-height: 1.7;
-        }
-
-        .prompt-box {
-            background: var(--bg-main);
-            border-left: 4px solid var(--accent);
-            padding: 15px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            border-radius: 8px;
-            margin: 20px 0;
-            color: #fff;
-        }
-
-        .task-box {
-            background: rgba(255, 215, 0, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 30px;
-        }
-
-        .task-box h4 {
-            color: #ffd700;
-            margin-bottom: 8px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; }
+        header { background: rgba(5, 7, 12, 0.95); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .back-link { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
+        @media(max-width:768px) { .container { grid-template-columns: 1fr; } }
+        .sidebar { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+        .level-btn { display: block; width: 100%; background: var(--bg-main); border: 1px solid var(--border); color: var(--text-muted); padding: 10px; border-radius: 10px; text-align: left; font-weight: 700; cursor: pointer; margin-bottom: 8px; }
+        .level-btn.active { background: rgba(0,242,254,0.1); color: var(--accent); border-color: var(--accent); }
+        .lessons-list { list-style: none; margin-top: 15px; display: flex; flex-direction: column; gap: 6px; }
+        .lesson-li { background: var(--bg-main); border: 1px solid var(--border); padding: 10px 12px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer; }
+        .lesson-li.active { color: #fff; border-color: var(--accent-2); background: rgba(79,172,254,0.1); }
+        .content-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; }
+        .prompt-box { background: var(--bg-main); border-left: 3px solid var(--accent); padding: 12px; font-family: monospace; font-size: 0.85rem; border-radius: 6px; margin: 15px 0; }
     </style>
 </head>
 <body>
-
     <header>
-        <div style="font-weight: 900; font-size: 1.2rem; background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SKILLDROP PORTAL</div>
-        <a href="index.html" class="back-link">← На главную академию</a>
+        <h3 id="courseHeaderTitle" style="color:var(--accent);">Академия</h3>
+        <a href="cabinet.html" class="back-link">← В личный кабинет</a>
     </header>
 
     <div class="container">
-        <!-- Навигация по уровням и урокам -->
         <div class="sidebar">
-            <h3 style="margin-bottom: 15px; font-size: 1.1rem;">Уровни обучения</h3>
-            <div class="level-tabs">
-                <button class="level-btn active" onclick="switchLevel('beginner')">🟢 Уровень 1: Старт</button>
-                <button class="level-btn" onclick="switchLevel('intermediate')">🟡 Уровень 2: Практик</button>
-                <button class="level-btn" onclick="switchLevel('pro')">🔴 Уровень 3: PRO Мастер</button>
-            </div>
-            
-            <h4 style="margin: 20px 0 10px; font-size: 0.95rem; color: var(--text-muted);">Уроки модуля:</h4>
-            <ul class="lessons-list" id="lessonsList">
-                <!-- Динамический список уроков -->
-            </ul>
+            <h4 style="margin-bottom: 10px; font-size:0.95rem;">Уровни</h4>
+            <button class="level-btn active" onclick="setLevel('beginner')">🟢 Уровень 1: Старт</button>
+            <button class="level-btn" onclick="setLevel('pro')">🔴 Уровень 2: PRO</button>
+            <h4 style="margin: 20px 0 8px; font-size:0.95rem; color:var(--text-muted);">Уроки:</h4>
+            <ul class="lessons-list" id="lessonsUl"></ul>
         </div>
-
-        <!-- Текст урока -->
-        <div class="content-panel" id="contentPanel">
-            <div class="lesson-title" id="lessonTitle">Выберите урок</div>
-            <div class="lesson-text" id="lessonDesc">Нажмите на любой урок в левом меню, чтобы открыть материалы, инструкции и готовые шаблоны.</div>
+        <div class="content-box">
+            <h2 id="lesTitle" style="color:var(--accent); margin-bottom: 15px;">Выберите урок</h2>
+            <div id="lesText" style="color:#d1d5db; font-size:0.95rem; line-height: 1.7;">Материалы урока загружаются...</div>
         </div>
     </div>
 
     <script>
-        // Данные уроков по уровням
-        const courseData = {
-            beginner: [
-                { title: "Урок 1. Базовая логика ИИ", desc: "Разбираем, как устроены большие языковые модели и почему они отвечают так или иначе.", prompt: "Действуй как преподаватель. Объясни простыми словами, как ИИ обрабатывает текст." },
-                { title: "Урок 2. Структура идеального промпта", desc: "Учимся правильно ставить задачу нейросети с помощью формулы Роль + Задача + Контекст.", prompt: "Напиши структуру запроса для генерации статьи на заданную тему." },
-                { title: "Урок 3. Первые коммерческие задачи", desc: "Как использовать бесплатные версии ИИ для решения рутинных школьных и рабочих задач за секунды." }
-            ],
-            intermediate: [
-                { title: "Урок 1. Цепочка рассуждений (CoT)", desc: "Заставляем нейросеть думать перед ответом, что полностью убирает галлюцинации и ошибки в коде.", prompt: "Реши сложную задачу по шагам, проверяя каждый этап расчетов перед финальным выводом." },
-                { title: "Урок 2. Автоматизация текстов и эссе", desc: "Создаем уникальные лонгриды, статьи и контент-планы без воды и штампов." },
-                { title: "Урок 3. Генерация графики и апскейл", desc: "Работа с визуальными нейросетями для создания крутых картинок под проекты." }
-            ],
-            pro: [
-                { title: "Урок 1. Создание агентов и автоворонок", desc: "Продвинутые схемы настройки ИИ-инструментов для полной автоматизации бизнеса.", prompt: "Разработай архитектуру бота-автоворонки с интеграцией ChatGPT API." },
-                { title: "Урок 2. Монетизация навыков на фрилансе", desc: "Пошаговый план выхода на стабильный доход от 1 000 рублей за заказ с помощью ИИ." },
-                { title: "Урок 3. Масштабирование и запуск проектов", desc: "Как упаковать свои услуги и продавать цифровые продукты на маркетплейсах." }
-            ]
+        const dbLessons = {
+            ai: {
+                beginner: [
+                    { title: "Урок 1. Основы ИИ", text: "Разбор базовых понятий токенизации и контекста.", prompt: "Объясни квантовую физику простыми словами." },
+                    { title: "Урок 2. Формула промпта", text: "Как правильно ставить роль, задачу и контекст модели.", prompt: "Действуй как маркетолог. Напиши план продвижения." }
+                ],
+                pro: [
+                    { title: "Урок 1. Автономные агенты", text: "Связывание нескольких моделей для автоматических задач.", prompt: "Напиши архитектуру авто-бота." }
+                ]
+            },
+            shorts: {
+                beginner: [
+                    { title: "Урок 1. Крючок для Shorts", text: "Как удерживать внимание зрителя в первые 2 секунды видео.", prompt: "Сценарий ролика на 15 секунд про желейного монстра." }
+                ],
+                pro: [
+                    { title: "Урок 1. ASMR-монтаж", text: "Тонкости звукового оформления и алгоритмов YouTube.", prompt: "Промпт для генерации ассетов в Kling AI." }
+                ]
+            }
         };
 
-        let currentLevel = 'beginner';
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get('course') || 'ai';
+        let currentLvl = 'beginner';
 
-        function switchLevel(level) {
-            currentLevel = level;
-            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('courseHeaderTitle').innerText = courseId === 'shorts' ? '🎬 3D Анимация и Shorts' : '🧠 Мастер ИИ и Промптинг';
+
+        function setLevel(lvl) {
+            currentLvl = lvl;
+            document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
-            renderLessons();
+            renderList();
         }
 
-        function renderLessons() {
-            const list = document.getElementById('lessonsList');
-            list.innerHTML = '';
-            courseData[currentLevel].forEach((lesson, index) => {
-                list.innerHTML += `<li class="lesson-item ${index === 0 ? 'active' : ''}" onclick="selectLesson(${index})">${lesson.title}</li>`;
+        function renderList() {
+            const ul = document.getElementById('lessonsUl');
+            ul.innerHTML = '';
+            const list = dbLessons[courseId][currentLvl] || [];
+            list.forEach((l, idx) => {
+                ul.innerHTML += `<li class="lesson-li ${idx===0?'active':''}" onclick="selectLesson(${idx})">${l.title}</li>`;
             });
-            selectLesson(0);
+            if(list.length > 0) selectLesson(0);
         }
 
-        function selectLesson(index) {
-            document.querySelectorAll('.lesson-item').forEach((item, idx) => {
-                if(idx === index) item.classList.add('active');
-                else item.classList.remove('active');
+        function selectLesson(idx) {
+            document.querySelectorAll('.lesson-li').forEach((li, i) => {
+                if(i === idx) li.classList.add('active');
+                else li.classList.remove('active');
             });
-
-            const lesson = courseData[currentLevel][index];
-            document.getElementById('lessonTitle').innerText = lesson.title;
-            
-            let html = `<div class="lesson-text">${lesson.desc}</div>`;
-            if(lesson.prompt) {
-                html += `<h4>Готовый шаблон / Промпт:</h4><div class="prompt-box">${lesson.prompt}</div>`;
-            }
-            html += `<div class="task-box"><h4>📌 Практическое задание</h4><p>Примени полученные знания на практике, протестируй шаблон в чате с ИИ и закрепи результат!</p></div>`;
-            
-            document.getElementById('contentPanel').innerHTML = html;
+            const l = dbLessons[courseId][currentLvl][idx];
+            document.getElementById('lesTitle').innerText = l.title;
+            document.getElementById('lesText').innerHTML = `
+                <p>${l.text}</p>
+                <div class="prompt-box">Шаблон / Промпт:<br><b>${l.prompt}</b></div>
+                <p style="margin-top:20px; color:var(--gold);"><b>📌 Задание:</b> Протестируйте этот шаблон и примените на практике.</p>
+            `;
         }
 
-        // Запуск при загрузке
-        renderLessons();
+        renderList();
     </script>
-
 </body>
 </html>
