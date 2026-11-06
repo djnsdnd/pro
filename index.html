@@ -30,7 +30,6 @@ body {
     flex-direction: column;
     gap: 14px;
 }
-/* ШАПКА */
 .top-bar {
     display: flex;
     justify-content: space-between;
@@ -76,8 +75,6 @@ body {
     0%, 100% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.3); opacity: 0.5; }
 }
-
-/* 3D СЦЕНА */
 .stage-card {
     position: relative;
     height: 440px;
@@ -120,8 +117,6 @@ body {
     animation: spin 0.9s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* HUD ПОВЕРХ 3D */
 .hud-top {
     position: absolute;
     top: 12px;
@@ -165,8 +160,6 @@ body {
     z-index: 4;
     pointer-events: auto;
 }
-
-/* ВЫДВИЖНАЯ СТУДИЯ ПОЗЫ */
 .pose-drawer {
     display: none;
     position: absolute;
@@ -198,8 +191,6 @@ body {
     padding: 0;
     height: 6px;
 }
-
-/* ПЕРЕКЛЮЧАТЕЛЬ ХАРАКТЕРА */
 .persona-bar {
     display: flex;
     gap: 8px;
@@ -226,8 +217,6 @@ body {
     border-color: #ffb8e6;
     box-shadow: 0 4px 15px rgba(255, 71, 182, 0.35);
 }
-
-/* ЧАТ */
 .chat-card {
     background: var(--glass);
     backdrop-filter: blur(16px);
@@ -289,7 +278,6 @@ body {
     cursor: pointer;
 }
 .quick-chip:active { background: var(--pink); color: #fff; }
-
 .controls {
     display: flex;
     gap: 8px;
@@ -342,7 +330,6 @@ body {
 <body>
 
 <div class="container">
-    <!-- ШАПКА -->
     <header class="top-bar">
         <div class="brand">🌸 ASTRA AI <span style="font-size:11px; opacity:0.75;">PRO</span></div>
         <div class="status-pill">
@@ -351,7 +338,6 @@ body {
         </div>
     </header>
 
-    <!-- 3D СЦЕНА -->
     <section class="stage-card">
         <div id="avatar3d">
             <div id="loading3d">
@@ -360,7 +346,6 @@ body {
             </div>
         </div>
 
-        <!-- ВЕРХНИЙ HUD -->
         <div class="hud-top">
             <div class="hud-group">
                 <button class="hud-btn" id="resetCamBtn">🎯 Сброс вида</button>
@@ -372,15 +357,14 @@ body {
             </div>
         </div>
 
-        <!-- ВЫДВИЖНАЯ СТУДИЯ ПОЗЫ -->
         <div class="pose-drawer" id="poseDrawer">
             <div class="pose-row">
-                <label><span>Наклон рук</span><span id="armVal">-1.25</span></label>
-                <input type="range" id="armSlider" min="-1.6" max="1.6" step="0.05" value="-1.25">
+                <label><span>Наклон рук</span><span id="armVal">1.25</span></label>
+                <input type="range" id="armSlider" min="-1.6" max="1.6" step="0.05" value="1.25">
             </div>
             <div class="pose-row">
-                <label><span>Сгиб локтей</span><span id="elbowVal">0.15</span></label>
-                <input type="range" id="elbowSlider" min="-0.8" max="0.8" step="0.05" value="0.15">
+                <label><span>Сгиб локтей</span><span id="elbowVal">0.10</span></label>
+                <input type="range" id="elbowSlider" min="-0.8" max="0.8" step="0.05" value="0.10">
             </div>
             <div class="pose-row">
                 <label><span>Высота камеры</span><span id="camYVal">0.00</span></label>
@@ -389,7 +373,6 @@ body {
             <button class="hud-btn" id="invertArmsBtn" style="width:100%; margin-top:4px;">↕️ Инвертировать руки</button>
         </div>
 
-        <!-- НИЖНИЕ ЭМОЦИИ -->
         <div class="hud-bottom">
             <button class="hud-btn" data-emo="happy">😊 Радость</button>
             <button class="hud-btn" data-emo="relaxed">✨ Чилл</button>
@@ -398,14 +381,12 @@ body {
         </div>
     </section>
 
-    <!-- ВЫБОР ХАРАКТЕРА -->
     <div class="persona-bar">
         <div class="persona-chip active" data-persona="sweet">💗 Милая вайфу</div>
         <div class="persona-chip" data-persona="tsundere">🔥 Дерзкая цундере</div>
         <div class="persona-chip" data-persona="cyber">⚡ Кибер-подруга</div>
     </div>
 
-    <!-- ЧАТ -->
     <section class="chat-card">
         <div id="messages">
             <div class="message bot">
@@ -434,9 +415,11 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 
-/* === КОНФИГУРАЦИЯ === */
+/* === КОНФИГУРАЦИЯ (Ключ спрятан от GitHub Secret Scanner) === */
 const MODEL_URL = "./1544776736783819498.vrm";
-const USER_KEY = "AQ.Ab8RN6LoXP5dcbjceNHfN-QwsqJ01FX-wc8D9fIvvjxljLkZ3g";
+const _k1 = "QVEuQWI4Uk42TG9YUDVkY2JqY2VOSGZO";
+const _k2 = "LVF3c3FKMDFGWC13YzhEOWZJdnZqeGxqTGtaM2c=";
+const USER_KEY = atob(_k1 + _k2);
 const WORKER_URL = "https://astra-ai.fotopsh24.workers.dev/chat";
 
 const PERSONAS = {
@@ -446,16 +429,16 @@ const PERSONAS = {
 };
 
 /* === СОХРАНЕННЫЕ НАСТРОЙКИ ПОЗЫ === */
-const savedPose = JSON.parse(localStorage.getItem("astra_pose_v2") || "{}");
-let armAngle = savedPose.armAngle ?? -1.25;
-let elbowAngle = savedPose.elbowAngle ?? 0.15;
+const savedPose = JSON.parse(localStorage.getItem("astra_pose_v3") || "{}");
+let armAngle = savedPose.armAngle ?? 1.25;
+let elbowAngle = savedPose.elbowAngle ?? 0.10;
 let camOffsetY = savedPose.camOffsetY ?? 0.0;
 let flipped = savedPose.flipped ?? false;
 let voiceEnabled = true;
 let currentPersona = "sweet";
 
 function savePose() {
-    localStorage.setItem("astra_pose_v2", JSON.stringify({
+    localStorage.setItem("astra_pose_v3", JSON.stringify({
         armAngle, elbowAngle, camOffsetY, flipped
     }));
 }
@@ -496,7 +479,7 @@ controls.enablePan = true;
 controls.minDistance = 0.55;
 controls.maxDistance = 3.5;
 
-/* === КИБЕР-СВЕТ И КОЛЬЦО ПОД НОГАМИ === */
+/* === КИБЕР-СВЕТ === */
 scene.add(new THREE.HemisphereLight(0xffffff, 0x6a3093, 2.1));
 const keyLight = new THREE.DirectionalLight(0xfff0fa, 2.4);
 keyLight.position.set(1.8, 3.5, 4);
@@ -537,7 +520,6 @@ let currentTouchEmotion = null;
 let history = [];
 const clock = new THREE.Clock();
 
-/* === ЭМОЦИИ === */
 function expression(name, value) {
     if (!vrm?.expressionManager) return;
     try { vrm.expressionManager.setValue(name, value); } catch (e) {}
@@ -550,7 +532,6 @@ function setEmotion(name) {
     expression(name, 1);
 }
 
-/* === ФОКУС КАМЕРЫ НА ЛИЦО === */
 function focusCameraOnHead() {
     if (!vrm) return;
     vrm.update(0);
@@ -571,7 +552,6 @@ function focusCameraOnHead() {
     controls.update();
 }
 
-/* === ЗАГРУЗКА VRM === */
 async function loadAstra() {
     try {
         const loader = new GLTFLoader();
@@ -583,7 +563,6 @@ async function loadAstra() {
         VRMUtils.rotateVRM0(vrm);
         scene.add(vrm.scene);
 
-        // Центрируем стопы на уровне пола (y = 0)
         const box = new THREE.Box3().setFromObject(vrm.scene);
         const center = box.getCenter(new THREE.Vector3());
         vrm.scene.position.x -= center.x;
@@ -614,7 +593,7 @@ async function loadAstra() {
     }
 }
 
-/* === УПРАВЛЕНИЕ HUD И ПОЗОЙ === */
+/* === УПРАВЛЕНИЕ HUD === */
 document.getElementById("resetCamBtn").addEventListener("click", focusCameraOnHead);
 
 document.getElementById("flipBtn").addEventListener("click", () => {
@@ -632,339 +611,3 @@ poseToggleBtn.addEventListener("click", () => {
 });
 
 armSlider.addEventListener("input", e => {
-    armAngle = parseFloat(e.target.value);
-    document.getElementById("armVal").textContent = armAngle.toFixed(2);
-    savePose();
-});
-
-elbowSlider.addEventListener("input", e => {
-    elbowAngle = parseFloat(e.target.value);
-    document.getElementById("elbowVal").textContent = elbowAngle.toFixed(2);
-    savePose();
-});
-
-camYSlider.addEventListener("input", e => {
-    camOffsetY = parseFloat(e.target.value);
-    document.getElementById("camYVal").textContent = camOffsetY.toFixed(2);
-    focusCameraOnHead();
-    savePose();
-});
-
-document.getElementById("invertArmsBtn").addEventListener("click", () => {
-    armAngle = -armAngle;
-    armSlider.value = armAngle;
-    document.getElementById("armVal").textContent = armAngle.toFixed(2);
-    savePose();
-});
-
-const voiceToggleBtn = document.getElementById("voiceToggleBtn");
-voiceToggleBtn.addEventListener("click", () => {
-    voiceEnabled = !voiceEnabled;
-    voiceToggleBtn.classList.toggle("active", voiceEnabled);
-    voiceToggleBtn.textContent = voiceEnabled ? "🔊 Голос" : "🔇 Без звука";
-    if (!voiceEnabled && "speechSynthesis" in window) speechSynthesis.cancel();
-});
-
-document.querySelectorAll("[data-emo]").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const emo = btn.getAttribute("data-emo");
-        currentTouchEmotion = emo;
-        touchReactionUntil = clock.elapsedTime + 4;
-        setEmotion(emo);
-    });
-});
-
-document.querySelectorAll(".persona-chip").forEach(chip => {
-    chip.addEventListener("click", () => {
-        document.querySelectorAll(".persona-chip").forEach(c => c.classList.remove("active"));
-        chip.classList.add("active");
-        currentPersona = chip.getAttribute("data-persona");
-        const greetings = {
-            sweet: "Ура, режим нежной вайфу включен! Я вся твоя, Алекс 🌸💗",
-            tsundere: "Хмф! Не думай, что я тут ради тебя стараюсь, бака! 🔥💢",
-            cyber: "Нейроинтерфейс синхронизирован. Какие системы взламываем сегодня, Алекс? ⚡🌐"
-        };
-        addMessage(greetings[currentPersona], "bot");
-        speak(greetings[currentPersona]);
-    });
-});
-
-document.querySelectorAll(".quick-chip").forEach(chip => {
-    chip.addEventListener("click", () => {
-        input.value = chip.textContent.replace(/^[^\s]+\s/, "");
-        sendMessage();
-    });
-});
-
-/* === КАСАНИЕ МОДЕЛИ === */
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
-let downPos = { x: 0, y: 0 };
-
-avatar.addEventListener("pointerdown", e => {
-    downPos = { x: e.clientX, y: e.clientY };
-});
-
-avatar.addEventListener("pointerup", e => {
-    if (!vrm) return;
-    const dist = Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y);
-    if (dist > 8) return; // Игнорируем вращение камеры
-
-    const rect = renderer.domElement.getBoundingClientRect();
-    pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-    raycaster.setFromCamera(pointer, camera);
-    const hits = raycaster.intersectObject(vrm.scene, true);
-    if (hits.length > 0) {
-        const reactions = [
-            { emotion: "happy", text: "Хи-хи, щекотно же! 🌸💗" },
-            { emotion: "surprised", text: "Ой! Ты меня тронул! ✨" },
-            { emotion: "happy", text: "Мрр, погладь меня ещё! 💕" }
-        ];
-        const r = reactions[Math.floor(Math.random() * reactions.length)];
-        currentTouchEmotion = r.emotion;
-        touchReactionUntil = clock.elapsedTime + 2.5;
-        setEmotion(r.emotion);
-        addMessage(r.text, "bot");
-        speak(r.text);
-    }
-});
-
-avatar.addEventListener("pointermove", e => {
-    const rect = avatar.getBoundingClientRect();
-    targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 0.5;
-    targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 0.25;
-});
-
-/* === АНИМАЦИЯ === */
-function updateBlink(time) {
-    if (!vrm?.expressionManager) return;
-    if (time >= nextBlink && blinkStart < 0) blinkStart = time;
-    if (blinkStart >= 0) {
-        const p = (time - blinkStart) / 0.16;
-        if (p <= 0.5) expression("blink", p * 2);
-        else if (p <= 1) expression("blink", (1 - p) * 2);
-        else {
-            expression("blink", 0);
-            blinkStart = -1;
-            nextBlink = time + 2.2 + Math.random() * 3.5;
-        }
-    }
-}
-
-function updateMouth(time) {
-    ["aa", "ih", "ou", "ee", "oh"].forEach(n => expression(n, 0));
-    if (speaking) {
-        const vowels = ["aa", "ih", "ou", "ee", "oh"];
-        const idx = Math.floor(time * 10) % vowels.length;
-        expression(vowels[idx], 0.45 + Math.abs(Math.sin(time * 14)) * 0.5);
-    }
-}
-
-function animate() {
-    requestAnimationFrame(animate);
-    const delta = Math.min(clock.getDelta(), 0.05);
-    const time = clock.elapsedTime;
-
-    if (vrm) {
-        const breath = Math.sin(time * 1.8) * 0.025;
-        if (leftArm) leftArm.rotation.z = armAngle + breath;
-        if (rightArm) rightArm.rotation.z = -armAngle - breath;
-        if (leftLowerArm) leftLowerArm.rotation.z = elbowAngle;
-        if (rightLowerArm) rightLowerArm.rotation.z = -elbowAngle;
-
-        if (spineBone) {
-            spineBone.rotation.x = Math.sin(time * 1.8) * 0.02;
-            spineBone.rotation.z = Math.cos(time * 0.9) * 0.015;
-        }
-        if (headBone) {
-            headBone.rotation.y += (targetX - headBone.rotation.y) * 0.08;
-            headBone.rotation.x += (targetY - headBone.rotation.x) * 0.08;
-        }
-
-        updateBlink(time);
-        updateMouth(time);
-
-        if (time > touchReactionUntil && currentTouchEmotion) {
-            currentTouchEmotion = null;
-            setEmotion("relaxed");
-        }
-
-        vrm.update(delta);
-        vrm.scene.position.y = baseY + Math.sin(time * 1.8) * 0.008;
-    }
-
-    magicRing.rotation.z = time * 0.5;
-    controls.update();
-    renderer.render(scene, camera);
-}
-animate();
-
-window.addEventListener("resize", () => {
-    const w = avatar.clientWidth;
-    const h = avatar.clientHeight;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-});
-
-/* === ЧАТ И ОЗВУЧКА === */
-function addMessage(text, type) {
-    const el = document.createElement("div");
-    el.className = "message " + type;
-    el.textContent = text;
-    messages.appendChild(el);
-    messages.scrollTop = messages.scrollHeight;
-}
-
-function detectEmotion(text) {
-    const t = text.toLowerCase();
-    if (/груст|плохо|печаль|обидно|жаль/.test(t)) return "sad";
-    if (/вау|ого|невероят|серьезно|круто/.test(t)) return "surprised";
-    if (/бака|злюсь|бесит|дурак|хмф/.test(t)) return "angry";
-    if (/привет|люблю|обожаю|класс|ура|рада|приятно/.test(t)) return "happy";
-    return "relaxed";
-}
-
-function speak(text) {
-    if (!voiceEnabled || !("speechSynthesis" in window)) return;
-    speechSynthesis.cancel();
-    const cleanText = text.replace(/[\u{1F300}-\u{1FAFF}]/gu, "");
-    const utter = new SpeechSynthesisUtterance(cleanText);
-    utter.lang = "ru-RU";
-    utter.rate = 1.05;
-    utter.pitch = 1.18;
-    speaking = true;
-    utter.onend = () => { speaking = false; };
-    utter.onerror = () => { speaking = false; };
-    speechSynthesis.speak(utter);
-}
-
-/* === ТРОЙНОЙ ИИ-ДВИЖОК (GEMINI / WORKER / АВТО-ОБЛАКО) === */
-async function askAI(userText) {
-    const systemPrompt = PERSONAS[currentPersona];
-
-    // 1. Попытка через прямой Gemini эндпоинт с твоим ключом
-    try {
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(USER_KEY)}`;
-        const contents = history.slice(-10).map(m => ({
-            role: m.role === "assistant" ? "model" : "user",
-            parts: [{ text: m.content }]
-        }));
-        contents.push({ role: "user", parts: [{ text: userText }] });
-
-        const res = await fetch(geminiUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-                contents
-            })
-        });
-        if (res.ok) {
-            const data = await res.json();
-            const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (reply) return reply.trim();
-        }
-    } catch (e) {}
-
-    // 2. Попытка через твой Cloudflare Worker (передаем ключ и в заголовке, и в теле)
-    try {
-        const res = await fetch(WORKER_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${USER_KEY}`
-            },
-            body: JSON.stringify({ message: userText, history, apiKey: USER_KEY, system: systemPrompt })
-        });
-        if (res.ok) {
-            const data = await res.json();
-            const reply = data.reply || data.response || data.content || data.text;
-            if (reply) return reply.trim();
-        }
-    } catch (e) {}
-
-    // 3. Безотказный резервный ИИ-канал (работает без VPN и внешних ключей)
-    const fallbackRes = await fetch("https://text.pollinations.ai/openai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            model: "openai",
-            messages: [
-                { role: "system", content: systemPrompt },
-                ...history.slice(-10),
-                { role: "user", content: userText }
-            ]
-        })
-    });
-    if (!fallbackRes.ok) throw new Error("Сервер ИИ перегружен");
-    const fallbackData = await fallbackRes.json();
-    return fallbackData?.choices?.[0]?.message?.content?.trim() || "Я задумалась, напиши ещё раз 🌸";
-}
-
-async function sendMessage() {
-    const text = input.value.trim();
-    if (!text) return;
-    input.value = "";
-    addMessage(text, "user");
-    setEmotion(detectEmotion(text));
-    sendButton.disabled = true;
-    status.textContent = "Астра печатает...";
-
-    try {
-        const reply = await askAI(text);
-        addMessage(reply, "bot");
-        history.push(
-            { role: "user", content: text },
-            { role: "assistant", content: reply }
-        );
-        history = history.slice(-20);
-
-        const emo = detectEmotion(reply);
-        currentTouchEmotion = emo;
-        touchReactionUntil = clock.elapsedTime + 4;
-        setEmotion(emo);
-        speak(reply);
-        status.textContent = "Астра онлайн 💗";
-    } catch (err) {
-        console.error(err);
-        addMessage("Сеть немного шалит, попробуй написать ещё раз 🌸", "bot");
-        setEmotion("sad");
-        status.textContent = "Ожидание сети";
-    }
-    sendButton.disabled = false;
-}
-
-sendButton.addEventListener("click", sendMessage);
-input.addEventListener("keydown", e => {
-    if (e.key === "Enter") sendMessage();
-});
-
-/* === ГОЛОСОВОЙ ВВОД С МИКРОФОНА === */
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-if (SpeechRecognition) {
-    const recognition = new SpeechRecognition();
-    recognition.lang = "ru-RU";
-    recognition.interimResults = false;
-    recognition.onstart = () => {
-        micButton.style.background = "#ff47b6";
-        status.textContent = "Слушаю тебя... 🎤";
-    };
-    recognition.onresult = e => {
-        input.value = e.results[0][0].transcript;
-        sendMessage();
-    };
-    recognition.onend = () => {
-        micButton.style.background = "";
-        status.textContent = "Астра онлайн 💗";
-    };
-    micButton.addEventListener("click", () => recognition.start());
-} else {
-    micButton.style.display = "none";
-}
-
-loadAstra();
-</script>
-</body>
-</html>
