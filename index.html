@@ -100,8 +100,8 @@ button:disabled { opacity: .5; }
 <script type="importmap">
 {
   "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
     "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3/lib/three-vrm.module.min.js"
   }
 }
@@ -134,10 +134,12 @@ button:disabled { opacity: .5; }
 <script type="module">
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { VRMLoaderPlugin } from "@pixiv/three-vrm";
+import { VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
+
 /* НАСТРОЙКИ */
 const MODEL_URL = "./1544776736783819498.vrm";
 const API_URL = "https://astra-ai.fotopsh24.workers.dev/chat";
+
 /* ЭЛЕМЕНТЫ */
 const avatar = document.getElementById("avatar3d");
 const loading = document.getElementById("loading3d");
@@ -145,10 +147,11 @@ const status = document.getElementById("status");
 const messages = document.getElementById("messages");
 const input = document.getElementById("userInput");
 const sendButton = document.getElementById("sendButton");
+
 /* THREE.JS */
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
-    30, avatar.clientWidth / avatar.clientHeight, 0.1, 100
+    28, avatar.clientWidth / avatar.clientHeight, 0.1, 100
 );
 const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -158,6 +161,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(avatar.clientWidth, avatar.clientHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 avatar.appendChild(renderer.domElement);
+
 /* СВЕТ */
 scene.add(new THREE.HemisphereLight(0xffffff, 0x8b5a9e, 2));
 const mainLight = new THREE.DirectionalLight(0xffffff, 2.5);
@@ -166,11 +170,16 @@ scene.add(mainLight);
 const pinkLight = new THREE.PointLight(0xff82cf, 2, 8);
 pinkLight.position.set(-2, 2, 2);
 scene.add(pinkLight);
+
 /* ПЕРЕМЕННЫЕ */
 let vrm = null;
 let headBone = null;
 let leftArm = null;
 let rightArm = null;
+let leftLowerArm = null;
+let rightLowerArm = null;
+let baseY = 0;
+let armSign = 1; // Направление сгиба рук в зависимости от версии VRM
 let targetX = 0;
 let targetY = 0;
 let speaking = false;
@@ -180,6 +189,7 @@ let touchReactionUntil = 0;
 let currentTouchEmotion = null;
 let history = [];
 const clock = new THREE.Clock();
+
 /* ЭМОЦИИ */
 function expression(name, value) {
     if (!vrm?.expressionManager) return;
@@ -198,6 +208,7 @@ function setEmotion(name) {
     clearEmotions();
     expression(name, 1);
 }
+
 /* СООБЩЕНИЯ */
 function addMessage(text, type) {
     const element = document.createElement("div");
@@ -206,6 +217,7 @@ function addMessage(text, type) {
     messages.appendChild(element);
     messages.scrollTop = messages.scrollHeight;
 }
+
 /* КАСАНИЯ */
 function touchAstra() {
     if (!vrm) return;
@@ -224,6 +236,7 @@ function touchAstra() {
     setEmotion(reaction.emotion);
     addMessage(reaction.text, "bot");
 }
+
 /* ОПРЕДЕЛЕНИЕ КАСАНИЯ ПЕРСОНАЖА */
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -236,6 +249,7 @@ avatar.addEventListener("pointerdown", event => {
     const hits = raycaster.intersectObject(vrm.scene, true);
     if (hits.length > 0) touchAstra();
 });
+
 /* ПОВОРОТ ГОЛОВЫ */
 avatar.addEventListener("pointermove", event => {
     const rect = avatar.getBoundingClientRect();
@@ -246,6 +260,7 @@ avatar.addEventListener("pointerleave", () => {
     targetX = 0;
     targetY = 0;
 });
+
 /* ЗАГРУЗКА МОДЕЛИ */
 async function loadAstra() {
     try {
@@ -255,26 +270,39 @@ async function loadAstra() {
         const gltf = await loader.loadAsync(MODEL_URL);
         vrm = gltf.userData.vrm;
         if (!vrm) throw new Error("VRM-модель не найдена");
+
+        // 1. Автоматический правильный поворот лицом к камере
+        VRMUtils.rotateVRM0(vrm);
+
         scene.add(vrm.scene);
-        // Разворот лицом к камере
-        vrm.scene.rotation.y = Math.PI;
+
+        // Центрируем модель
         const box = new THREE.Box3().setFromObject(vrm.scene);
         const size = box.getSize(new THREE.Vector3());
         const center = box.getCenter(new THREE.Vector3());
         vrm.scene.position.x -= center.x;
         vrm.scene.position.y -= box.min.y;
         vrm.scene.position.z -= center.z;
+        baseY = vrm.scene.position.y;
+
+        // Настраиваем камеру (портретный план по пояс/грудь)
         const height = Math.max(size.y, 1);
-        camera.position.set(0, height * 0.85, height * 2.5);
-        camera.lookAt(0, height * 0.55, 0);
+        camera.position.set(0, height * 0.78, height * 1.65);
+        camera.lookAt(0, height * 0.72, 0);
         camera.far = height * 20;
         camera.updateProjectionMatrix();
+
+        // Получаем кости
         headBone = vrm.humanoid?.getNormalizedBoneNode("head");
         leftArm = vrm.humanoid?.getNormalizedBoneNode("leftUpperArm");
         rightArm = vrm.humanoid?.getNormalizedBoneNode("rightUpperArm");
-        // Пробуем опустить руки
-        if (leftArm) leftArm.rotation.z = -0.8;
-        if (rightArm) rightArm.rotation.z = 0.8;
+        leftLowerArm = vrm.humanoid?.getNormalizedBoneNode("leftLowerArm");
+        rightLowerArm = vrm.humanoid?.getNormalizedBoneNode("rightLowerArm");
+
+        // 2. Определяем направление осей для VRM 0.0 и VRM 1.0
+        const isVRM0 = String(vrm.meta?.metaVersion) === "0";
+        armSign = isVRM0 ? 1 : -1;
+
         loading.style.display = "none";
         setEmotion("happy");
         status.textContent = "● Астра готова! 💗";
@@ -284,6 +312,7 @@ async function loadAstra() {
         status.textContent = "● Ошибка модели";
     }
 }
+
 /* МОРГАНИЕ */
 function updateBlink(time) {
     if (!vrm?.expressionManager) return;
@@ -303,6 +332,7 @@ function updateBlink(time) {
         }
     }
 }
+
 /* АНИМАЦИЯ РТА */
 function updateMouth(time) {
     ["aa", "ih", "ou", "ee", "oh"].forEach(
@@ -317,30 +347,55 @@ function updateMouth(time) {
         );
     }
 }
+
 /* ОСНОВНАЯ АНИМАЦИЯ */
 function animate() {
     requestAnimationFrame(animate);
     const delta = Math.min(clock.getDelta(), 0.05);
     const time = clock.elapsedTime;
+
     if (vrm) {
-        vrm.update(delta);
+        // Опускаем руки из Т-позы и добавляем легкое дыхание
+        const sway = Math.sin(time * 1.8) * 0.03;
+        if (leftArm) {
+            leftArm.rotation.z = armSign * (-1.22 + sway);
+        }
+        if (rightArm) {
+            rightArm.rotation.z = armSign * (1.22 - sway);
+        }
+        if (leftLowerArm) {
+            leftLowerArm.rotation.z = armSign * -0.12;
+        }
+        if (rightLowerArm) {
+            rightLowerArm.rotation.z = armSign * 0.12;
+        }
+
+        // Поворот головы за курсором
+        if (headBone) {
+            headBone.rotation.y += (targetX - headBone.rotation.y) * 0.08;
+            headBone.rotation.x += (targetY - headBone.rotation.x) * 0.08;
+        }
+
+        // Эмоции и моргание обновляем ДО vrm.update(delta)
         updateBlink(time);
         updateMouth(time);
-        if (headBone) {
-            headBone.rotation.y +=
-                (targetX - headBone.rotation.y) * 0.06;
-            headBone.rotation.x +=
-                (targetY - headBone.rotation.x) * 0.06;
-        }
-        vrm.scene.position.y = Math.sin(time * 1.5) * 0.015;
+
         if (time > touchReactionUntil && currentTouchEmotion) {
             currentTouchEmotion = null;
             setEmotion("relaxed");
         }
+
+        // Применяем изменения нормализованных костей и мимики к модели
+        vrm.update(delta);
+
+        // Плавное покачивание вверх-вниз
+        vrm.scene.position.y = baseY + Math.sin(time * 1.5) * 0.012;
     }
+
     renderer.render(scene, camera);
 }
 animate();
+
 /* АДАПТАЦИЯ */
 window.addEventListener("resize", () => {
     const width = avatar.clientWidth;
@@ -349,6 +404,7 @@ window.addEventListener("resize", () => {
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
 });
+
 /* ЭМОЦИИ ОТ СООБЩЕНИЙ */
 function detectEmotion(text) {
     const t = text.toLowerCase();
@@ -358,6 +414,7 @@ function detectEmotion(text) {
     if (/спасибо|класс|круто|привет|рада/.test(t)) return "happy";
     return "relaxed";
 }
+
 /* ГОЛОС */
 function speak(text) {
     if (!("speechSynthesis" in window)) return;
@@ -371,6 +428,7 @@ function speak(text) {
     speech.onerror = () => speaking = false;
     speechSynthesis.speak(speech);
 }
+
 /* ИИ-ЧАТ */
 async function sendMessage() {
     const message = input.value.trim();
@@ -415,6 +473,7 @@ sendButton.addEventListener("click", sendMessage);
 input.addEventListener("keydown", event => {
     if (event.key === "Enter") sendMessage();
 });
+
 /* ЗАПУСК */
 loadAstra();
 </script>
