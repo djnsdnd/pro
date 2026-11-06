@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Астра — твоя AI-подруга</title>
+<title>Астра — AI Assistant</title>
 
 <style>
 * {
@@ -22,13 +22,13 @@ body {
 header {
     padding: 22px;
     text-align: center;
-    font-size: 25px;
+    font-size: 27px;
     color: #ffb5df;
     font-weight: bold;
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1050px;
     margin: auto;
     padding: 15px;
     display: flex;
@@ -40,7 +40,7 @@ header {
 .character {
     flex: 1;
     min-width: 280px;
-    min-height: 430px;
+    min-height: 450px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -51,96 +51,31 @@ header {
     padding: 20px;
 }
 
-.avatar {
-    width: 240px;
-    height: 280px;
+#avatar3d {
+    width: 100%;
+    height: 390px;
     position: relative;
-    animation: float 3s infinite ease-in-out;
+    overflow: hidden;
+    border-radius: 20px;
+    touch-action: pan-y;
 }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+#avatar3d canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
-.hair {
+#loading3d {
     position: absolute;
-    top: 10px;
-    left: 20px;
-    width: 200px;
-    height: 230px;
-    background: linear-gradient(135deg, #ff91ca, #ed4d9c);
-    border-radius: 48% 48% 40% 40%;
-    box-shadow: 0 0 35px #ff70b755;
-}
-
-.face {
-    position: absolute;
-    top: 55px;
-    left: 43px;
-    width: 155px;
-    height: 170px;
-    background: #ffe0d9;
-    border-radius: 45% 45% 48% 48%;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #ffb5df;
+    transform: translateY(-50%);
     z-index: 2;
 }
-
-.bangs {
-    position: absolute;
-    top: 30px;
-    left: 38px;
-    width: 165px;
-    height: 100px;
-    background: #ff85bf;
-    border-radius: 60% 60% 35% 35%;
-    z-index: 3;
-    clip-path: polygon(0 0,100% 0,100% 55%,80% 100%,65% 48%,48% 100%,30% 48%,15% 100%,0 65%);
-}
-
-.eye {
-    position: absolute;
-    top: 95px;
-    width: 27px;
-    height: 35px;
-    background: linear-gradient(#76caff, #2877df);
-    border-radius: 50%;
-    border: 3px solid white;
-    z-index: 4;
-    animation: blink 4s infinite;
-}
-
-.eye.left { left: 33px; }
-.eye.right { right: 33px; }
-
-@keyframes blink {
-    0%, 94%, 100% { transform: scaleY(1); }
-    97% { transform: scaleY(0.1); }
-}
-
-.mouth {
-    position: absolute;
-    top: 145px;
-    left: 69px;
-    width: 18px;
-    height: 10px;
-    border-bottom: 3px solid #e86a8c;
-    border-radius: 50%;
-    z-index: 4;
-}
-
-.blush {
-    position: absolute;
-    top: 140px;
-    width: 27px;
-    height: 12px;
-    background: #ff9baf;
-    opacity: .6;
-    filter: blur(5px);
-    z-index: 4;
-}
-
-.blush.left { left: 15px; }
-.blush.right { right: 15px; }
 
 .character h2 {
     color: #ffb5df;
@@ -157,7 +92,7 @@ header {
     flex: 1;
     min-width: 280px;
     max-width: 450px;
-    height: 430px;
+    height: 450px;
     background: #ffffff0b;
     border: 1px solid #ffb5df44;
     border-radius: 25px;
@@ -213,6 +148,7 @@ input {
     background: #ffffff18;
     color: white;
     outline: none;
+    font-size: 16px;
 }
 
 input::placeholder {
@@ -227,6 +163,11 @@ button {
     color: white;
     cursor: pointer;
     font-size: 16px;
+}
+
+button:disabled {
+    opacity: .5;
+    cursor: wait;
 }
 
 button:hover {
@@ -245,7 +186,28 @@ footer {
     color: #bda8d1;
     font-size: 13px;
 }
+
+@media(max-width: 600px) {
+    .chat {
+        height: 430px;
+    }
+
+    #avatar3d {
+        height: 340px;
+    }
+}
 </style>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+    "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3.4.2/lib/three-vrm.module.min.js"
+  }
+}
+</script>
+
 </head>
 
 <body>
@@ -256,18 +218,8 @@ footer {
 
     <section class="character">
 
-        <div class="avatar">
-            <div class="hair"></div>
-            <div class="face"></div>
-            <div class="bangs"></div>
-
-            <div class="eye left"></div>
-            <div class="eye right"></div>
-
-            <div class="blush left"></div>
-            <div class="blush right"></div>
-
-            <div class="mouth"></div>
+        <div id="avatar3d">
+            <div id="loading3d">Загружаю Астру... 🌸</div>
         </div>
 
         <h2>Астра 💗</h2>
@@ -288,10 +240,10 @@ footer {
 
         <div class="controls">
             <input id="input" placeholder="Напиши мне что-нибудь...">
-            <button onclick="sendMessage()">➤</button>
+            <button id="sendButton">➤</button>
         </div>
 
-        <button class="mic" onclick="listen()">🎤 Говорить</button>
+        <button class="mic" id="micButton">🎤 Говорить</button>
 
     </section>
 
@@ -301,58 +253,287 @@ footer {
     Astra AI © 2026 · Твоя виртуальная помощница 🌸
 </footer>
 
-<script>
-const API_URL = "https://astra-ai.fotopsh24.workers.dev/chat";
+<script type="module">
+
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { VRMLoaderPlugin } from "@pixiv/three-vrm";
+
+// -----------------------------
+// 3D АСТРА
+// -----------------------------
+
+const container = document.getElementById("avatar3d");
+const loading = document.getElementById("loading3d");
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+    30,
+    container.clientWidth / container.clientHeight,
+    0.1,
+    100
+);
+
+camera.position.set(0, 1.35, 3.5);
+
+const renderer = new THREE.WebGLRenderer({
+    alpha: true,
+    antialias: true
+});
+
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(
+    container.clientWidth,
+    container.clientHeight
+);
+
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+container.appendChild(renderer.domElement);
+
+// Освещение
+
+scene.add(
+    new THREE.HemisphereLight(
+        0xffffff,
+        0x9b6b9b,
+        2
+    )
+);
+
+const light = new THREE.DirectionalLight(
+    0xffffff,
+    2
+);
+
+light.position.set(1, 2, 3);
+scene.add(light);
+
+// Загрузка VRM
+
+let currentVrm = null;
+let head = null;
+
+const loader = new GLTFLoader();
+
+loader.register(parser => new VRMLoaderPlugin(parser));
+
+loader.load(
+    "./1544776736783819498.vrm",
+
+    gltf => {
+
+        currentVrm = gltf.userData.vrm;
+
+        if (!currentVrm) {
+            loading.textContent = "Не удалось прочитать VRM.";
+            return;
+        }
+
+        scene.add(currentVrm.scene);
+
+        // Подбираем положение камеры по размеру модели
+
+        const box = new THREE.Box3().setFromObject(
+            currentVrm.scene
+        );
+
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+
+        currentVrm.scene.position.x -= center.x;
+        currentVrm.scene.position.y -= box.min.y;
+        currentVrm.scene.position.z -= center.z;
+
+        const height = size.y || 1.5;
+
+        camera.position.set(
+            0,
+            height * 0.72,
+            height * 2.5
+        );
+
+        camera.lookAt(
+            0,
+            height * 0.55,
+            0
+        );
+
+        head = currentVrm.humanoid
+            .getNormalizedBoneNode("head");
+
+        loading.style.display = "none";
+
+    },
+
+    progress => {
+
+        if (progress.total > 0) {
+            const percent = Math.round(
+                progress.loaded / progress.total * 100
+            );
+
+            loading.textContent =
+                "Загружаю Астру... " + percent + "%";
+        }
+
+    },
+
+    error => {
+
+        console.error(error);
+
+        loading.textContent =
+            "Не удалось загрузить модель. Проверь файл VRM.";
+
+    }
+);
+
+// Поворот головы
+
+let targetX = 0;
+let targetY = 0;
+
+container.addEventListener("pointermove", event => {
+
+    const rect = container.getBoundingClientRect();
+
+    targetY = (
+        (event.clientX - rect.left) / rect.width - 0.5
+    ) * 0.5;
+
+    targetX = (
+        (event.clientY - rect.top) / rect.height - 0.5
+    ) * 0.2;
+
+});
+
+container.addEventListener("pointerleave", () => {
+    targetX = 0;
+    targetY = 0;
+});
+
+// Анимация
+
+const clock = new THREE.Clock();
+
+function animate() {
+
+    requestAnimationFrame(animate);
+
+    const delta = clock.getDelta();
+
+    if (currentVrm) {
+
+        currentVrm.update(delta);
+
+        if (head) {
+
+            head.rotation.y +=
+                (targetY - head.rotation.y) * 0.05;
+
+            head.rotation.x +=
+                (targetX - head.rotation.x) * 0.05;
+
+        }
+
+    }
+
+    renderer.render(scene, camera);
+
+}
+
+animate();
+
+// Адаптация под размер экрана
+
+window.addEventListener("resize", () => {
+
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(width, height);
+
+});
+
+// -----------------------------
+// ЧАТ С ИСКУССТВЕННЫМ ИНТЕЛЛЕКТОМ
+// -----------------------------
+
+const API_URL =
+    "https://astra-ai.fotopsh24.workers.dev/chat";
 
 const messages = document.getElementById("messages");
 const input = document.getElementById("input");
+const sendButton = document.getElementById("sendButton");
+const micButton = document.getElementById("micButton");
 
 let history = [];
 let isSending = false;
 
 function addMessage(text, type) {
+
     const div = document.createElement("div");
+
     div.className = "message " + type;
     div.textContent = text;
+
     messages.appendChild(div);
+
     messages.scrollTop = messages.scrollHeight;
+
 }
 
 function speak(text) {
+
     if (!("speechSynthesis" in window)) return;
 
     speechSynthesis.cancel();
 
     const voice = new SpeechSynthesisUtterance(text);
+
     voice.lang = "ru-RU";
     voice.rate = 1;
     voice.pitch = 1.15;
 
     speechSynthesis.speak(voice);
+
 }
 
 async function sendMessage() {
+
     const text = input.value.trim();
 
     if (!text || isSending) return;
 
     input.value = "";
+
     addMessage(text, "user");
 
     isSending = true;
-    const button = document.querySelector(".controls button");
-    button.disabled = true;
+    sendButton.disabled = true;
 
     try {
+
         const response = await fetch(API_URL, {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
+
                 message: text,
                 history: history
+
             })
+
         });
 
         const data = await response.json();
@@ -362,6 +543,7 @@ async function sendMessage() {
         }
 
         addMessage(data.reply, "bot");
+
         speak(data.reply);
 
         history.push(
@@ -372,53 +554,82 @@ async function sendMessage() {
         history = history.slice(-10);
 
     } catch (error) {
+
+        console.error(error);
+
         addMessage(
             "Ой! Не получилось подключиться к моему ИИ. Попробуй ещё раз. 💗",
             "bot"
         );
-        console.error(error);
 
     } finally {
+
         isSending = false;
-        button.disabled = false;
+        sendButton.disabled = false;
         input.focus();
+
     }
+
 }
 
+sendButton.addEventListener("click", sendMessage);
+
 input.addEventListener("keydown", event => {
-    if (event.key === "Enter") sendMessage();
+
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+
 });
 
+// -----------------------------
+// ГОЛОСОВОЙ ВВОД
+// -----------------------------
+
 function listen() {
+
     const Recognition =
         window.SpeechRecognition ||
         window.webkitSpeechRecognition;
 
     if (!Recognition) {
+
         addMessage(
             "Твой браузер не поддерживает распознавание речи.",
             "bot"
         );
+
         return;
+
     }
 
     const recognition = new Recognition();
+
     recognition.lang = "ru-RU";
 
     recognition.onresult = event => {
+
         input.value = event.results[0][0].transcript;
+
         sendMessage();
+
     };
 
     recognition.onerror = () => {
+
         addMessage(
             "Не удалось распознать речь. Попробуй ещё раз.",
             "bot"
         );
+
     };
 
     recognition.start();
+
 }
+
+micButton.addEventListener("click", listen);
+
 </script>
 
 </body>
