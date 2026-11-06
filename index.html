@@ -151,7 +151,7 @@ const sendButton = document.getElementById("sendButton");
 /* THREE.JS */
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
-    28, avatar.clientWidth / avatar.clientHeight, 0.1, 100
+    26, avatar.clientWidth / avatar.clientHeight, 0.1, 100
 );
 const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -179,7 +179,6 @@ let rightArm = null;
 let leftLowerArm = null;
 let rightLowerArm = null;
 let baseY = 0;
-let armSign = 1; // Направление сгиба рук в зависимости от версии VRM
 let targetX = 0;
 let targetY = 0;
 let speaking = false;
@@ -271,26 +270,9 @@ async function loadAstra() {
         vrm = gltf.userData.vrm;
         if (!vrm) throw new Error("VRM-модель не найдена");
 
-        // 1. Автоматический правильный поворот лицом к камере
+        // Поворачиваем модель лицом к камере
         VRMUtils.rotateVRM0(vrm);
-
         scene.add(vrm.scene);
-
-        // Центрируем модель
-        const box = new THREE.Box3().setFromObject(vrm.scene);
-        const size = box.getSize(new THREE.Vector3());
-        const center = box.getCenter(new THREE.Vector3());
-        vrm.scene.position.x -= center.x;
-        vrm.scene.position.y -= box.min.y;
-        vrm.scene.position.z -= center.z;
-        baseY = vrm.scene.position.y;
-
-        // Настраиваем камеру (портретный план по пояс/грудь)
-        const height = Math.max(size.y, 1);
-        camera.position.set(0, height * 0.78, height * 1.65);
-        camera.lookAt(0, height * 0.72, 0);
-        camera.far = height * 20;
-        camera.updateProjectionMatrix();
 
         // Получаем кости
         headBone = vrm.humanoid?.getNormalizedBoneNode("head");
@@ -299,9 +281,22 @@ async function loadAstra() {
         leftLowerArm = vrm.humanoid?.getNormalizedBoneNode("leftLowerArm");
         rightLowerArm = vrm.humanoid?.getNormalizedBoneNode("rightLowerArm");
 
-        // 2. Определяем направление осей для VRM 0.0 и VRM 1.0
-        const isVRM0 = String(vrm.meta?.metaVersion) === "0";
-        armSign = isVRM0 ? 1 : -1;
+        // Обновляем матрицы, чтобы точно узнать высоту головы
+        vrm.update(0);
+        vrm.scene.updateMatrixWorld(true);
+
+        // Находим реальную позицию головы в 3D-пространстве
+        const headPos = new THREE.Vector3(0, 1.35, 0);
+        if (headBone) {
+            headBone.getWorldPosition(headPos);
+        }
+
+        // Ставим камеру точно напротив лица и верхней части тела
+        camera.position.set(0, headPos.y - 0.08, 1.35);
+        camera.lookAt(0, headPos.y - 0.12, 0);
+        camera.updateProjectionMatrix();
+
+        baseY = vrm.scene.position.y;
 
         loading.style.display = "none";
         setEmotion("happy");
@@ -355,28 +350,27 @@ function animate() {
     const time = clock.elapsedTime;
 
     if (vrm) {
-        // Опускаем руки из Т-позы и добавляем легкое дыхание
+        // Опускаем руки вниз вдоль тела (исправленный знак для твоей модели)
         const sway = Math.sin(time * 1.8) * 0.03;
         if (leftArm) {
-            leftArm.rotation.z = armSign * (-1.22 + sway);
+            leftArm.rotation.z = 1.25 - sway;
         }
         if (rightArm) {
-            rightArm.rotation.z = armSign * (1.22 - sway);
+            rightArm.rotation.z = -1.25 + sway;
         }
         if (leftLowerArm) {
-            leftLowerArm.rotation.z = armSign * -0.12;
+            leftLowerArm.rotation.z = 0.1;
         }
         if (rightLowerArm) {
-            rightLowerArm.rotation.z = armSign * 0.12;
+            rightLowerArm.rotation.z = -0.1;
         }
 
-        // Поворот головы за курсором
+        // Поворот головы
         if (headBone) {
             headBone.rotation.y += (targetX - headBone.rotation.y) * 0.08;
             headBone.rotation.x += (targetY - headBone.rotation.x) * 0.08;
         }
 
-        // Эмоции и моргание обновляем ДО vrm.update(delta)
         updateBlink(time);
         updateMouth(time);
 
@@ -385,11 +379,10 @@ function animate() {
             setEmotion("relaxed");
         }
 
-        // Применяем изменения нормализованных костей и мимики к модели
         vrm.update(delta);
 
-        // Плавное покачивание вверх-вниз
-        vrm.scene.position.y = baseY + Math.sin(time * 1.5) * 0.012;
+        // Плавное дыхание вверх-вниз
+        vrm.scene.position.y = baseY + Math.sin(time * 1.5) * 0.01;
     }
 
     renderer.render(scene, camera);
@@ -445,23 +438,26 @@ async function sendMessage() {
             body: JSON.stringify({ message, history })
         });
         if (!response.ok) {
-            throw new Error("Ошибка сервера: " + response.status);
+            const errText = await response.text().catch(() => "");
+            throw new Error(`HTTP ${response.status} ${errText}`);
         }
         const data = await response.json();
-        if (!data.reply) throw new Error("Пустой ответ");
-        addMessage(data.reply, "bot");
+        const reply = data.reply || data.response || data.content || data.text;
+        if (!reply) throw new Error("Пустой ответ от воркера");
+
+        addMessage(reply, "bot");
         history.push(
             { role: "user", content: message },
-            { role: "assistant", content: data.reply }
+            { role: "assistant", content: reply }
         );
         history = history.slice(-20);
-        setEmotion(detectEmotion(data.reply));
-        speak(data.reply);
+        setEmotion(detectEmotion(reply));
+        speak(reply);
         status.textContent = "● Астра готова 💗";
     } catch (error) {
         console.error(error);
         addMessage(
-            "Не получилось подключиться к моему ИИ 🌸",
+            `Не получилось подключиться к моему ИИ 🌸 (${error.message})`,
             "bot"
         );
         setEmotion("sad");
