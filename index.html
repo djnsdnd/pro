@@ -140,7 +140,6 @@ button:disabled {
     text-align: center;
     margin-top: 12px;
 }
-
 </style>
 
 <script type="importmap">
@@ -162,7 +161,7 @@ button:disabled {
 
 <section class="card">
     <div id="avatar3d">
-        <div id="loading3d">Загружаю 3D-Астру... 🌸</div>
+        <div id="loading3d">Загружаю Астру... 🌸</div>
     </div>
 
     <h2>Астра 💗</h2>
@@ -174,7 +173,7 @@ button:disabled {
 
     <div id="messages">
         <div class="message bot">
-            Привет! Я Астра! 🌸 Рада тебя видеть!
+            Привет! Я Астра! 🌸 Теперь я умею выражать эмоции!
         </div>
     </div>
 
@@ -184,13 +183,14 @@ button:disabled {
     </div>
 
     <div class="small">
-        Astra AI • 3D Anime Assistant
+        ASTRA AI • 3D ANIME ASSISTANT
     </div>
 </section>
 
 </main>
 
 <script type="module">
+
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { VRMLoaderPlugin } from "@pixiv/three-vrm";
@@ -200,9 +200,14 @@ import { VRMLoaderPlugin } from "@pixiv/three-vrm";
 const MODEL_URL = "./1544776736783819498.vrm";
 const API_URL = "https://astra-ai.fotopsh24.workers.dev/chat";
 
+/* ЭЛЕМЕНТЫ */
+
 const avatar = document.getElementById("avatar3d");
 const loading = document.getElementById("loading3d");
 const status = document.getElementById("status");
+const messages = document.getElementById("messages");
+const input = document.getElementById("userInput");
+const sendButton = document.getElementById("sendButton");
 
 /* THREE.JS */
 
@@ -214,9 +219,6 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     100
 );
-
-camera.position.set(0, 1.35, 3.5);
-camera.lookAt(0, 1.2, 0);
 
 const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -233,9 +235,9 @@ avatar.appendChild(renderer.domElement);
 
 scene.add(new THREE.HemisphereLight(0xffffff, 0x8b5a9e, 2));
 
-const light = new THREE.DirectionalLight(0xffffff, 2.5);
-light.position.set(2, 4, 5);
-scene.add(light);
+const mainLight = new THREE.DirectionalLight(0xffffff, 2.5);
+mainLight.position.set(2, 4, 5);
+scene.add(mainLight);
 
 const pinkLight = new THREE.PointLight(0xff82cf, 2, 8);
 pinkLight.position.set(-2, 2, 2);
@@ -249,79 +251,185 @@ let headBone = null;
 let targetX = 0;
 let targetY = 0;
 
+let currentEmotion = "happy";
+let speaking = false;
+let blinkValue = 0;
+let nextBlink = 3 + Math.random() * 3;
+let blinkStart = -1;
+
 const clock = new THREE.Clock();
 
-/* ЗАГРУЗКА VRM */
+/* УПРАВЛЕНИЕ ЭМОЦИЯМИ */
+
+function setExpression(name, value) {
+    if (!vrm?.expressionManager) return;
+
+    try {
+        vrm.expressionManager.setValue(name, value);
+    } catch (error) {
+        console.warn("Эмоция недоступна:", name);
+    }
+}
+
+function clearEmotions() {
+    [
+        "happy",
+        "sad",
+        "angry",
+        "surprised",
+        "relaxed"
+    ].forEach(name => setExpression(name, 0));
+}
+
+function setEmotion(name) {
+    const allowed = [
+        "happy",
+        "sad",
+        "angry",
+        "surprised",
+        "relaxed"
+    ];
+
+    if (!allowed.includes(name)) return;
+
+    currentEmotion = name;
+
+    clearEmotions();
+    setExpression(name, 1);
+}
+
+/* РЕАКЦИИ НА СООБЩЕНИЯ */
+
+function detectEmotion(text) {
+    const t = text.toLowerCase();
+
+    if (/груст|плохо|печаль|одинок|расстроен/.test(t)) {
+        return "sad";
+    }
+
+    if (/вау|невероят|удив|серьёзно|правда/.test(t)) {
+        return "surprised";
+    }
+
+    if (/злюсь|раздраж|бесит/.test(t)) {
+        return "angry";
+    }
+
+    if (/спасибо|люблю|класс|круто|привет|рада/.test(t)) {
+        return "happy";
+    }
+
+    return "relaxed";
+}
+
+/* ЗАГРУЗКА МОДЕЛИ */
 
 async function loadAstra() {
     try {
-        loading.textContent = "Загружаю модель... 🌸";
+        loading.textContent = "Загружаю 3D-Астру... 🌸";
 
         const loader = new GLTFLoader();
 
-        loader.register((parser) => {
-            return new VRMLoaderPlugin(parser);
-        });
+        loader.register(parser => new VRMLoaderPlugin(parser));
 
         const gltf = await loader.loadAsync(MODEL_URL);
 
         vrm = gltf.userData.vrm;
 
         if (!vrm) {
-            throw new Error("В файле не найдена VRM-модель.");
+            throw new Error("VRM-модель не найдена");
         }
 
         scene.add(vrm.scene);
 
-        // Определяем размеры персонажа
         const box = new THREE.Box3().setFromObject(vrm.scene);
         const size = box.getSize(new THREE.Vector3());
         const center = box.getCenter(new THREE.Vector3());
 
-        // Центрируем персонажа
         vrm.scene.position.x -= center.x;
         vrm.scene.position.y -= box.min.y;
         vrm.scene.position.z -= center.z;
 
-        // Подбираем масштаб камеры
         const height = Math.max(size.y, 1);
+
         camera.position.set(0, height * 0.85, height * 2.5);
         camera.lookAt(0, height * 0.55, 0);
-
         camera.far = height * 20;
         camera.updateProjectionMatrix();
 
-        // Находим кость головы
         headBone = vrm.humanoid?.getNormalizedBoneNode("head");
 
         loading.style.display = "none";
+
+        setEmotion("happy");
+
         status.textContent = "● Астра готова к общению 💗";
 
     } catch (error) {
-        console.error("Ошибка VRM:", error);
+        console.error(error);
 
-        loading.textContent =
-            "Не удалось загрузить 3D-Астру. Проверь файл модели и подключение к интернету.";
+        loading.textContent = "Ошибка загрузки Астры. Проверь подключение.";
 
-        status.textContent = "● Ошибка загрузки модели";
+        status.textContent = "● Ошибка модели";
     }
 }
 
-/* ДВИЖЕНИЕ ГОЛОВЫ */
+/* ПОВОРОТ ГОЛОВЫ */
 
-function moveHead(event) {
+avatar.addEventListener("pointermove", event => {
     const rect = avatar.getBoundingClientRect();
 
     targetX = ((event.clientX - rect.left) / rect.width - 0.5) * 0.7;
     targetY = ((event.clientY - rect.top) / rect.height - 0.5) * 0.35;
-}
-
-avatar.addEventListener("pointermove", moveHead);
+});
 
 avatar.addEventListener("pointerleave", () => {
     targetX = 0;
     targetY = 0;
 });
+
+/* МОРГАНИЕ */
+
+function updateBlink(time) {
+    if (!vrm?.expressionManager) return;
+
+    if (time >= nextBlink && blinkStart < 0) {
+        blinkStart = time;
+    }
+
+    if (blinkStart >= 0) {
+        const progress = (time - blinkStart) / 0.18;
+
+        if (progress <= 0.5) {
+            blinkValue = progress * 2;
+        } else if (progress <= 1) {
+            blinkValue = (1 - progress) * 2;
+        } else {
+            blinkValue = 0;
+            blinkStart = -1;
+            nextBlink = time + 2.5 + Math.random() * 4;
+        }
+
+        setExpression("blink", blinkValue);
+    }
+}
+
+/* ДВИЖЕНИЕ РТА */
+
+function updateMouth(time) {
+    if (!vrm?.expressionManager) return;
+
+    const mouthNames = ["aa", "ih", "ou", "ee", "oh"];
+
+    mouthNames.forEach(name => setExpression(name, 0));
+
+    if (speaking) {
+        const index = Math.floor(time * 9) % mouthNames.length;
+        const value = 0.35 + Math.abs(Math.sin(time * 12)) * 0.55;
+
+        setExpression(mouthNames[index], value);
+    }
+}
 
 /* АНИМАЦИЯ */
 
@@ -329,12 +437,14 @@ function animate() {
     requestAnimationFrame(animate);
 
     const delta = Math.min(clock.getDelta(), 0.05);
-    const elapsed = clock.elapsedTime;
+    const time = clock.elapsedTime;
 
     if (vrm) {
         vrm.update(delta);
 
-        // Плавное движение головы
+        updateBlink(time);
+        updateMouth(time);
+
         if (headBone) {
             headBone.rotation.y +=
                 (targetX - headBone.rotation.y) * 0.06;
@@ -343,9 +453,11 @@ function animate() {
                 (targetY - headBone.rotation.x) * 0.06;
         }
 
-        // Лёгкое естественное движение модели
         vrm.scene.position.y =
-            Math.sin(elapsed * 1.5) * 0.015;
+            Math.sin(time * 1.5) * 0.015;
+
+        vrm.scene.rotation.y =
+            Math.sin(time * 0.7) * 0.025;
     }
 
     renderer.render(scene, camera);
@@ -353,7 +465,7 @@ function animate() {
 
 animate();
 
-/* АДАПТАЦИЯ ПОД ТЕЛЕФОН */
+/* АДАПТАЦИЯ */
 
 window.addEventListener("resize", () => {
     const width = avatar.clientWidth;
@@ -365,13 +477,7 @@ window.addEventListener("resize", () => {
     renderer.setSize(width, height);
 });
 
-loadAstra();
-
 /* ЧАТ */
-
-const messages = document.getElementById("messages");
-const input = document.getElementById("userInput");
-const sendButton = document.getElementById("sendButton");
 
 let history = [];
 
@@ -385,13 +491,45 @@ function addMessage(text, type) {
     messages.scrollTop = messages.scrollHeight;
 }
 
+/* ГОЛОС */
+
+function speak(text) {
+    if (!("speechSynthesis" in window)) return;
+
+    speechSynthesis.cancel();
+
+    const speech = new SpeechSynthesisUtterance(text);
+
+    speech.lang = "ru-RU";
+    speech.rate = 1;
+    speech.pitch = 1.1;
+
+    speaking = true;
+
+    speech.onend = () => {
+        speaking = false;
+        setExpression("aa", 0);
+    };
+
+    speech.onerror = () => {
+        speaking = false;
+    };
+
+    speechSynthesis.speak(speech);
+}
+
+/* ОТПРАВКА СООБЩЕНИЙ */
+
 async function sendMessage() {
     const message = input.value.trim();
 
     if (!message) return;
 
     input.value = "";
+
     addMessage(message, "user");
+
+    setEmotion(detectEmotion(message));
 
     sendButton.disabled = true;
     status.textContent = "● Астра думает...";
@@ -399,12 +537,14 @@ async function sendMessage() {
     try {
         const response = await fetch(API_URL, {
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
-                message: message,
-                history: history
+                message,
+                history
             })
         });
 
@@ -415,7 +555,7 @@ async function sendMessage() {
         const data = await response.json();
 
         if (!data.reply) {
-            throw new Error("Сервер не вернул ответ.");
+            throw new Error("Пустой ответ сервера");
         }
 
         addMessage(data.reply, "bot");
@@ -427,26 +567,22 @@ async function sendMessage() {
 
         history = history.slice(-20);
 
+        // Эмоция по ответу Астры
+        setEmotion(detectEmotion(data.reply));
+
+        speak(data.reply);
+
         status.textContent = "● Астра готова к общению 💗";
-
-        // Озвучивание ответа
-        if ("speechSynthesis" in window) {
-            speechSynthesis.cancel();
-
-            const speech = new SpeechSynthesisUtterance(data.reply);
-            speech.lang = "ru-RU";
-            speech.rate = 1;
-
-            speechSynthesis.speak(speech);
-        }
 
     } catch (error) {
         console.error(error);
 
         addMessage(
-            "Не получилось подключиться к моему ИИ. Попробуй ещё раз.",
+            "Ой! Не получилось подключиться к моему ИИ. Попробуй ещё раз 🌸",
             "bot"
         );
+
+        setEmotion("sad");
 
         status.textContent = "● Ошибка соединения";
     }
@@ -456,11 +592,16 @@ async function sendMessage() {
 
 sendButton.addEventListener("click", sendMessage);
 
-input.addEventListener("keydown", (event) => {
+input.addEventListener("keydown", event => {
     if (event.key === "Enter") {
         sendMessage();
     }
 });
+
+/* ЗАПУСК */
+
+loadAstra();
+
 </script>
 
 </body>
