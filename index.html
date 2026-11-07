@@ -122,7 +122,7 @@ select.field option{color:#000}
         <input type="range" id="sElbow" min="-0.5" max="0.8" step="0.05"></div>
 
       <h3>Голос</h3>
-      <label class="hint" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="cloudChk"> Облачный няшный голос</label>
+      <label class="hint" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="cloudChk" checked> Облачный няшный голос</label>
       <input class="field" id="fKey" type="password" autocomplete="off" placeholder="Ключ Fish Audio">
       <input class="field" id="fVoice" autocomplete="off" placeholder="ID голоса Fish Audio">
       <input class="field" id="pKey" type="password" autocomplete="off" placeholder="Ключ Pollinations (если нужен)">
@@ -489,9 +489,12 @@ const TTS_URL = WORKER_URL.replace(/\/chat$/, "/tts");
 let cloudVoice = store.get("astra_cloud", "1") === "1", ttsDownUntil = 0, speakToken = 0;
 const player = new Audio(); let actx = null, analyser = null, buf = null;
 
-// Записываем твой ключ в поле Студии по умолчанию, если он еще не сохранен
+// Автоматически прописываем ключи и ID, если их нет
 if (!store.get("astra_fkey")) {
   store.set("astra_fkey", "Sk-fish-6V2Di-KA6qg_rBM4WoJt8PevVfLTz6U7I-MmwcXWXms");
+}
+if (!store.get("astra_fvoice")) {
+  store.set("astra_fvoice", "1a79e1288b834b81bd46b1607cf7d165");
 }
 
 $("fKey").value = store.get("astra_fkey", ""); 
@@ -516,11 +519,10 @@ function setupAnalyser(){
 async function getAudioBlob(text){
   const pk = store.get("astra_pkey", "").trim(), q = encodeURIComponent(text);
   const fk = store.get("astra_fkey", "").trim() || "Sk-fish-6V2Di-KA6qg_rBM4WoJt8PevVfLTz6U7I-MmwcXWXms";
-  const fv = store.get("astra_fvoice", "").trim();
+  const fv = store.get("astra_fvoice", "").trim() || "1a79e1288b834b81bd46b1607cf7d165";
 
   const tries = [
     ...(fk && fv ? [async () => {
-      // CORS-прокси для обхода блокировок на телефоне
       const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent("https://api.fish.audio/v1/tts");
       return await post(proxyUrl, { 
         method:"POST",
