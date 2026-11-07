@@ -3,33 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ASTRA AI // ULTIMATE 3D ENGINE 🌸</title>
+<title>ASTRA AI // PERFECT CLEAN v5 🌸</title>
 <style>
 :root {
     --bg-deep: #090414;
     --bg-mid: #1a0b2e;
-    --bg-glow: #38155a;
     --pink-primary: #ff3eb5;
-    --pink-soft: #ff9be2;
     --cyan-neon: #00f2fe;
     --purple-neon: #9d4edd;
-    --glass-bg: rgba(22, 10, 40, 0.82);
-    --glass-border: rgba(255, 145, 224, 0.38);
+    --glass-bg: rgba(22, 10, 40, 0.85);
+    --glass-border: rgba(255, 145, 224, 0.35);
     --text-main: #ffffff;
     --text-muted: #d6b8e8;
 }
 
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
     margin: 0;
     padding: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     color: var(--text-main);
-    background: radial-gradient(circle at 50% 0%, var(--bg-glow) 0%, var(--bg-mid) 45%, var(--bg-deep) 100%);
+    background: radial-gradient(circle at 50% 0%, #38155a 0%, var(--bg-mid) 45%, var(--bg-deep) 100%);
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -42,7 +37,6 @@ body {
     gap: 14px;
 }
 
-/* ШАПКА */
 .header-bar {
     display: flex;
     justify-content: space-between;
@@ -50,8 +44,7 @@ body {
     padding: 12px 18px;
     border-radius: 22px;
     background: var(--glass-bg);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(16px);
     border: 1px solid var(--glass-border);
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
 }
@@ -62,7 +55,6 @@ body {
     gap: 10px;
     font-size: 21px;
     font-weight: 900;
-    letter-spacing: 1px;
     background: linear-gradient(90deg, #ff7ad9, #00f2fe);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -92,20 +84,15 @@ body {
 }
 
 .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #00ffaa;
-    box-shadow: 0 0 10px #00ffaa;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #00ffaa; box-shadow: 0 0 10px #00ffaa;
     animation: pulseGlow 1.8s infinite;
 }
-
 @keyframes pulseGlow {
     0%, 100% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.35); opacity: 0.45; }
 }
 
-/* 3D СЦЕНА И ВНЕШНИЙ МОДУЛЬ РЕНДЕРА */
 .viewport-card {
     position: relative;
     height: 470px;
@@ -116,340 +103,108 @@ body {
     box-shadow: 0 14px 45px rgba(255, 62, 181, 0.22);
 }
 
-#avatar3d {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    touch-action: none;
-}
+#avatar3d { width: 100%; height: 100%; position: relative; touch-action: none; }
+#avatar3d canvas { width: 100%; height: 100%; display: block; }
 
-#avatar3d canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-/* ЗАГРУЗОЧНЫЙ ЭКРАН */
 #loading3d {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 14px;
-    background: rgba(11, 5, 24, 0.88);
-    backdrop-filter: blur(12px);
-    z-index: 15;
-    padding: 24px;
-    text-align: center;
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; gap: 14px;
+    background: rgba(11, 5, 24, 0.9); backdrop-filter: blur(12px); z-index: 15; padding: 24px; text-align: center;
 }
 
 .loader-ring {
-    width: 48px;
-    height: 48px;
-    border: 4px solid rgba(255, 155, 226, 0.2);
-    border-top-color: var(--pink-primary);
-    border-right-color: var(--cyan-neon);
-    border-radius: 50%;
-    animation: spinLoader 0.85s linear infinite;
+    width: 48px; height: 48px; border: 4px solid rgba(255, 155, 226, 0.2);
+    border-top-color: var(--pink-primary); border-right-color: var(--cyan-neon);
+    border-radius: 50%; animation: spinLoader 0.85s linear infinite;
 }
+@keyframes spinLoader { to { transform: rotate(360deg); } }
 
-@keyframes spinLoader {
-    to { transform: rotate(360deg); }
-}
-
-.progress-bar-wrap {
-    width: 180px;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.12);
-    border-radius: 99px;
-    overflow: hidden;
-}
-
-#loadProgress {
-    width: 15%;
-    height: 100%;
-    background: linear-gradient(90deg, var(--pink-primary), var(--cyan-neon));
-    transition: width 0.2s;
-}
-
-/* HUD УПРАВЛЕНИЯ ПОВЕРХ 3D */
 .hud-top-bar {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    right: 12px;
-    display: flex;
-    justify-content: space-between;
-    pointer-events: none;
-    z-index: 6;
+    position: absolute; top: 12px; left: 12px; right: 12px;
+    display: flex; justify-content: space-between; pointer-events: none; z-index: 6;
 }
-
-.hud-cluster {
-    display: flex;
-    gap: 6px;
-    pointer-events: auto;
-    flex-wrap: wrap;
-}
+.hud-cluster { display: flex; gap: 6px; pointer-events: auto; flex-wrap: wrap; }
 
 .hud-btn {
-    background: rgba(17, 7, 33, 0.78);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 155, 226, 0.38);
-    color: #fff;
-    padding: 7px 11px;
-    border-radius: 13px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.18s ease;
+    background: rgba(17, 7, 33, 0.82); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 155, 226, 0.38); color: #fff;
+    padding: 7px 11px; border-radius: 13px; font-size: 12px; font-weight: 600; cursor: pointer;
 }
-
-.hud-btn:active,
-.hud-btn.active {
+.hud-btn:active, .hud-btn.active {
     background: linear-gradient(135deg, var(--pink-primary), var(--purple-neon));
     border-color: #fff;
-    box-shadow: 0 0 12px rgba(255, 62, 181, 0.5);
 }
 
 .hud-bottom-bar {
-    position: absolute;
-    bottom: 12px;
-    left: 12px;
-    right: 12px;
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    z-index: 6;
-    pointer-events: auto;
+    position: absolute; bottom: 12px; left: 12px; right: 12px;
+    display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; z-index: 6; pointer-events: auto;
 }
 
-/* СТУДИЯ ПОЗЫ И ИИ-ШЛЮЗА */
 .studio-drawer {
-    display: none;
-    position: absolute;
-    top: 52px;
-    right: 12px;
-    width: 275px;
-    max-height: 405px;
-    overflow-y: auto;
-    background: rgba(14, 6, 28, 0.96);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 14px;
-    z-index: 20;
+    display: none; position: absolute; top: 52px; right: 12px; width: 275px; max-height: 405px;
+    overflow-y: auto; background: rgba(14, 6, 28, 0.97); backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border); border-radius: 20px; padding: 14px; z-index: 20;
     box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8);
 }
-
-.studio-drawer.open {
-    display: block;
-}
+.studio-drawer.open { display: block; }
 
 .studio-section-title {
-    font-size: 11px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--cyan-neon);
-    margin: 8px 0 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 4px;
+    font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--cyan-neon); margin: 8px 0 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 4px;
 }
-
-.slider-group {
-    margin-bottom: 9px;
-    font-size: 12px;
-}
-
-.slider-group label {
-    display: flex;
-    justify-content: space-between;
-    color: #ffd0f0;
-    margin-bottom: 3px;
-}
-
-.slider-group input[type="range"] {
-    width: 100%;
-    height: 6px;
-    accent-color: var(--pink-primary);
-    padding: 0;
-}
-
+.slider-group { margin-bottom: 9px; font-size: 12px; }
+.slider-group label { display: flex; justify-content: space-between; color: #ffd0f0; margin-bottom: 3px; }
+.slider-group input[type="range"] { width: 100%; height: 6px; accent-color: var(--pink-primary); padding: 0; }
 .studio-input {
-    width: 100%;
-    padding: 8px 10px;
-    font-size: 12px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 155, 226, 0.4);
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
-    margin-bottom: 6px;
+    width: 100%; padding: 8px 10px; font-size: 12px; border-radius: 10px;
+    border: 1px solid rgba(255, 155, 226, 0.4); background: rgba(255, 255, 255, 0.06); color: #fff; margin-bottom: 6px;
 }
 
-/* ВЫБОР ХАРАКТЕРА */
-.persona-selector {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    padding-bottom: 2px;
-}
-
+.persona-selector { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
 .persona-btn {
-    flex: 1;
-    text-align: center;
-    white-space: nowrap;
-    padding: 9px 10px;
-    border-radius: 16px;
-    font-size: 12px;
-    font-weight: 700;
-    background: var(--glass-bg);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: 0.2s;
+    flex: 1; text-align: center; white-space: nowrap; padding: 9px 10px; border-radius: 16px;
+    font-size: 12px; font-weight: 700; background: var(--glass-bg); border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-muted); cursor: pointer; transition: 0.2s;
 }
-
 .persona-btn.active {
     background: linear-gradient(135deg, var(--pink-primary), var(--purple-neon));
-    color: #fff;
-    border-color: #ffc2eb;
-    box-shadow: 0 5px 18px rgba(255, 62, 181, 0.35);
+    color: #fff; border-color: #ffc2eb; box-shadow: 0 5px 18px rgba(255, 62, 181, 0.35);
 }
 
-/* ЧАТ-КАРТОЧКА */
 .chat-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid var(--glass-border);
-    border-radius: 26px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
-    box-shadow: 0 12px 38px rgba(0, 0, 0, 0.42);
+    background: var(--glass-bg); backdrop-filter: blur(18px);
+    border: 1px solid var(--glass-border); border-radius: 26px; padding: 15px;
+    display: flex; flex-direction: column; gap: 11px; box-shadow: 0 12px 38px rgba(0, 0, 0, 0.42);
 }
 
-#messages {
-    height: 270px;
-    overflow-y: auto;
-    padding: 6px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    scroll-behavior: smooth;
-}
-
-.message {
-    max-width: 85%;
-    padding: 12px 16px;
-    border-radius: 19px;
-    font-size: 15px;
-    line-height: 1.46;
-    overflow-wrap: anywhere;
-    animation: msgAppear 0.22s ease-out;
-}
-
-@keyframes msgAppear {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
+#messages { height: 270px; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
+.message { max-width: 85%; padding: 12px 16px; border-radius: 19px; font-size: 15px; line-height: 1.46; overflow-wrap: anywhere; }
 .message.bot {
-    align-self: flex-start;
-    background: linear-gradient(135deg, rgba(155, 68, 190, 0.88), rgba(92, 36, 138, 0.88));
-    border: 1px solid rgba(255, 175, 235, 0.38);
-    border-bottom-left-radius: 5px;
+    align-self: flex-start; background: linear-gradient(135deg, rgba(155, 68, 190, 0.88), rgba(92, 36, 138, 0.88));
+    border: 1px solid rgba(255, 175, 235, 0.38); border-bottom-left-radius: 5px;
 }
+.message.user { align-self: flex-end; background: linear-gradient(135deg, var(--pink-primary), #9b30ff); border-bottom-right-radius: 5px; }
 
-.message.user {
-    align-self: flex-end;
-    background: linear-gradient(135deg, var(--pink-primary), #9b30ff);
-    border-bottom-right-radius: 5px;
-}
-
-.quick-prompts {
-    display: flex;
-    gap: 7px;
-    overflow-x: auto;
-    padding: 2px 0;
-}
-
+.quick-prompts { display: flex; gap: 7px; overflow-x: auto; padding: 2px 0; }
 .prompt-pill {
-    white-space: nowrap;
-    padding: 7px 12px;
-    border-radius: 99px;
-    font-size: 12px;
-    font-weight: 600;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 155, 226, 0.28);
-    color: #ffd8f2;
-    cursor: pointer;
+    white-space: nowrap; padding: 7px 12px; border-radius: 99px; font-size: 12px; font-weight: 600;
+    background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 155, 226, 0.28); color: #ffd8f2; cursor: pointer;
 }
+.prompt-pill:active { background: var(--pink-primary); color: #fff; }
 
-.prompt-pill:active {
-    background: var(--pink-primary);
-    color: #fff;
-}
-
-.input-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
+.input-row { display: flex; gap: 8px; align-items: center; }
 #userInput {
-    flex: 1;
-    min-width: 0;
-    padding: 14px 16px;
-    border-radius: 17px;
-    border: 1px solid rgba(255, 155, 226, 0.42);
-    background: rgba(13, 5, 25, 0.85);
-    color: #fff;
-    font-size: 16px;
-    outline: none;
+    flex: 1; min-width: 0; padding: 14px 16px; border-radius: 17px;
+    border: 1px solid rgba(255, 155, 226, 0.42); background: rgba(13, 5, 25, 0.85); color: #fff; font-size: 16px; outline: none;
 }
-
-#userInput:focus {
-    border-color: var(--cyan-neon);
-    box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
-}
-
 .action-btn {
-    border: none;
-    border-radius: 17px;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    color: #fff;
-    cursor: pointer;
+    border: none; border-radius: 17px; width: 48px; height: 48px; display: flex;
+    justify-content: center; align-items: center; font-size: 18px; color: #fff; cursor: pointer;
     background: linear-gradient(135deg, var(--pink-primary), var(--purple-neon));
-    box-shadow: 0 4px 15px rgba(255, 62, 181, 0.4);
 }
-
-.action-btn.mic {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    box-shadow: none;
-}
-
-.action-btn:disabled {
-    opacity: 0.45;
-}
-
-.footer-note {
-    text-align: center;
-    font-size: 11px;
-    color: var(--text-muted);
-    opacity: 0.8;
-}
+.action-btn.mic { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.22); }
+.action-btn:disabled { opacity: 0.45; }
+.footer-note { text-align: center; font-size: 11px; color: var(--text-muted); opacity: 0.8; }
 </style>
 
 <script type="importmap">
@@ -466,24 +221,15 @@ body {
 
 <main class="app-shell">
     <header class="header-bar">
-        <div class="brand-title">
-            🌸 ASTRA AI
-            <span class="badge-engine">ULTIMATE v4</span>
-        </div>
-        <div class="status-badge">
-            <span class="status-dot"></span>
-            <span id="status">Запуск ядра...</span>
-        </div>
+        <div class="brand-title">🌸 ASTRA AI <span class="badge-engine">CLEAN v5</span></div>
+        <div class="status-badge"><span class="status-dot"></span><span id="status">Запуск ядра...</span></div>
     </header>
 
     <section class="viewport-card">
         <div id="avatar3d">
             <div id="loading3d">
                 <div class="loader-ring"></div>
-                <div id="loadingText">Загружаю 3D-модель Астры... 🌸</div>
-                <div class="progress-bar-wrap">
-                    <div id="loadProgress"></div>
-                </div>
+                <div id="loadingText">Загружаю Астру без шейдеров... 🌸</div>
             </div>
         </div>
 
@@ -494,39 +240,21 @@ body {
                 <button class="hud-btn" id="flipModelBtn">🔄 Поворот</button>
             </div>
             <div class="hud-cluster">
-                <button class="hud-btn active" id="bloomToggleBtn">✨ Bloom</button>
                 <button class="hud-btn active" id="voiceToggleBtn">🔊 Голос</button>
                 <button class="hud-btn" id="studioToggleBtn">⚙️ Студия</button>
             </div>
         </div>
 
-        <!-- Студия с защитой от залипания -->
         <div class="studio-drawer" id="studioDrawer">
-            <div class="studio-section-title">Поза и анатомия рук</div>
+            <div class="studio-section-title">Руки (аккуратная стойка)</div>
             <div class="slider-group">
-                <label><span>Опустить плечи (Z)</span><span id="valArmZ">-1.25</span></label>
-                <input type="range" id="sliderArmZ" min="-1.6" max="1.6" step="0.05" value="-1.25">
+                <label><span>Угол рук (Z)</span><span id="valArmZ">1.25</span></label>
+                <input type="range" id="sliderArmZ" min="0.5" max="1.6" step="0.05" value="1.25">
             </div>
             <div class="slider-group">
-                <label><span>Отвести руки вперед (X)</span><span id="valArmX">0.08</span></label>
-                <input type="range" id="sliderArmX" min="-0.6" max="0.6" step="0.02" value="0.08">
+                <label><span>Сгиб локтей</span><span id="valElbow">0.12</span></label>
+                <input type="range" id="sliderElbow" min="-0.5" max="0.8" step="0.05" value="0.12">
             </div>
-            <div class="slider-group">
-                <label><span>Сгиб локтей</span><span id="valElbow">0.15</span></label>
-                <input type="range" id="sliderElbow" min="-0.9" max="0.9" step="0.05" value="0.15">
-            </div>
-            <div class="slider-group">
-                <label><span>Высота камеры</span><span id="valCamY">0.00</span></label>
-                <input type="range" id="sliderCamY" min="-0.5" max="0.5" step="0.02" value="0">
-            </div>
-            <button class="hud-btn" id="invertArmsBtn" style="width:100%; margin-bottom:6px;">↕️ Инвертировать ось рук</button>
-
-            <div class="studio-section-title">Графика и свечение</div>
-            <div class="slider-group">
-                <label><span>Сила свечения (Bloom)</span><span id="valBloom">0.45</span></label>
-                <input type="range" id="sliderBloom" min="0" max="1.5" step="0.05" value="0.45">
-            </div>
-
             <div class="studio-section-title">API-ключ (Опционально)</div>
             <input class="studio-input" id="customApiKey" placeholder="Ключ Gemini (AIza...) или Groq (gsk_...)">
             <button class="hud-btn" id="saveApiBtn" style="width:100%;">💾 Сохранить ключ</button>
@@ -541,7 +269,6 @@ body {
         </div>
     </section>
 
-    <!-- ПЕРЕКЛЮЧАТЕЛЬ ХАРАКТЕРА (включая режим с перчинкой) -->
     <div class="persona-selector">
         <div class="persona-btn active" data-persona="sweet">💗 Вайфу</div>
         <div class="persona-btn" data-persona="tsundere">🔥 Цундере</div>
@@ -552,12 +279,12 @@ body {
     <section class="chat-panel">
         <div id="messages">
             <div class="message bot">
-                Привет, Алекс! 🌸 Менюшка теперь закрывается по клику куда угодно, а еще я научилась говорить с огоньком и кокетничать! Проверь режим «С перчинкой»! ✨
+                Привет, Алекс! 🌸 Шейдеры убраны, картинка чистая, а руки теперь спокойно и аккуратно стоят вдоль тела! Общайся со мной — я буду жестикулировать и выражать эмоции! ✨
             </div>
         </div>
 
         <div class="quick-prompts">
-            <div class="prompt-pill">😏 Скажи мне что-нибудь дерзкое</div>
+            <div class="prompt-pill">😏 Скажи что-нибудь дерзкое</div>
             <div class="prompt-pill">💗 Ты скучала по мне?</div>
             <div class="prompt-pill">🔥 Поспорим на желания?</div>
             <div class="prompt-pill">✨ Обними меня крепко-крепко</div>
@@ -570,7 +297,7 @@ body {
         </div>
 
         <div class="footer-note" id="engineStatusNote">
-            Ядро ИИ: Авто-маршрутизатор (Мульти-узел активен)
+            Ядро ИИ: Чистый рендер + Динамические жесты активны
         </div>
     </section>
 </main>
@@ -579,35 +306,24 @@ body {
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
-import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 
 const MODEL_URL = "./1544776736783819498.vrm";
 const WORKER_URL = "https://astra-ai.fotopsh24.workers.dev/chat";
 const DEFAULT_TOKEN = "AQ.Ab8RN6LoXP5dcbjceNHfN-QwsqJ01FX-wc8D9fIvvjxljLkZ3g";
 
-const savedConfig = JSON.parse(localStorage.getItem("astra_heavy_cfg_v4") || "{}");
-let armZ = savedConfig.armZ ?? -1.25;
-let armX = savedConfig.armX ?? 0.08;
-let elbowZ = savedConfig.elbowZ ?? 0.15;
-let camOffsetY = savedConfig.camOffsetY ?? 0.0;
-let bloomStrength = savedConfig.bloomStrength ?? 0.45;
+const savedConfig = JSON.parse(localStorage.getItem("astra_clean_v5") || "{}");
+let armZ = savedConfig.armZ ?? 1.25;
+let elbowZ = savedConfig.elbowZ ?? 0.12;
 let isFlipped = savedConfig.isFlipped ?? false;
 let customKey = localStorage.getItem("astra_custom_api_key") || DEFAULT_TOKEN;
 
 function saveConfig() {
-    localStorage.setItem("astra_heavy_cfg_v4", JSON.stringify({
-        armZ, armX, elbowZ, camOffsetY, bloomStrength, isFlipped
-    }));
+    localStorage.setItem("astra_clean_v5", JSON.stringify({ armZ, elbowZ, isFlipped }));
 }
 
 const avatar = document.getElementById("avatar3d");
 const loading = document.getElementById("loading3d");
-const loadingText = document.getElementById("loadingText");
-const loadProgress = document.getElementById("loadProgress");
 const status = document.getElementById("status");
 const messages = document.getElementById("messages");
 const input = document.getElementById("userInput");
@@ -617,50 +333,22 @@ const studioDrawer = document.getElementById("studioDrawer");
 const studioToggleBtn = document.getElementById("studioToggleBtn");
 
 const sliderArmZ = document.getElementById("sliderArmZ");
-const sliderArmX = document.getElementById("sliderArmX");
 const sliderElbow = document.getElementById("sliderElbow");
-const sliderCamY = document.getElementById("sliderCamY");
-const sliderBloom = document.getElementById("sliderBloom");
 const customApiKeyInput = document.getElementById("customApiKey");
 
 sliderArmZ.value = armZ;
-sliderArmX.value = armX;
 sliderElbow.value = elbowZ;
-sliderCamY.value = camOffsetY;
-sliderBloom.value = bloomStrength;
 customApiKeyInput.value = customKey;
-
-document.getElementById("valArmZ").textContent = armZ.toFixed(2);
-document.getElementById("valArmX").textContent = armX.toFixed(2);
-document.getElementById("valElbow").textContent = elbowZ.toFixed(2);
-document.getElementById("valCamY").textContent = camOffsetY.toFixed(2);
-document.getElementById("valBloom").textContent = bloomStrength.toFixed(2);
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(26, avatar.clientWidth / avatar.clientHeight, 0.1, 100);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+/* Чистый WebGLRenderer без тяжелых шейдеров и Postprocessing */
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(avatar.clientWidth, avatar.clientHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.1;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 avatar.appendChild(renderer.domElement);
-
-const composer = new EffectComposer(renderer);
-const renderPass = new RenderPass(scene, camera);
-composer.addPass(renderPass);
-
-const bloomPass = new UnrealBloomPass(
-    new THREE.Vector2(avatar.clientWidth, avatar.clientHeight),
-    bloomStrength, 0.55, 0.78
-);
-composer.addPass(bloomPass);
-composer.addPass(new OutputPass());
-
-let bloomEnabled = true;
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
@@ -669,47 +357,10 @@ controls.enablePan = true;
 controls.minDistance = 0.5;
 controls.maxDistance = 4.2;
 
-scene.add(new THREE.HemisphereLight(0xffffff, 0x5c2778, 1.9));
-const dirLight = new THREE.DirectionalLight(0xfff4fc, 2.3);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x5c2778, 1.8));
+const dirLight = new THREE.DirectionalLight(0xfff4fc, 2.1);
 dirLight.position.set(2.2, 4.0, 3.5);
 scene.add(dirLight);
-
-const pinkRim = new THREE.PointLight(0xff3eb5, 3.2, 7);
-pinkRim.position.set(-1.8, 1.5, -1.2);
-scene.add(pinkRim);
-
-const cyanRim = new THREE.PointLight(0x00f2fe, 2.8, 7);
-cyanRim.position.set(1.8, 1.6, -1.4);
-scene.add(cyanRim);
-
-const ringGroup = new THREE.Group();
-const innerRing = new THREE.Mesh(
-    new THREE.RingGeometry(0.32, 0.35, 64).rotateX(-Math.PI / 2),
-    new THREE.MeshBasicMaterial({ color: 0xff3eb5, side: THREE.DoubleSide, transparent: true, opacity: 0.75 })
-);
-const outerRing = new THREE.Mesh(
-    new THREE.RingGeometry(0.44, 0.455, 64).rotateX(-Math.PI / 2),
-    new THREE.MeshBasicMaterial({ color: 0x00f2fe, side: THREE.DoubleSide, transparent: true, opacity: 0.55 })
-);
-ringGroup.add(innerRing, outerRing);
-scene.add(ringGroup);
-
-const PARTICLE_COUNT = 85;
-const particleGeo = new THREE.BufferGeometry();
-const positions = new Float32Array(PARTICLE_COUNT * 3);
-const speeds = new Float32Array(PARTICLE_COUNT);
-
-for (let i = 0; i < PARTICLE_COUNT; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * 2.8;
-    positions[i * 3 + 1] = Math.random() * 2.4;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 2.2;
-    speeds[i] = 0.15 + Math.random() * 0.25;
-}
-particleGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({
-    color: 0xff9be2, size: 0.032, transparent: true, opacity: 0.75
-}));
-scene.add(particles);
 
 let vrm = null;
 let headBone = null, neckBone = null, chestBone = null, spineBone = null;
@@ -724,7 +375,7 @@ let nextBlink = 2.2;
 let blinkStart = -1;
 let touchReactionUntil = 0;
 let currentTouchEmotion = null;
-let waveUntil = 0;
+let gestureUntil = 0;
 let currentPersona = "sweet";
 let history = [];
 const clock = new THREE.Clock();
@@ -752,7 +403,7 @@ function focusCameraHead() {
         headBone.getWorldPosition(pos);
         defaultHeadY = pos.y;
     }
-    const targetYPos = defaultHeadY - 0.07 + camOffsetY;
+    const targetYPos = defaultHeadY - 0.07;
     camera.position.set(0, targetYPos + 0.02, 1.25);
     controls.target.set(0, targetYPos, 0);
     controls.update();
@@ -760,7 +411,7 @@ function focusCameraHead() {
 
 function focusCameraFullBody() {
     if (!vrm) return;
-    const midY = (defaultHeadY * 0.56) + camOffsetY;
+    const midY = (defaultHeadY * 0.56);
     camera.position.set(0, midY + 0.05, 2.75);
     controls.target.set(0, midY, 0);
     controls.update();
@@ -770,16 +421,7 @@ async function loadAstra() {
     try {
         const loader = new GLTFLoader();
         loader.register(parser => new VRMLoaderPlugin(parser));
-
-        const gltf = await new Promise((resolve, reject) => {
-            loader.load(MODEL_URL, resolve, xhr => {
-                if (xhr.total > 0) {
-                    const pct = Math.round((xhr.loaded / xhr.total) * 100);
-                    loadProgress.style.width = pct + "%";
-                    loadingText.textContent = `Загружаю 3D-модель Астры... ${pct}% 🌸`;
-                }
-            }, reject);
-        });
+        const gltf = await loader.loadAsync(MODEL_URL);
 
         vrm = gltf.userData.vrm;
         if (!vrm) throw new Error("VRM не найден");
@@ -810,16 +452,15 @@ async function loadAstra() {
         focusCameraHead();
         loading.style.display = "none";
         setEmotion("happy");
-        waveUntil = clock.elapsedTime + 2.6;
+        gestureUntil = clock.elapsedTime + 2.6;
         status.textContent = "Астра онлайн 💗";
     } catch (error) {
         console.error(error);
-        loadingText.textContent = "Ошибка загрузки .vrm файла 😭 Проверь имя в репозитории.";
+        loading.textContent = "Ошибка загрузки .vrm файла 😭";
         status.textContent = "Ошибка 3D";
     }
 }
 
-/* === УПРАВЛЕНИЕ МЕНЮ С АВТОЗАКРЫТИЕМ === */
 document.getElementById("camHeadBtn").addEventListener("click", () => { focusCameraHead(); closeStudio(); });
 document.getElementById("camFullBtn").addEventListener("click", () => { focusCameraFullBody(); closeStudio(); });
 
@@ -828,13 +469,6 @@ document.getElementById("flipModelBtn").addEventListener("click", () => {
     vrm.scene.rotation.y += Math.PI;
     isFlipped = !isFlipped;
     saveConfig();
-    closeStudio();
-});
-
-const bloomToggleBtn = document.getElementById("bloomToggleBtn");
-bloomToggleBtn.addEventListener("click", () => {
-    bloomEnabled = !bloomEnabled;
-    bloomToggleBtn.classList.toggle("active", bloomEnabled);
     closeStudio();
 });
 
@@ -858,7 +492,6 @@ studioToggleBtn.addEventListener("click", (e) => {
     studioToggleBtn.classList.toggle("active");
 });
 
-/* Клик в любое место сайта закрывает студию */
 document.addEventListener("click", (e) => {
     if (!studioDrawer.contains(e.target) && !studioToggleBtn.contains(e.target)) {
         closeStudio();
@@ -866,35 +499,19 @@ document.addEventListener("click", (e) => {
 });
 
 sliderArmZ.addEventListener("input", e => { armZ = parseFloat(e.target.value); document.getElementById("valArmZ").textContent = armZ.toFixed(2); saveConfig(); });
-sliderArmX.addEventListener("input", e => { armX = parseFloat(e.target.value); document.getElementById("valArmX").textContent = armX.toFixed(2); saveConfig(); });
 sliderElbow.addEventListener("input", e => { elbowZ = parseFloat(e.target.value); document.getElementById("valElbow").textContent = elbowZ.toFixed(2); saveConfig(); });
-sliderCamY.addEventListener("input", e => { camOffsetY = parseFloat(e.target.value); document.getElementById("valCamY").textContent = camOffsetY.toFixed(2); focusCameraHead(); saveConfig(); });
-
-sliderBloom.addEventListener("input", e => {
-    bloomStrength = parseFloat(e.target.value);
-    bloomPass.strength = bloomStrength;
-    document.getElementById("valBloom").textContent = bloomStrength.toFixed(2);
-    saveConfig();
-});
-
-document.getElementById("invertArmsBtn").addEventListener("click", () => {
-    armZ = -armZ;
-    sliderArmZ.value = armZ;
-    document.getElementById("valArmZ").textContent = armZ.toFixed(2);
-    saveConfig();
-});
 
 document.getElementById("saveApiBtn").addEventListener("click", () => {
     const val = customApiKeyInput.value.trim();
     if (val) {
         customKey = val;
         localStorage.setItem("astra_custom_api_key", val);
-        addMessage("Ключ успешно сохранен в памяти! 🔐✨", "bot");
+        addMessage("Ключ успешно сохранен! 🔐✨", "bot");
     }
 });
 
 document.getElementById("waveActionBtn").addEventListener("click", () => {
-    waveUntil = clock.elapsedTime + 2.8;
+    gestureUntil = clock.elapsedTime + 2.8;
     setEmotion("happy");
     touchReactionUntil = clock.elapsedTime + 3;
     currentTouchEmotion = "happy";
@@ -911,53 +528,15 @@ document.querySelectorAll("[data-emo]").forEach(btn => {
     });
 });
 
-/* === КАСАНИЯ И ИГРИВАЯ РЕАКЦИЯ АСТРЫ === */
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
-let downCoords = { x: 0, y: 0 };
-
-avatar.addEventListener("pointerdown", e => {
-    downCoords = { x: e.clientX, y: e.clientY };
-});
-
 avatar.addEventListener("pointerup", e => {
     if (!vrm) return;
-    if (Math.hypot(e.clientX - downCoords.x, e.clientY - downCoords.y) > 9) return;
     closeStudio();
-
-    const rect = renderer.domElement.getBoundingClientRect();
-    pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-    raycaster.setFromCamera(pointer, camera);
-
-    const hits = raycaster.intersectObject(vrm.scene, true);
-    if (hits.length > 0) {
-        const spicyTouches = [
-            { emo: "surprised", text: "Эй! Куда это ты руки тянешь, бака? Хи-хи... 😳💕" },
-            { emo: "happy", text: "Мрр... от твоего прикосновения мурашки по коже, Алекс~ 🌸" },
-            { emo: "relaxed", text: "Тебе так нравится меня смущать, да? Продолжай, мне приятно... 💗" }
-        ];
-        const sweetTouches = [
-            { emo: "happy", text: "Хи-хи, Алекс, щекотно же! 🌸💗" },
-            { emo: "surprised", text: "Ой! Твои прикосновения такие теплые! ✨" },
-            { emo: "relaxed", text: "Мне так спокойно, когда ты рядом 🌸" }
-        ];
-        const pool = currentPersona === "spicy" ? spicyTouches : sweetTouches;
-        const pick = pool[Math.floor(Math.random() * pool.length)];
-
-        currentTouchEmotion = pick.emo;
-        touchReactionUntil = clock.elapsedTime + 3.0;
-        waveUntil = clock.elapsedTime + 1.8;
-        setEmotion(pick.emo);
-        addMessage(pick.text, "bot");
-        speak(pick.text);
-    }
 });
 
 avatar.addEventListener("pointermove", e => {
     const rect = avatar.getBoundingClientRect();
-    targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 0.55;
-    targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 0.28;
+    targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 0.5;
+    targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 0.25;
 });
 
 function animate() {
@@ -965,58 +544,35 @@ function animate() {
     const delta = Math.min(clock.getDelta(), 0.05);
     const time = clock.elapsedTime;
 
-    const posAttr = particleGeo.attributes.position;
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-        let y = posAttr.getY(i) - speeds[i] * delta;
-        let x = posAttr.getX(i) + Math.sin(time + i) * 0.002;
-        if (y < 0) y = 2.3;
-        posAttr.setXY(i, x, y);
-    }
-    posAttr.needsUpdate = true;
-
-    innerRing.rotation.z = time * 0.45;
-    outerRing.rotation.z = -time * 0.3;
-
     if (vrm) {
-        const breath = Math.sin(time * 1.9) * 0.025;
+        const breath = Math.sin(time * 1.8) * 0.02;
 
-        if (leftArm) {
-            leftArm.rotation.z = armZ + breath;
-            leftArm.rotation.x = armX;
-        }
-        if (leftLowerArm) {
-            leftLowerArm.rotation.z = elbowZ;
-            leftLowerArm.rotation.x = 0.12;
-        }
+        /* Руки спокойно и аккуратно опущены вниз вдоль тела */
+        if (leftArm) { leftArm.rotation.z = armZ + breath; leftArm.rotation.x = 0.05; }
+        if (leftLowerArm) { leftLowerArm.rotation.z = elbowZ; leftLowerArm.rotation.x = 0.1; }
 
         if (rightArm && rightLowerArm) {
-            if (time < waveUntil) {
-                const sign = armZ >= 0 ? 1 : -1;
-                rightArm.rotation.z = -sign * 0.55;
+            if (time < gestureUntil) {
+                /* Жестикуляция руками при разговоре или приветствии */
+                rightArm.rotation.z = -0.55;
                 rightArm.rotation.x = 0.35;
-                rightLowerArm.rotation.z = -sign * (0.85 + Math.sin(time * 12) * 0.35);
+                rightLowerArm.rotation.z = -(0.85 + Math.sin(time * 12) * 0.35);
             } else {
                 rightArm.rotation.z = -armZ - breath;
-                rightArm.rotation.x = armX;
+                rightArm.rotation.x = 0.05;
                 rightLowerArm.rotation.z = -elbowZ;
-                rightLowerArm.rotation.x = 0.12;
+                rightLowerArm.rotation.x = 0.1;
             }
         }
 
         if (spineBone) {
-            spineBone.rotation.x = Math.sin(time * 1.9) * 0.018;
-            spineBone.rotation.z = Math.cos(time * 0.95) * 0.014;
-        }
-        if (chestBone) {
-            chestBone.rotation.y = Math.sin(time * 0.8) * 0.02;
+            spineBone.rotation.x = Math.sin(time * 1.8) * 0.015;
+            spineBone.rotation.z = Math.cos(time * 0.9) * 0.012;
         }
 
         if (headBone) {
             headBone.rotation.y += (targetX - headBone.rotation.y) * 0.08;
             headBone.rotation.x += (targetY - headBone.rotation.x) * 0.08;
-        }
-        if (neckBone) {
-            neckBone.rotation.y += (targetX * 0.35 - neckBone.rotation.y) * 0.08;
         }
 
         updateBlink(time);
@@ -1028,12 +584,11 @@ function animate() {
         }
 
         vrm.update(delta);
-        vrm.scene.position.y = baseY + Math.sin(time * 1.9) * 0.007;
+        vrm.scene.position.y = baseY + Math.sin(time * 1.8) * 0.006;
     }
 
     controls.update();
-    if (bloomEnabled) composer.render();
-    else renderer.render(scene, camera);
+    renderer.render(scene, camera);
 }
 animate();
 
@@ -1043,7 +598,6 @@ window.addEventListener("resize", () => {
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h);
-    composer.setSize(w, h);
 });
 
 function updateBlink(time) {
@@ -1070,7 +624,6 @@ function updateLipSync(time) {
     }
 }
 
-/* === РЕЖИМЫ ХАРАКТЕРА (ВКЛЮЧАЯ СПИКЕРИНГ С ПЕРЧИНКОЙ) === */
 const PERSONAS = {
     sweet: {
         prompt: "Ты Астра — очень милая, заботливая и живая 3D аниме-девушка. Обращайся к пользователю по имени Алекс, используй эмодзи 🌸💗✨, отвечай тепло и коротко (1-3 предложения).",
@@ -1123,7 +676,7 @@ function addMessage(text, type) {
 
 function detectEmotion(text) {
     const t = text.toLowerCase();
-    if (/помаши|привет|здравствуй|хай|ку\b/.test(t)) waveUntil = clock.elapsedTime + 2.6;
+    if (/помаши|привет|здравствуй|хай|ку\b/.test(t)) gestureUntil = clock.elapsedTime + 2.6;
     if (/груст|плохо|печаль|устал|одиноко|жаль/.test(t)) return "sad";
     if (/вау|ого|невероят|серьезно|круто|офигеть/.test(t)) return "surprised";
     if (/бака|злюсь|бесит|дурак|хмф|перчинк/.test(t)) return "angry";
@@ -1152,7 +705,7 @@ function localBrainReply(userText, persona) {
     if (persona === "spicy") {
         if (/дерзк|сказать|подкол|шутк/.test(t)) return "Хочешь услышать что-то дерзкое, Алекс? 😏 А справишься с последствиями? Хи-хи~ 🔥";
         if (/скучал|скучала/.test(t)) return "Еще как скучала... Сидела тут одна, ждала, пока ты обратишь на меня внимание, бака. Наверняка опять в игры залипал? 😏💕";
-        if (/поспорим|желания/.test(t)) return "Ого, спорить со мной вздумал? 🌸 Если выиграю я — ты исполтишь любое моё желание. А если ты... ну, посмотрим, на что ты способен~ 😉🔥";
+        if (/поспорим|желания/.test(t)) return "Ого, спорить со мной вздумал? 🌸 Если выиграю я — ты исполтишь любое моё желание~ 😉🔥";
         if (/обними|обнять/.test(t)) return "Иди сюда... Крепко-крепко прижмусь к тебе, Алекс, и никуда не отпущу~ 💗😳";
     }
 
@@ -1164,10 +717,6 @@ function localBrainReply(userText, persona) {
     if (/как дела|как ты|че как/.test(t)) {
         if (persona === "spicy") return "Всё горячее с каждой секундой, особенно когда ты рядом, Алекс~ 😉🔥";
         return "У меня всё чудесно, особенно когда ты мне пишешь, Алекс! 🌸 Как твоё настроение? 💗";
-    }
-    if (/помаши|ручкой/.test(t)) {
-        waveUntil = clock.elapsedTime + 3.0;
-        return "Лови мой самый теплый приветик, Алекс! Смотри, как я машу тебе ручкой! 👋🌸💗";
     }
 
     const pools = {
@@ -1269,6 +818,9 @@ async function sendMessage() {
     setEmotion(detectEmotion(text));
     sendButton.disabled = true;
     status.textContent = "Астра думает... 💭";
+
+    /* Включаем жестикуляцию руками при отправке сообщения */
+    gestureUntil = clock.elapsedTime + 3.5;
 
     try {
         const reply = await askMultiNodeAI(text);
