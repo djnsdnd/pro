@@ -122,6 +122,10 @@ select.field option{color:#000}
         <input type="range" id="sElbow" min="-0.5" max="0.8" step="0.05"></div>
 
       <h3>Голос</h3>
+      <label class="hint" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="cloudChk"> Облачный няшный голос</label>
+      <input class="field" id="fKey" type="password" autocomplete="off" placeholder="Ключ Fish Audio">
+      <input class="field" id="fVoice" autocomplete="off" placeholder="ID голоса Fish Audio">
+      <input class="field" id="pKey" type="password" autocomplete="off" placeholder="Ключ Pollinations (если нужен)">
       <select class="field" id="voiceSel" aria-label="Голос"></select>
       <div class="row"><label for="sPitch"><span>Тон (няшность)</span><span id="vPitch"></span></label>
         <input type="range" id="sPitch" min="0.8" max="2" step="0.05"></div>
@@ -306,7 +310,7 @@ $("filePick2").onchange = e => { loadFromFile(e.target.files[0]); closeDrawer();
 const EMO = ["happy","sad","angry","surprised","relaxed"];
 let emoTarget = {}, emoCur = {}, emoUntil = 0, waveUntil = 0;
 const pose = { lz:-1.15, rz:1.15, llz:0.15, rlz:-0.15, wave:0 };
-let speaking = false, nextBlink = 2.2, blinkStart = -1, lookX = 0, lookY = 0;
+let speaking = false, nextBlink = 2.2, blinkStart = -1, lookX = 0, lookY = 0, useAudio = false;
 
 function setEmotion(name, hold = 4){
   emoTarget = { [name]: 1 };
@@ -351,7 +355,12 @@ function tick(){
     }
     // губы
     ["aa","ih","ou","ee","oh"].forEach(v => expr(v, 0));
-    if (speaking){
+    if (speaking && useAudio && analyser){
+      analyser.getByteTimeDomainData(buf); let sum = 0;
+      for (const b of buf){ const x = (b - 128) / 128; sum += x * x; }
+      const lv = Math.min(1, Math.sqrt(sum / buf.length) * 5);
+      expr("aa", lv); expr("oh", lv * 0.3);
+    } else if (speaking){
       const vs = ["aa","ih","ou","ee","oh"];
       expr(vs[Math.floor(t * 10) % 5], 0.4 + Math.abs(Math.sin(t * 15)) * 0.5);
     }
@@ -400,7 +409,7 @@ let voiceOn = true;
 $("voiceBtn").onclick = e => {
   voiceOn = !voiceOn; e.currentTarget.classList.toggle("on", voiceOn);
   e.currentTarget.textContent = voiceOn ? "🔊 Голос" : "🔇 Тихо";
-  if (!voiceOn) speechSynthesis?.cancel();
+  if (!voiceOn){ speechSynthesis?.cancel(); player.pause(); speaking = false; }
 };
 
 /* ---------- характеры ---------- */
@@ -481,12 +490,66 @@ $("sPitch").oninput = e => { pitchBase = +e.target.value; $("vPitch").textConten
 $("sRate").oninput  = e => { rateBase = +e.target.value;  $("vRate").textContent  = rateBase.toFixed(2);  saveVoice(); };
 $("testVoice").onclick = () => speak("Привет! Я Астра. Хи-хи, нравится мой голосок? 🌸");
 
+/* облачный голос: mp3 из Fish Audio / воркера / Pollinations, рот двигается по громкости */
+const TTS_URL = WORKER_URL.replace(/\/chat$/, "/tts");
+let cloudVoice = store.get("astra_cloud", "1") === "1", ttsDownUntil = 0, speakToken = 0;
+const player = new Audio(); let actx = null, analyser = null, buf = null;
+$("fKey").value = store.get("astra_fkey", ""); $("fVoice").value = store.get("astra_fvoice", "");
+$("fKey").onchange = e => store.set("astra_fkey", e.target.value.trim());
+$("fVoice").onchange = e => store.set("astra_fvoice", e.target.value.trim());
+$("cloudChk").checked = cloudVoice; $("pKey").value = store.get("astra_pkey", ""); $("pKey").onchange = e => store.set("astra_pkey", e.target.value.trim());
+$("cloudChk").onchange = e => { cloudVoice = e.target.checked; store.set("astra_cloud", cloudVoice ? "1" : "0"); };
+function setupAnalyser(){
+  if (analyser) return;
+  try {
+    actx = new (window.AudioContext || window.webkitAudioContext)();
+    const src = actx.createMediaElementSource(player);
+    analyser = actx.createAnalyser(); analyser.fftSize = 256; buf = new Uint8Array(analyser.fftSize);
+    src.connect(analyser); analyser.connect(actx.destination);
+  } catch {}
+}
+// 1) Fish Audio напрямую (если введены ключ и ID) 2) воркер /tts 3) Pollinations
+async function getAudioBlob(text){
+  const pk = store.get("astra_pkey", "").trim(), q = encodeURIComponent(text);
+  const fk = store.get("astra_fkey", "").trim(), fv = store.get("astra_fvoice", "").trim();
+  const tries = [
+    ...(fk && fv ? [() => post("https://api.fish.audio/v1/tts", { method:"POST",
+      headers:{ ...JSONH, Authorization:`Bearer ${fk}` },
+      body: JSON.stringify({ text, reference_id: fv, format: "mp3" }) }, 15000)] : []),
+    () => post(TTS_URL, { method:"POST", headers:JSONH, body: JSON.stringify({ text }) }, 12000),
+    () => post(`https://gen.pollinations.ai/audio/${q}?voice=nova${pk ? "&key=" + encodeURIComponent(pk) : ""}`, { method:"GET" }, 15000),
+    () => post(`https://text.pollinations.ai/${q}?model=openai-audio&voice=nova`, { method:"GET" }, 15000)
+  ];
+  for (const t of tries){
+    try { const r = await t(); if (r.ok && /audio/.test(r.headers.get("content-type") || "")) return await r.blob(); } catch {}
+  }
+  throw new Error("tts");
+}
+async function speakCloud(text, token){
+  const blob = await getAudioBlob(text.slice(0, 300));
+  if (token !== speakToken) return;
+  setupAnalyser(); actx?.resume?.();
+  player.onplay = () => { speaking = true; useAudio = true; };
+  player.onended = player.onpause = player.onerror = () => { speaking = false; useAudio = false; };
+  player.src = URL.createObjectURL(blob);
+  await player.play();
+}
+
 function speak(text){
-  if (!voiceOn || !("speechSynthesis" in window)) return;
-  speechSynthesis.cancel();
+  if (!voiceOn) return;
+  try { speechSynthesis.cancel(); } catch {}
   const clean = text.replace(/[\p{Extended_Pictographic}\uFE0F\u200D]/gu, "").replace(/\*[^*]*\*/g, "")
     .replace(/~+/g, "…").replace(/\.{2,}/g, "…").replace(/\s+/g, " ").trim();
   if (!clean) return;
+  const token = ++speakToken; player.pause();
+  if (cloudVoice && Date.now() > ttsDownUntil){
+    speakCloud(clean, token).catch(() => { ttsDownUntil = Date.now() + 60000; if (token === speakToken) browserSpeak(clean); });
+    return;
+  }
+  browserSpeak(clean);
+}
+function browserSpeak(clean){
+  if (!("speechSynthesis" in window)) return;
   const chunks = clean.match(/[^.!?…]+[.!?…]*/g)?.map(x => x.trim()).filter(Boolean) ?? [clean];
   const voice = voices.find(v => v.name === voiceName);
   const pr = PERSONAS[persona], pMul = pr.pitch / 1.18, rMul = pr.rate / 1.05;
@@ -652,7 +715,7 @@ if (SR){
   rec.onresult = e => send(e.results[0][0].transcript);
   mic.onclick = () => {
     if (live){ rec.stop(); return; }
-    speechSynthesis?.cancel(); speaking = false; // чтобы не слушать саму Астру
+    speechSynthesis?.cancel(); player.pause(); speaking = false; // чтобы не слушать саму Астру
     try { rec.start(); } catch {}
   };
 } else mic.style.display = "none";
