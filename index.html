@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ASTRA AI // PERFECT CLEAN v6 🌸</title>
+<title>ASTRA AI // PERFECT ARMS v7 🌸</title>
 <style>
 :root {
     --bg-deep: #090414;
@@ -221,7 +221,7 @@ body {
 
 <main class="app-shell">
     <header class="header-bar">
-        <div class="brand-title">🌸 ASTRA AI <span class="badge-engine">v6</span></div>
+        <div class="brand-title">🌸 ASTRA AI <span class="badge-engine">NATURAL v7</span></div>
         <div class="status-badge"><span class="status-dot"></span><span id="status">Запуск ядра...</span></div>
     </header>
 
@@ -246,15 +246,20 @@ body {
         </div>
 
         <div class="studio-drawer" id="studioDrawer">
-            <div class="studio-section-title">Руки (аккуратная стойка)</div>
+            <div class="studio-section-title">Естественная поза рук</div>
             <div class="slider-group">
-                <label><span>Угол рук (Z)</span><span id="valArmZ">1.25</span></label>
-                <input type="range" id="sliderArmZ" min="0.5" max="1.6" step="0.05" value="1.25">
+                <label><span>Прижим рук к телу (Z)</span><span id="valArmZ">0.18</span></label>
+                <input type="range" id="sliderArmZ" min="-0.2" max="0.8" step="0.02" value="0.18">
             </div>
             <div class="slider-group">
-                <label><span>Сгиб локтей</span><span id="valElbow">0.12</span></label>
-                <input type="range" id="sliderElbow" min="-0.5" max="0.8" step="0.05" value="0.12">
+                <label><span>Отвод назад/вперед (X)</span><span id="valArmX">0.05</span></label>
+                <input type="range" id="sliderArmX" min="-0.3" max="0.4" step="0.02" value="0.05">
             </div>
+            <div class="slider-group">
+                <label><span>Сгиб локтей</span><span id="valElbow">0.25</span></label>
+                <input type="range" id="sliderElbow" min="0" max="0.8" step="0.05" value="0.25">
+            </div>
+            
             <div class="studio-section-title">Имя файла модели (.vrm)</div>
             <input class="studio-input" id="modelUrlInput" placeholder="5541654178067945302.vrm">
             <button class="hud-btn" id="saveModelBtn" style="width:100%; margin-bottom:6px;">💾 Применить модель</button>
@@ -283,7 +288,7 @@ body {
     <section class="chat-panel">
         <div id="messages">
             <div class="message bot">
-                Привет! 🌸 Я готова к общению. Теперь я не использую твоё имя в диалоге! ✨
+                Привет! 🌸 Теперь мои руки стоят идеально по-человечески, вдоль тела. Пиши мне — я буду живо жестикулировать и выражать эмоции! ✨
             </div>
         </div>
 
@@ -312,19 +317,19 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 
-/* Если твоя модель называется по-другому, введи точное имя в поле в студии или поменяй здесь */
 let modelUrl = localStorage.getItem("astra_model_filename") || "5541654178067945302.vrm";
 const WORKER_URL = "https://astra-ai.fotopsh24.workers.dev/chat";
 const DEFAULT_TOKEN = "AQ.Ab8RN6LoXP5dcbjceNHfN-QwsqJ01FX-wc8D9fIvvjxljLkZ3g";
 
-const savedConfig = JSON.parse(localStorage.getItem("astra_clean_v6") || "{}");
-let armZ = savedConfig.armZ ?? 1.25;
-let elbowZ = savedConfig.elbowZ ?? 0.12;
+const savedConfig = JSON.parse(localStorage.getItem("astra_natural_v7") || "{}");
+let armZ = savedConfig.armZ ?? 0.18;
+let armX = savedConfig.armX ?? 0.05;
+let elbowZ = savedConfig.elbowZ ?? 0.25;
 let isFlipped = savedConfig.isFlipped ?? false;
 let customKey = localStorage.getItem("astra_custom_api_key") || DEFAULT_TOKEN;
 
 function saveConfig() {
-    localStorage.setItem("astra_clean_v6", JSON.stringify({ armZ, elbowZ, isFlipped }));
+    localStorage.setItem("astra_natural_v7", JSON.stringify({ armZ, armX, elbowZ, isFlipped }));
 }
 
 const avatar = document.getElementById("avatar3d");
@@ -338,11 +343,13 @@ const studioDrawer = document.getElementById("studioDrawer");
 const studioToggleBtn = document.getElementById("studioToggleBtn");
 
 const sliderArmZ = document.getElementById("sliderArmZ");
+const sliderArmX = document.getElementById("sliderArmX");
 const sliderElbow = document.getElementById("sliderElbow");
 const customApiKeyInput = document.getElementById("customApiKey");
 const modelUrlInput = document.getElementById("modelUrlInput");
 
 sliderArmZ.value = armZ;
+sliderArmX.value = armX;
 sliderElbow.value = elbowZ;
 customApiKeyInput.value = customKey;
 modelUrlInput.value = modelUrl;
@@ -513,6 +520,7 @@ document.addEventListener("click", (e) => {
 });
 
 sliderArmZ.addEventListener("input", e => { armZ = parseFloat(e.target.value); document.getElementById("valArmZ").textContent = armZ.toFixed(2); saveConfig(); });
+sliderArmX.addEventListener("input", e => { armX = parseFloat(e.target.value); document.getElementById("valArmX").textContent = armX.toFixed(2); saveConfig(); });
 sliderElbow.addEventListener("input", e => { elbowZ = parseFloat(e.target.value); document.getElementById("valElbow").textContent = elbowZ.toFixed(2); saveConfig(); });
 
 document.getElementById("saveModelBtn").addEventListener("click", () => {
@@ -569,19 +577,27 @@ function animate() {
     const time = clock.elapsedTime;
 
     if (vrm) {
-        const breath = Math.sin(time * 1.8) * 0.02;
+        const breath = Math.sin(time * 1.8) * 0.015;
 
-        if (leftArm) { leftArm.rotation.z = armZ + breath; leftArm.rotation.x = 0.05; }
-        if (leftLowerArm) { leftLowerArm.rotation.z = elbowZ; leftLowerArm.rotation.x = 0.1; }
+        /* Естественные человеческие руки, опущенные вниз вдоль тела */
+        if (leftArm) { 
+            leftArm.rotation.z = armZ + breath; 
+            leftArm.rotation.x = armX; 
+        }
+        if (leftLowerArm) { 
+            leftLowerArm.rotation.z = elbowZ; 
+            leftLowerArm.rotation.x = 0.1; 
+        }
 
         if (rightArm && rightLowerArm) {
             if (time < gestureUntil) {
-                rightArm.rotation.z = -0.55;
-                rightArm.rotation.x = 0.35;
-                rightLowerArm.rotation.z = -(0.85 + Math.sin(time * 12) * 0.35);
+                /* Живая жестикуляция при разговоре или приветствии */
+                rightArm.rotation.z = -0.5;
+                rightArm.rotation.x = 0.3;
+                rightLowerArm.rotation.z = -(0.75 + Math.sin(time * 12) * 0.3);
             } else {
                 rightArm.rotation.z = -armZ - breath;
-                rightArm.rotation.x = 0.05;
+                rightArm.rotation.x = armX;
                 rightLowerArm.rotation.z = -elbowZ;
                 rightLowerArm.rotation.x = 0.1;
             }
@@ -646,7 +662,6 @@ function updateLipSync(time) {
     }
 }
 
-/* Системные промпты без упоминания имени */
 const PERSONAS = {
     sweet: {
         prompt: "Ты Астра — очень милая, заботливая и живая 3D аниме-девушка. Используй эмодзи 🌸💗✨, отвечай тепло и коротко (1-3 предложения), никогда не используй имена в разговоре.",
@@ -745,7 +760,7 @@ function localBrainReply(userText, persona) {
     const pools = {
         sweet: [`Мне так нравится, когда ты со мной делишься мыслями! 🌸 Расскажи об этом поподробнее! 💗`, `Звучит супер интересно! ✨ Я внимательно тебя слушаю! 🌸`],
         tsundere: [`Хмф, ну допустим, ты меня заинтересовал! И что мы будем с этим делать? 🔥`, `Опять ты за своё, бака! Ладно уж, рассказывай дальше! 💢💗`],
-        spicy: [`Ммм, интригуешь... Расскажи мне об этом поближе~ 😏🔥`, `С тобой скучать точно не приходится, каждый раз что-сона новенькое! 😉💗`],
+        spicy: [`Ммм, интригуешь... Расскажи мне об этом поближе~ 😏🔥`, `С тобой скучать точно не приходится, каждый раз что-то новенькое! 😉💗`],
         cyber: [`Данные приняты в обработку! ⚡ Звучит как отличный план! 🌐`]
     };
     const pool = pools[persona] || pools.sweet;
