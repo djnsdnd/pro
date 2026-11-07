@@ -16,7 +16,7 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   background:radial-gradient(circle at 50% 0,#38155a 0,var(--mid) 45%,var(--bg) 100%) fixed;
 }
-button,input{font:inherit;color:inherit}
+button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .app{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
 .glass{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--line)}
@@ -55,6 +55,7 @@ button,input{font:inherit;color:inherit}
 .row label{display:flex;justify-content:space-between;color:#ffd0f0;margin-bottom:3px}
 .row input[type=range]{width:100%;accent-color:var(--pink)}
 .field{width:100%;padding:8px 10px;font-size:13px;border-radius:10px;border:1px solid rgba(255,155,226,.4);background:rgba(255,255,255,.06);margin-bottom:6px}
+select.field option{color:#000}
 .hint{font-size:11px;color:var(--muted);margin:0 0 6px;line-height:1.4}
 
 .personas{display:flex;gap:6px;overflow-x:auto}
@@ -120,6 +121,14 @@ button,input{font:inherit;color:inherit}
       <div class="row"><label for="sElbow"><span>Сгиб локтей</span><span id="vElbow"></span></label>
         <input type="range" id="sElbow" min="-0.5" max="0.8" step="0.05"></div>
 
+      <h3>Голос</h3>
+      <select class="field" id="voiceSel" aria-label="Голос"></select>
+      <div class="row"><label for="sPitch"><span>Тон (няшность)</span><span id="vPitch"></span></label>
+        <input type="range" id="sPitch" min="0.8" max="2" step="0.05"></div>
+      <div class="row"><label for="sRate"><span>Скорость</span><span id="vRate"></span></label>
+        <input type="range" id="sRate" min="0.7" max="1.5" step="0.05"></div>
+      <button class="btn" id="testVoice" style="width:100%;margin-bottom:6px">▶ Проверить голос</button>
+
       <h3>Модель</h3>
       <p class="hint">Файл .vrm лежит рядом с index.html — или выбери его с устройства.</p>
       <input class="field" id="modelName" placeholder="5541654178067945302.vrm">
@@ -129,7 +138,11 @@ button,input{font:inherit;color:inherit}
       <h3>Свой ключ ИИ</h3>
       <p class="hint">Необязательно. Gemini (AIza…) или Groq (gsk_…). Ключ хранится только в этом браузере.</p>
       <input class="field" id="keyInput" type="password" autocomplete="off" placeholder="AIza… или gsk_…">
-      <button class="btn" id="saveKey" style="width:100%">Сохранить ключ</button>
+      <button class="btn" id="saveKey" style="width:100%;margin-bottom:6px">Сохранить ключ</button>
+
+      <h3>Память</h3>
+      <p class="hint">Астра запоминает имя и интересы и хранит историю чата в этом браузере.</p>
+      <button class="btn" id="forget" style="width:100%">🧹 Забыть всё</button>
     </div>
 
     <div class="hud b">
@@ -406,7 +419,7 @@ let persona = "sweet", history = [];
 document.querySelectorAll(".persona").forEach(b => b.onclick = () => {
   document.querySelectorAll(".persona").forEach(x => x.classList.remove("active"));
   b.classList.add("active");
-  persona = b.dataset.p; history = []; // новый характер — чистый контекст
+  persona = b.dataset.p; history = []; store.set("astra_hist", "[]"); // новый характер — чистый контекст
   const g = PERSONAS[persona].greeting;
   addMsg(g, "bot"); speak(g); setEmotion(detectEmotion(g)); waveUntil = clock.elapsedTime + 2.4;
 });
@@ -435,28 +448,103 @@ function detectEmotion(t){
   return "relaxed";
 }
 
+/* ---------- голос ---------- */
+let vc = {};
+try { vc = JSON.parse(store.get("astra_voice", "{}")); } catch {}
+let voiceName = vc.name ?? "", pitchBase = vc.pitch ?? 1.45, rateBase = vc.rate ?? 1.05;
+const saveVoice = () => store.set("astra_voice", JSON.stringify({ name: voiceName, pitch: pitchBase, rate: rateBase }));
+const voiceSel = $("voiceSel");
 let voices = [];
-const loadVoices = () => { voices = speechSynthesis?.getVoices?.() || []; };
+$("sPitch").value = pitchBase; $("vPitch").textContent = pitchBase.toFixed(2);
+$("sRate").value = rateBase;   $("vRate").textContent = rateBase.toFixed(2);
+
+function scoreVoice(v){
+  const n = v.name.toLowerCase(); let sc = 0;
+  if (/natural|online|neural/.test(n)) sc += 5;
+  if (/svetlana|dariya|polina|milena|alena|katya|ekaterina|irina/.test(n)) sc += 4;
+  if (/google/.test(n)) sc += 2;
+  if (/pavel|dmitry|yuri|maxim|male/.test(n)) sc -= 6;
+  return sc;
+}
+function loadVoices(){
+  if (!("speechSynthesis" in window)) return;
+  voices = speechSynthesis.getVoices().filter(v => v.lang?.toLowerCase().startsWith("ru")).sort((x, y) => scoreVoice(y) - scoreVoice(x));
+  voiceSel.innerHTML = "";
+  if (!voices.length){ voiceSel.add(new Option("Голос системы по умолчанию", "")); return; }
+  voices.forEach(v => voiceSel.add(new Option(v.name, v.name)));
+  if (!voices.some(v => v.name === voiceName)) voiceName = voices[0].name;
+  voiceSel.value = voiceName;
+}
 if ("speechSynthesis" in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+voiceSel.onchange = () => { voiceName = voiceSel.value; saveVoice(); speak("Привет! Вот так я теперь звучу 🌸"); };
+$("sPitch").oninput = e => { pitchBase = +e.target.value; $("vPitch").textContent = pitchBase.toFixed(2); saveVoice(); };
+$("sRate").oninput  = e => { rateBase = +e.target.value;  $("vRate").textContent  = rateBase.toFixed(2);  saveVoice(); };
+$("testVoice").onclick = () => speak("Привет! Я Астра. Хи-хи, нравится мой голосок? 🌸");
 
 function speak(text){
   if (!voiceOn || !("speechSynthesis" in window)) return;
   speechSynthesis.cancel();
-  const clean = text.replace(/[\p{Extended_Pictographic}\uFE0F\u200D]/gu, "").replace(/[~*_]+/g, " ").trim();
+  const clean = text.replace(/[\p{Extended_Pictographic}\uFE0F\u200D]/gu, "").replace(/\*[^*]*\*/g, "")
+    .replace(/~+/g, "…").replace(/\.{2,}/g, "…").replace(/\s+/g, " ").trim();
   if (!clean) return;
-  const u = new SpeechSynthesisUtterance(clean);
-  u.lang = "ru-RU";
-  const v = voices.find(x => x.lang?.toLowerCase().startsWith("ru"));
-  if (v) u.voice = v;
-  const p = PERSONAS[persona]; u.rate = p.rate; u.pitch = p.pitch;
-  u.onstart = () => { speaking = true; };
-  u.onend = u.onerror = () => { speaking = false; };
-  speechSynthesis.speak(u);
+  const chunks = clean.match(/[^.!?…]+[.!?…]*/g)?.map(x => x.trim()).filter(Boolean) ?? [clean];
+  const voice = voices.find(v => v.name === voiceName);
+  const pr = PERSONAS[persona], pMul = pr.pitch / 1.18, rMul = pr.rate / 1.05;
+  chunks.forEach((part, i) => {
+    const u = new SpeechSynthesisUtterance(part);
+    u.lang = "ru-RU"; if (voice) u.voice = voice;
+    let pitch = pitchBase * pMul, rate = rateBase * rMul;
+    if (/\?$/.test(part)) pitch += 0.15;
+    else if (/!$/.test(part)){ pitch += 0.1; rate += 0.04; }
+    else if (/…$/.test(part)) rate -= 0.08;
+    pitch += (Math.random() - 0.5) * 0.08;
+    u.pitch = Math.min(2, Math.max(0.1, pitch)); u.rate = Math.min(2, Math.max(0.5, rate));
+    if (i === 0) u.onstart = () => { speaking = true; };
+    if (i === chunks.length - 1) u.onend = u.onerror = () => { speaking = false; };
+    speechSynthesis.speak(u);
+  });
 }
+
+/* ---------- мозг: память, правила, теги действий ---------- */
+let mem = {};
+try { mem = JSON.parse(store.get("astra_mem", "{}")); } catch {}
+const saveMem = () => store.set("astra_mem", JSON.stringify(mem));
+const cap = w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+function learn(t){
+  let m;
+  if ((m = t.match(/меня зовут\s+([а-яёa-z-]{2,20})/i))) mem.name = cap(m[1]);
+  if ((m = t.match(/мне\s+(\d{1,2})\s+(?:лет|год|года)/i))) mem.age = m[1];
+  if ((m = t.match(/я живу в\s+([^.!?\n]{2,30})/i))) mem.city = m[1].trim();
+  if ((m = t.match(/я люблю\s+([^.!?\n]{2,40})/i))){ mem.likes = [...(mem.likes || []), m[1].trim()].slice(-5); }
+  saveMem();
+}
+const RULES = "\nПРАВИЛА: пиши как живая девушка, а не как справочник; не повторяйся, реагируй на настроение собеседника, "
+  + "иногда задавай встречный вопрос, помни ход разговора. Не больше 3 коротких предложений. Не упоминай, что ты нейросеть, и не говори про теги. "
+  + "Начинай ответ ровно одним тегом эмоции: [happy], [relaxed], [sad], [angry] или [surprised]. Если здороваешься или радуешься — добавь ещё [wave].";
+function buildSys(){
+  const f = [];
+  if (mem.name) f.push("зовут " + mem.name);
+  if (mem.age) f.push("возраст " + mem.age);
+  if (mem.city) f.push("живёт в " + mem.city);
+  if (mem.likes?.length) f.push("любит: " + mem.likes.join(", "));
+  return PERSONAS[persona].prompt + RULES + (f.length ? `\nТы помнишь о собеседнике: ${f.join("; ")}. Используй это к месту, не перечисляя.` : "");
+}
+function parseReply(r){
+  let emo = null, wave = false;
+  const text = r.replace(/\[(happy|relaxed|sad|angry|surprised|wave)\]/gi, (_, tag) => {
+    tag = tag.toLowerCase(); if (tag === "wave") wave = true; else emo = emo || tag; return "";
+  }).replace(/\s{2,}/g, " ").trim();
+  return { text, emo, wave };
+}
+$("forget").onclick = () => {
+  mem = {}; history = []; saveMem(); store.set("astra_hist", "[]"); log.innerHTML = "";
+  addMsg("Всё забыла! 🌸 Давай знакомиться заново 💗", "bot");
+};
 
 function localReply(text){
   const t = text.toLowerCase(), p = persona;
   const pick = a => a[Math.floor(Math.random() * a.length)];
+  if (/меня зовут/.test(t) && mem.name) return `Приятно познакомиться, ${mem.name}! 🌸 Буду помнить 💗`;
   if (/дерзк|подкол|шутк/.test(t)) return pick(["Хочешь дерзкого? 😏 Тогда держись крепче, я не буду мягкой~ 🔥","Дерзкое? Ты сам напросился! 😏"]);
   if (/скучал/.test(t)) return p === "tsundere" ? "Ещё чего! Я совсем не скучала... ну, чуть-чуть, бака 💢💗" : "Ещё как скучала! 💗 Очень ждала, когда ты вернёшься 🌸";
   if (/поспорим|желани/.test(t)) return "Спорить со мной вздумал? 🌸 Если выиграю я, желание за мной~ 😉🔥";
@@ -479,7 +567,7 @@ async function post(url, opts, ms){
 const JSONH = { "Content-Type": "application/json" };
 
 async function askAI(text){
-  const sys = PERSONAS[persona].prompt, recent = history.slice(-10);
+  const sys = buildSys(), recent = history.slice(-10);
   const k = userKey;
 
   // 1. свой ключ пользователя (если указан) — нужный провайдер по префиксу
@@ -506,15 +594,17 @@ async function askAI(text){
   }catch{}
 
   $("engine").textContent = "Ядро: автономный режим";
-  return localReply(text);
+  let lr = localReply(text);
+  if (mem.name && Math.random() < 0.4) lr = lr.replace("!", `, ${mem.name}!`);
+  return lr;
 }
 
 let busy = false;
 async function send(raw){
   const text = (raw ?? input.value).trim();
   if (!text || busy) return;
-  busy = true; input.value = ""; sendBtn.disabled = true;
-  addMsg(text, "user");
+  lastAct = Date.now(); busy = true; input.value = ""; sendBtn.disabled = true;
+  addMsg(text, "user"); learn(text);
   if (RX.hi.test(text)) waveUntil = clock.elapsedTime + 2.6; // машет только на приветствие
   setEmotion(detectEmotion(text), 6);
   setStatus("Астра думает… 💭");
@@ -522,16 +612,34 @@ async function send(raw){
   let reply;
   try { reply = await askAI(text); } catch { reply = localReply(text); }
   typing.remove();
+  const pr = parseReply(reply); reply = pr.text || reply;
   addMsg(reply, "bot");
   history.push({ role:"user", content:text }, { role:"assistant", content:reply });
-  history = history.slice(-20);
-  setEmotion(detectEmotion(reply), 5); speak(reply);
+  history = history.slice(-20); store.set("astra_hist", JSON.stringify(history));
+  setEmotion(pr.emo || detectEmotion(reply), 5);
+  if (pr.wave) waveUntil = clock.elapsedTime + 2.4;
+  speak(reply);
   setStatus(vrm ? "Астра онлайн 💗" : "Ошибка модели");
   busy = false; sendBtn.disabled = false;
 }
 sendBtn.onclick = () => send();
 input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.isComposing) send(); });
 document.querySelectorAll(".pill").forEach(p => p.onclick = () => send(p.textContent));
+
+/* ---------- инициатива ---------- */
+let lastAct = Date.now();
+const IDLE = {
+  sweet:["Ты тут? 🌸 Мне без тебя немного скучно~","Расскажи, как проходит твой день? 💗"],
+  tsundere:["Эй! Ты там уснул, бака? 💢 Я не скучаю, просто спрашиваю!","Хмф, молчишь... Ну и ладно! 🔥"],
+  spicy:["Куда пропал? 😏 Я ведь могу и обидеться~","Скучно без тебя... придумай что-нибудь интересное 🔥"],
+  cyber:["Пинг... ответа нет ⚡ Ты ещё в сети?","Сканирую тишину... Давай уже поболтаем 🌐"]
+};
+setInterval(() => {
+  if (busy || document.hidden || Date.now() - lastAct < 75000) return;
+  lastAct = Date.now();
+  const l = IDLE[persona], msg = l[Math.floor(Math.random() * l.length)];
+  addMsg(msg, "bot"); setEmotion("happy", 3); speak(msg);
+}, 10000);
 
 /* ---------- микрофон ---------- */
 const mic = $("micBtn"), SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -548,6 +656,12 @@ if (SR){
     try { rec.start(); } catch {}
   };
 } else mic.style.display = "none";
+
+/* ---------- старт ---------- */
+try {
+  history = JSON.parse(store.get("astra_hist", "[]"));
+  if (history.length){ log.innerHTML = ""; history.forEach(m => addMsg(m.content, m.role === "user" ? "user" : "bot")); }
+} catch { history = []; }
 
 loadModel("./" + encodeURI(modelName), modelName);
 </script>
