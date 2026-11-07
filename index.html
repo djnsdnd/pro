@@ -2,313 +2,167 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ASTRA AI // PERFECT ARMS v7 🌸</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Астра — 3D-собеседница 🌸</title>
 <style>
-:root {
-    --bg-deep: #090414;
-    --bg-mid: #1a0b2e;
-    --pink-primary: #ff3eb5;
-    --cyan-neon: #00f2fe;
-    --purple-neon: #9d4edd;
-    --glass-bg: rgba(22, 10, 40, 0.85);
-    --glass-border: rgba(255, 145, 224, 0.35);
-    --text-main: #ffffff;
-    --text-muted: #d6b8e8;
+:root{
+  --bg:#090414; --mid:#1a0b2e; --pink:#ff3eb5; --cyan:#00f2fe; --purple:#9d4edd;
+  --glass:rgba(22,10,40,.82); --line:rgba(255,145,224,.3); --muted:#d6b8e8;
 }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{
+  padding:12px; min-height:100dvh; color:#fff; overflow-x:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:radial-gradient(circle at 50% 0,#38155a 0,var(--mid) 45%,var(--bg) 100%) fixed;
+}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.app{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.glass{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--line)}
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+.top{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-radius:20px}
+.brand{font-size:21px;font-weight:900;background:linear-gradient(90deg,#ff7ad9,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.status{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;padding:6px 12px;border-radius:99px;background:rgba(0,255,170,.12);border:1px solid rgba(0,255,170,.4);color:#72ffc4}
+.dot{width:8px;height:8px;border-radius:50%;background:#00ffaa;box-shadow:0 0 10px #00ffaa;animation:pulse 1.8s infinite}
+@keyframes pulse{50%{transform:scale(1.35);opacity:.45}}
 
-body {
-    margin: 0;
-    padding: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    color: var(--text-main);
-    background: radial-gradient(circle at 50% 0%, #38155a 0%, var(--bg-mid) 45%, var(--bg-deep) 100%);
-    min-height: 100vh;
-    overflow-x: hidden;
-}
+.stage{position:relative;height:min(62dvh,500px);min-height:380px;border-radius:26px;overflow:hidden;border:1px solid var(--line);
+  background:radial-gradient(ellipse at 50% 30%,#5b247a 0,#240f3d 60%,#0d051a 100%);box-shadow:0 14px 45px rgba(255,62,181,.22)}
+#view{position:absolute;inset:0}
+#view canvas{width:100%;height:100%;display:block}
+#overlay{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;background:rgba(11,5,24,.92)}
+#overlay[hidden]{display:none}
+.ring{width:46px;height:46px;border:4px solid rgba(255,155,226,.2);border-top-color:var(--pink);border-right-color:var(--cyan);border-radius:50%;animation:spin .85s linear infinite}
+#overlay.err .ring{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pick{display:none;margin-top:4px}
+#overlay.err .pick{display:inline-block}
 
-.app-shell {
-    max-width: 640px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
+.hud{position:absolute;left:10px;right:10px;display:flex;gap:6px;flex-wrap:wrap;z-index:6}
+.hud.t{top:10px;justify-content:space-between}
+.hud.b{bottom:10px;justify-content:center}
+.hud .grp{display:flex;gap:6px;flex-wrap:wrap}
+.btn{background:rgba(17,7,33,.82);backdrop-filter:blur(10px);border:1px solid rgba(255,155,226,.38);padding:8px 12px;border-radius:13px;font-size:12px;font-weight:600;cursor:pointer;min-height:36px}
+.btn:active,.btn.on{background:linear-gradient(135deg,var(--pink),var(--purple));border-color:#fff}
 
-.header-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 18px;
-    border-radius: 22px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
-}
+.drawer{display:none;position:absolute;top:54px;right:10px;width:min(290px,calc(100% - 20px));max-height:calc(100% - 64px);overflow-y:auto;z-index:20;
+  background:rgba(14,6,28,.97);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 14px 40px rgba(0,0,0,.8)}
+.drawer.open{display:block}
+.drawer h3{font-size:12px;font-weight:700;color:var(--cyan);margin:10px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.1)}
+.drawer h3:first-child{margin-top:0}
+.row{font-size:12px;margin-bottom:8px}
+.row label{display:flex;justify-content:space-between;color:#ffd0f0;margin-bottom:3px}
+.row input[type=range]{width:100%;accent-color:var(--pink)}
+.field{width:100%;padding:8px 10px;font-size:13px;border-radius:10px;border:1px solid rgba(255,155,226,.4);background:rgba(255,255,255,.06);margin-bottom:6px}
+.hint{font-size:11px;color:var(--muted);margin:0 0 6px;line-height:1.4}
 
-.brand-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 21px;
-    font-weight: 900;
-    background: linear-gradient(90deg, #ff7ad9, #00f2fe);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+.personas{display:flex;gap:6px;overflow-x:auto}
+.persona{flex:1;white-space:nowrap;padding:10px;border-radius:16px;font-size:13px;font-weight:700;background:var(--glass);border:1px solid rgba(255,255,255,.12);color:var(--muted);cursor:pointer}
+.persona.active{background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff;border-color:#ffc2eb;box-shadow:0 5px 18px rgba(255,62,181,.35)}
 
-.badge-engine {
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 8px;
-    background: rgba(255, 62, 181, 0.2);
-    border: 1px solid var(--pink-primary);
-    color: #ffb8e8;
-    -webkit-text-fill-color: #ffb8e8;
-}
-
-.status-badge {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 6px 13px;
-    border-radius: 99px;
-    background: rgba(0, 255, 170, 0.12);
-    border: 1px solid rgba(0, 255, 170, 0.4);
-    color: #72ffc4;
-}
-
-.status-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #00ffaa; box-shadow: 0 0 10px #00ffaa;
-    animation: pulseGlow 1.8s infinite;
-}
-@keyframes pulseGlow {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.35); opacity: 0.45; }
-}
-
-.viewport-card {
-    position: relative;
-    height: 470px;
-    border-radius: 28px;
-    overflow: hidden;
-    border: 1px solid var(--glass-border);
-    background: radial-gradient(ellipse at 50% 30%, #5b247a 0%, #240f3d 60%, #0d051a 100%);
-    box-shadow: 0 14px 45px rgba(255, 62, 181, 0.22);
-}
-
-#avatar3d { width: 100%; height: 100%; position: relative; touch-action: none; }
-#avatar3d canvas { width: 100%; height: 100%; display: block; }
-
-#loading3d {
-    position: absolute; inset: 0; display: flex; flex-direction: column;
-    justify-content: center; align-items: center; gap: 14px;
-    background: rgba(11, 5, 24, 0.9); backdrop-filter: blur(12px); z-index: 15; padding: 24px; text-align: center;
-}
-
-.loader-ring {
-    width: 48px; height: 48px; border: 4px solid rgba(255, 155, 226, 0.2);
-    border-top-color: var(--pink-primary); border-right-color: var(--cyan-neon);
-    border-radius: 50%; animation: spinLoader 0.85s linear infinite;
-}
-@keyframes spinLoader { to { transform: rotate(360deg); } }
-
-.hud-top-bar {
-    position: absolute; top: 12px; left: 12px; right: 12px;
-    display: flex; justify-content: space-between; pointer-events: none; z-index: 6;
-}
-.hud-cluster { display: flex; gap: 6px; pointer-events: auto; flex-wrap: wrap; }
-
-.hud-btn {
-    background: rgba(17, 7, 33, 0.82); backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 155, 226, 0.38); color: #fff;
-    padding: 7px 11px; border-radius: 13px; font-size: 12px; font-weight: 600; cursor: pointer;
-}
-.hud-btn:active, .hud-btn.active {
-    background: linear-gradient(135deg, var(--pink-primary), var(--purple-neon));
-    border-color: #fff;
-}
-
-.hud-bottom-bar {
-    position: absolute; bottom: 12px; left: 12px; right: 12px;
-    display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; z-index: 6; pointer-events: auto;
-}
-
-.studio-drawer {
-    display: none; position: absolute; top: 52px; right: 12px; width: 275px; max-height: 405px;
-    overflow-y: auto; background: rgba(14, 6, 28, 0.97); backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border); border-radius: 20px; padding: 14px; z-index: 20;
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8);
-}
-.studio-drawer.open { display: block; }
-
-.studio-section-title {
-    font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px;
-    color: var(--cyan-neon); margin: 8px 0 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 4px;
-}
-.slider-group { margin-bottom: 9px; font-size: 12px; }
-.slider-group label { display: flex; justify-content: space-between; color: #ffd0f0; margin-bottom: 3px; }
-.slider-group input[type="range"] { width: 100%; height: 6px; accent-color: var(--pink-primary); padding: 0; }
-.studio-input {
-    width: 100%; padding: 8px 10px; font-size: 12px; border-radius: 10px;
-    border: 1px solid rgba(255, 155, 226, 0.4); background: rgba(255, 255, 255, 0.06); color: #fff; margin-bottom: 6px;
-}
-
-.persona-selector { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
-.persona-btn {
-    flex: 1; text-align: center; white-space: nowrap; padding: 9px 10px; border-radius: 16px;
-    font-size: 12px; font-weight: 700; background: var(--glass-bg); border: 1px solid rgba(255, 255, 255, 0.12);
-    color: var(--text-muted); cursor: pointer; transition: 0.2s;
-}
-.persona-btn.active {
-    background: linear-gradient(135deg, var(--pink-primary), var(--purple-neon));
-    color: #fff; border-color: #ffc2eb; box-shadow: 0 5px 18px rgba(255, 62, 181, 0.35);
-}
-
-.chat-panel {
-    background: var(--glass-bg); backdrop-filter: blur(18px);
-    border: 1px solid var(--glass-border); border-radius: 26px; padding: 15px;
-    display: flex; flex-direction: column; gap: 11px; box-shadow: 0 12px 38px rgba(0, 0, 0, 0.42);
-}
-
-#messages { height: 270px; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
-.message { max-width: 85%; padding: 12px 16px; border-radius: 19px; font-size: 15px; line-height: 1.46; overflow-wrap: anywhere; }
-.message.bot {
-    align-self: flex-start; background: linear-gradient(135deg, rgba(155, 68, 190, 0.88), rgba(92, 36, 138, 0.88));
-    border: 1px solid rgba(255, 175, 235, 0.38); border-bottom-left-radius: 5px;
-}
-.message.user { align-self: flex-end; background: linear-gradient(135deg, var(--pink-primary), #9b30ff); border-bottom-right-radius: 5px; }
-
-.quick-prompts { display: flex; gap: 7px; overflow-x: auto; padding: 2px 0; }
-.prompt-pill {
-    white-space: nowrap; padding: 7px 12px; border-radius: 99px; font-size: 12px; font-weight: 600;
-    background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 155, 226, 0.28); color: #ffd8f2; cursor: pointer;
-}
-.prompt-pill:active { background: var(--pink-primary); color: #fff; }
-
-.input-row { display: flex; gap: 8px; align-items: center; }
-#userInput {
-    flex: 1; min-width: 0; padding: 14px 16px; border-radius: 17px;
-    border: 1px solid rgba(255, 155, 226, 0.42); background: rgba(13, 5, 25, 0.85); color: #fff; font-size: 16px; outline: none;
-}
-.action-btn {
-    border: none; border-radius: 17px; width: 48px; height: 48px; display: flex;
-    justify-content: center; align-items: center; font-size: 18px; color: #fff; cursor: pointer;
-    background: linear-gradient(135deg, var(--pink-primary), var(--purple-neon));
-}
-.action-btn.mic { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.22); }
-.action-btn:disabled { opacity: 0.45; }
-.footer-note { text-align: center; font-size: 11px; color: var(--text-muted); opacity: 0.8; }
+.chat{border-radius:24px;padding:14px;display:flex;flex-direction:column;gap:10px}
+#log{height:260px;overflow-y:auto;padding:4px;display:flex;flex-direction:column;gap:9px}
+.msg{max-width:85%;padding:11px 15px;border-radius:18px;font-size:15px;line-height:1.45;overflow-wrap:anywhere}
+.msg.bot{align-self:flex-start;background:linear-gradient(135deg,rgba(155,68,190,.88),rgba(92,36,138,.88));border:1px solid rgba(255,175,235,.38);border-bottom-left-radius:5px}
+.msg.user{align-self:flex-end;background:linear-gradient(135deg,var(--pink),#9b30ff);border-bottom-right-radius:5px}
+.msg.typing{opacity:.7;font-style:italic}
+.pills{display:flex;gap:7px;overflow-x:auto}
+.pill{white-space:nowrap;padding:8px 12px;border-radius:99px;font-size:12px;font-weight:600;background:rgba(255,255,255,.07);border:1px solid rgba(255,155,226,.28);color:#ffd8f2;cursor:pointer}
+.pill:active{background:var(--pink);color:#fff}
+.send{display:flex;gap:8px}
+#text{flex:1;min-width:0;padding:13px 15px;border-radius:17px;border:1px solid rgba(255,155,226,.42);background:rgba(13,5,25,.85);font-size:16px}
+.round{border:0;border-radius:17px;width:48px;height:48px;font-size:18px;cursor:pointer;background:linear-gradient(135deg,var(--pink),var(--purple))}
+.round.mic{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22)}
+.round.mic.live{background:var(--pink)}
+.round:disabled{opacity:.45}
+.note{text-align:center;font-size:11px;color:var(--muted);opacity:.85}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
-
 <script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
-    "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3/lib/three-vrm.module.min.js"
-  }
-}
+{"imports":{
+ "three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+ "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+ "@pixiv/three-vrm":"https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3.3.3/lib/three-vrm.module.min.js"}}
 </script>
 </head>
 <body>
+<main class="app">
+  <header class="top glass">
+    <div class="brand">🌸 Астра</div>
+    <div class="status"><span class="dot"></span><span id="status">Запуск…</span></div>
+  </header>
 
-<main class="app-shell">
-    <header class="header-bar">
-        <div class="brand-title">🌸 ASTRA AI <span class="badge-engine">NATURAL v7</span></div>
-        <div class="status-badge"><span class="status-dot"></span><span id="status">Запуск ядра...</span></div>
-    </header>
-
-    <section class="viewport-card">
-        <div id="avatar3d">
-            <div id="loading3d">
-                <div class="loader-ring"></div>
-                <div id="loadingText">Загружаю модель Астры... 🌸</div>
-            </div>
-        </div>
-
-        <div class="hud-top-bar">
-            <div class="hud-cluster">
-                <button class="hud-btn" id="camHeadBtn">🎯 Лицо</button>
-                <button class="hud-btn" id="camFullBtn">👗 Рост</button>
-                <button class="hud-btn" id="flipModelBtn">🔄 Поворот</button>
-            </div>
-            <div class="hud-cluster">
-                <button class="hud-btn active" id="voiceToggleBtn">🔊 Голос</button>
-                <button class="hud-btn" id="studioToggleBtn">⚙️ Студия</button>
-            </div>
-        </div>
-
-        <div class="studio-drawer" id="studioDrawer">
-            <div class="studio-section-title">Естественная поза рук</div>
-            <div class="slider-group">
-                <label><span>Прижим рук к телу (Z)</span><span id="valArmZ">0.18</span></label>
-                <input type="range" id="sliderArmZ" min="-0.2" max="0.8" step="0.02" value="0.18">
-            </div>
-            <div class="slider-group">
-                <label><span>Отвод назад/вперед (X)</span><span id="valArmX">0.05</span></label>
-                <input type="range" id="sliderArmX" min="-0.3" max="0.4" step="0.02" value="0.05">
-            </div>
-            <div class="slider-group">
-                <label><span>Сгиб локтей</span><span id="valElbow">0.25</span></label>
-                <input type="range" id="sliderElbow" min="0" max="0.8" step="0.05" value="0.25">
-            </div>
-            
-            <div class="studio-section-title">Имя файла модели (.vrm)</div>
-            <input class="studio-input" id="modelUrlInput" placeholder="5541654178067945302.vrm">
-            <button class="hud-btn" id="saveModelBtn" style="width:100%; margin-bottom:6px;">💾 Применить модель</button>
-
-            <div class="studio-section-title">API-ключ (Опционально)</div>
-            <input class="studio-input" id="customApiKey" placeholder="Ключ Gemini (AIza...) или Groq (gsk_...)">
-            <button class="hud-btn" id="saveApiBtn" style="width:100%;">💾 Сохранить ключ</button>
-        </div>
-
-        <div class="hud-bottom-bar">
-            <button class="hud-btn" data-emo="happy">😊 Улыбка</button>
-            <button class="hud-btn" data-emo="relaxed">🌸 Чилл</button>
-            <button class="hud-btn" data-emo="surprised">😮 Вау</button>
-            <button class="hud-btn" data-emo="angry">💢 Цундере</button>
-            <button class="hud-btn" id="waveActionBtn">👋 Махать</button>
-        </div>
-    </section>
-
-    <div class="persona-selector">
-        <div class="persona-btn active" data-persona="sweet">💗 Вайфу</div>
-        <div class="persona-btn" data-persona="tsundere">🔥 Цундере</div>
-        <div class="persona-btn" data-persona="spicy">😏 С перчинкой</div>
-        <div class="persona-btn" data-persona="cyber">⚡ Кибер</div>
+  <section class="stage">
+    <div id="view"></div>
+    <div id="overlay">
+      <div class="ring"></div>
+      <div id="overlayText">Загружаю модель…</div>
+      <label class="btn pick">📂 Выбрать .vrm-файл<input id="filePick" type="file" accept=".vrm,.glb" hidden></label>
     </div>
 
-    <section class="chat-panel">
-        <div id="messages">
-            <div class="message bot">
-                Привет! 🌸 Теперь мои руки стоят идеально по-человечески, вдоль тела. Пиши мне — я буду живо жестикулировать и выражать эмоции! ✨
-            </div>
-        </div>
+    <div class="hud t">
+      <div class="grp">
+        <button class="btn" id="camHead">🎯 Лицо</button>
+        <button class="btn" id="camFull">👗 Рост</button>
+        <button class="btn" id="flip">🔄 Поворот</button>
+      </div>
+      <div class="grp">
+        <button class="btn on" id="voiceBtn">🔊 Голос</button>
+        <button class="btn" id="studioBtn" aria-expanded="false">⚙️ Студия</button>
+      </div>
+    </div>
 
-        <div class="quick-prompts">
-            <div class="prompt-pill">😏 Скажи что-нибудь дерзкое</div>
-            <div class="prompt-pill">💗 Ты скучала по мне?</div>
-            <div class="prompt-pill">🔥 Поспорим на желания?</div>
-            <div class="prompt-pill">✨ Обними меня крепко-крепко</div>
-        </div>
+    <div class="drawer" id="drawer">
+      <h3>Руки</h3>
+      <div class="row"><label for="sArm"><span>Опускание рук</span><span id="vArm"></span></label>
+        <input type="range" id="sArm" min="0.3" max="1.5" step="0.05"></div>
+      <div class="row"><label for="sElbow"><span>Сгиб локтей</span><span id="vElbow"></span></label>
+        <input type="range" id="sElbow" min="-0.5" max="0.8" step="0.05"></div>
 
-        <div class="input-row">
-            <button class="action-btn mic" id="micBtn" title="Голосовой ввод">🎤</button>
-            <input id="userInput" placeholder="Напиши Астре..." autocomplete="off">
-            <button class="action-btn" id="sendButton">➤</button>
-        </div>
+      <h3>Модель</h3>
+      <p class="hint">Файл .vrm лежит рядом с index.html — или выбери его с устройства.</p>
+      <input class="field" id="modelName" placeholder="5541654178067945302.vrm">
+      <button class="btn" id="applyModel" style="width:100%;margin-bottom:6px">Применить имя файла</button>
+      <label class="btn" style="display:block;text-align:center;width:100%">📂 Выбрать с устройства<input id="filePick2" type="file" accept=".vrm,.glb" hidden></label>
 
-        <div class="footer-note" id="engineStatusNote">
-            Ядро ИИ: Автономный режим активен 🌸
-        </div>
-    </section>
+      <h3>Свой ключ ИИ</h3>
+      <p class="hint">Необязательно. Gemini (AIza…) или Groq (gsk_…). Ключ хранится только в этом браузере.</p>
+      <input class="field" id="keyInput" type="password" autocomplete="off" placeholder="AIza… или gsk_…">
+      <button class="btn" id="saveKey" style="width:100%">Сохранить ключ</button>
+    </div>
+
+    <div class="hud b">
+      <button class="btn" data-emo="happy">😊 Улыбка</button>
+      <button class="btn" data-emo="relaxed">🌸 Чилл</button>
+      <button class="btn" data-emo="surprised">😮 Вау</button>
+      <button class="btn" data-emo="angry">💢 Цундере</button>
+      <button class="btn" id="waveBtn">👋 Махать</button>
+    </div>
+  </section>
+
+  <nav class="personas" aria-label="Характер">
+    <button class="persona active" data-p="sweet">💗 Вайфу</button>
+    <button class="persona" data-p="tsundere">🔥 Цундере</button>
+    <button class="persona" data-p="spicy">😏 С перчинкой</button>
+    <button class="persona" data-p="cyber">⚡ Кибер</button>
+  </nav>
+
+  <section class="chat glass">
+    <div id="log" aria-live="polite"><div class="msg bot">Привет! 🌸 Напиши мне что-нибудь — я отвечу и озвучу ✨</div></div>
+    <div class="pills">
+      <button class="pill">Скажи что-нибудь дерзкое</button>
+      <button class="pill">Ты скучала по мне?</button>
+      <button class="pill">Поспорим на желания?</button>
+      <button class="pill">Обними меня крепко-крепко</button>
+    </div>
+    <div class="send">
+      <button class="round mic" id="micBtn" title="Голосовой ввод" aria-label="Голосовой ввод">🎤</button>
+      <input id="text" placeholder="Напиши Астре…" autocomplete="off" enterkeyhint="send">
+      <button class="round" id="sendBtn" aria-label="Отправить">➤</button>
+    </div>
+    <div class="note" id="engine">Ядро: автономный режим</div>
+  </section>
 </main>
 
 <script type="module">
@@ -317,587 +171,385 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 
-let modelUrl = localStorage.getItem("astra_model_filename") || "5541654178067945302.vrm";
+/* ---------- настройки ---------- */
+// Ключ API НЕ хранится на странице: его знает только воркер.
 const WORKER_URL = "https://astra-ai.fotopsh24.workers.dev/chat";
-const DEFAULT_TOKEN = "AQ.Ab8RN6LoXP5dcbjceNHfN-QwsqJ01FX-wc8D9fIvvjxljLkZ3g";
+const DEFAULT_MODEL = "5541654178067945302.vrm";
 
-const savedConfig = JSON.parse(localStorage.getItem("astra_natural_v7") || "{}");
-let armZ = savedConfig.armZ ?? 0.18;
-let armX = savedConfig.armX ?? 0.05;
-let elbowZ = savedConfig.elbowZ ?? 0.25;
-let isFlipped = savedConfig.isFlipped ?? false;
-let customKey = localStorage.getItem("astra_custom_api_key") || DEFAULT_TOKEN;
+const $ = id => document.getElementById(id);
+const store = {
+  get(k, d){ try { return localStorage.getItem(k) ?? d; } catch { return d; } },
+  set(k, v){ try { localStorage.setItem(k, v); } catch {} }
+};
+let cfg = {};
+try { cfg = JSON.parse(store.get("astra_v9", "{}")); } catch {}
+let arm = cfg.arm ?? 1.15, elbow = cfg.elbow ?? 0.15, flipped = cfg.flipped ?? false;
+let modelName = store.get("astra_model", DEFAULT_MODEL);
+let userKey = store.get("astra_key", "");
+const saveCfg = () => store.set("astra_v9", JSON.stringify({ arm, elbow, flipped }));
 
-function saveConfig() {
-    localStorage.setItem("astra_natural_v7", JSON.stringify({ armZ, armX, elbowZ, isFlipped }));
-}
+$("sArm").value = arm; $("sElbow").value = elbow;
+$("vArm").textContent = arm.toFixed(2); $("vElbow").textContent = elbow.toFixed(2);
+$("modelName").value = modelName; $("keyInput").value = userKey;
 
-const avatar = document.getElementById("avatar3d");
-const loading = document.getElementById("loading3d");
-const status = document.getElementById("status");
-const messages = document.getElementById("messages");
-const input = document.getElementById("userInput");
-const sendButton = document.getElementById("sendButton");
-const engineStatusNote = document.getElementById("engineStatusNote");
-const studioDrawer = document.getElementById("studioDrawer");
-const studioToggleBtn = document.getElementById("studioToggleBtn");
-
-const sliderArmZ = document.getElementById("sliderArmZ");
-const sliderArmX = document.getElementById("sliderArmX");
-const sliderElbow = document.getElementById("sliderElbow");
-const customApiKeyInput = document.getElementById("customApiKey");
-const modelUrlInput = document.getElementById("modelUrlInput");
-
-sliderArmZ.value = armZ;
-sliderArmX.value = armX;
-sliderElbow.value = elbowZ;
-customApiKeyInput.value = customKey;
-modelUrlInput.value = modelUrl;
-
+/* ---------- сцена ---------- */
+const view = $("view");
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(26, avatar.clientWidth / avatar.clientHeight, 0.1, 100);
-
+const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.setSize(avatar.clientWidth, avatar.clientHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
-avatar.appendChild(renderer.domElement);
+view.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.07;
-controls.enablePan = true;
-controls.minDistance = 0.5;
-controls.maxDistance = 4.2;
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.enablePan = false; controls.enableZoom = true;
+renderer.domElement.style.touchAction = "pan-y"; // вертикальный скролл страницы остаётся рабочим
 
 scene.add(new THREE.HemisphereLight(0xffffff, 0x5c2778, 1.8));
-const dirLight = new THREE.DirectionalLight(0xfff4fc, 2.1);
-dirLight.position.set(2.2, 4.0, 3.5);
-scene.add(dirLight);
+const key = new THREE.DirectionalLight(0xfff4fc, 2.1); key.position.set(2.2, 4, 3.5); scene.add(key);
+const rim = new THREE.DirectionalLight(0xff3eb5, 1.2); rim.position.set(-3, 2, -2.5); scene.add(rim);
 
-let vrm = null;
-let headBone = null, neckBone = null, chestBone = null, spineBone = null;
-let leftArm = null, rightArm = null, leftLowerArm = null, rightLowerArm = null;
+function resize(){
+  const w = view.clientWidth, h = view.clientHeight;
+  if (!w || !h) return;
+  camera.aspect = w / h; camera.updateProjectionMatrix(); renderer.setSize(w, h);
+}
+new ResizeObserver(resize).observe(view); resize();
 
-let defaultHeadY = 1.35;
-let baseY = 0;
-let targetX = 0, targetY = 0;
-let speaking = false;
-let voiceEnabled = true;
-let nextBlink = 2.2;
-let blinkStart = -1;
-let touchReactionUntil = 0;
-let currentTouchEmotion = null;
-let gestureUntil = 0;
-let currentPersona = "sweet";
-let history = [];
+/* ---------- модель ---------- */
+let vrm = null, bones = {}, bodyH = 1.5, baseY = 0, objectUrl = null;
 const clock = new THREE.Clock();
 
-function expression(name, value) {
-    if (!vrm?.expressionManager) return;
-    try { vrm.expressionManager.setValue(name, value); } catch (e) {}
+function setStatus(t){ $("status").textContent = t; }
+function showOverlay(text, isErr){
+  $("overlayText").textContent = text; $("overlay").classList.toggle("err", !!isErr); $("overlay").hidden = false;
 }
 
-function clearEmotions() {
-    ["happy", "sad", "angry", "surprised", "relaxed"].forEach(n => expression(n, 0));
+function frame(mode){
+  if (!vrm) return;
+  const fov = THREE.MathUtils.degToRad(camera.fov);
+  if (mode === "head"){
+    const y = bodyH * 0.9;
+    const dist = (bodyH * 0.34) / Math.tan(fov / 2);
+    camera.position.set(0, y + 0.02, dist); controls.target.set(0, y, 0);
+  } else {
+    const y = bodyH * 0.5;
+    const dist = (bodyH * 1.15) / (2 * Math.tan(fov / 2));
+    camera.position.set(0, y + 0.05, Math.max(dist, 1.5)); controls.target.set(0, y, 0);
+  }
+  controls.minDistance = bodyH * 0.25; controls.maxDistance = bodyH * 5;
+  controls.update();
 }
 
-function setEmotion(name) {
-    clearEmotions();
-    expression(name, 1);
-}
+async function loadModel(src, label){
+  showOverlay(`Загружаю модель (${label})…`);
+  setStatus("Загрузка…");
+  try{
+    const loader = new GLTFLoader();
+    loader.register(p => new VRMLoaderPlugin(p));
+    const gltf = await loader.loadAsync(src);
+    const next = gltf.userData.vrm;
+    if (!next) throw new Error("Это не VRM-файл");
 
-function focusCameraHead() {
-    if (!vrm) return;
-    vrm.update(0);
-    vrm.scene.updateMatrixWorld(true);
-    if (headBone) {
-        const pos = new THREE.Vector3();
-        headBone.getWorldPosition(pos);
-        defaultHeadY = pos.y;
+    if (vrm){ scene.remove(vrm.scene); VRMUtils.deepDispose(vrm.scene); vrm = null; }
+    VRMUtils.removeUnnecessaryVertices(gltf.scene);
+    VRMUtils.combineSkeletons?.(gltf.scene);
+    VRMUtils.rotateVRM0(next);
+    next.scene.traverse(o => { o.frustumCulled = false; });
+    scene.add(next.scene);
+
+    const box = new THREE.Box3().setFromObject(next.scene);
+    const c = box.getCenter(new THREE.Vector3());
+    next.scene.position.set(-c.x, -box.min.y, -c.z);
+    baseY = next.scene.position.y; bodyH = box.max.y - box.min.y;
+    next.scene.rotation.y = flipped ? Math.PI : 0;
+
+    const h = next.humanoid, g = n => h?.getNormalizedBoneNode(n);
+    bones = { head:g("head"), neck:g("neck"), spine:g("spine"), chest:g("chest"),
+      lUp:g("leftUpperArm"), rUp:g("rightUpperArm"), lLo:g("leftLowerArm"), rLo:g("rightLowerArm") };
+    vrm = next;
+    pose.lz = -arm; pose.rz = arm; pose.llz = elbow; pose.rlz = -elbow; // сразу в позе без «T»
+    frame("head");
+    $("overlay").hidden = true;
+    emoTarget = { happy: 1 }; waveUntil = clock.elapsedTime + 2.4;
+    setStatus("Астра онлайн 💗");
+  }catch(e){
+    console.error(e);
+    showOverlay(`Не удалось загрузить «${label}». Положи .vrm рядом с index.html или выбери файл с устройства.`, true);
+    setStatus("Ошибка модели");
+  }
+}
+function loadFromFile(file){
+  if (!file) return;
+  if (objectUrl) URL.revokeObjectURL(objectUrl);
+  objectUrl = URL.createObjectURL(file);
+  loadModel(objectUrl, file.name);
+}
+$("filePick").onchange = e => loadFromFile(e.target.files[0]);
+$("filePick2").onchange = e => { loadFromFile(e.target.files[0]); closeDrawer(); };
+
+/* ---------- эмоции, мимика, поза ---------- */
+const EMO = ["happy","sad","angry","surprised","relaxed"];
+let emoTarget = {}, emoCur = {}, emoUntil = 0, waveUntil = 0;
+const pose = { lz:-1.15, rz:1.15, llz:0.15, rlz:-0.15, wave:0 };
+let speaking = false, nextBlink = 2.2, blinkStart = -1, lookX = 0, lookY = 0;
+
+function setEmotion(name, hold = 4){
+  emoTarget = { [name]: 1 };
+  emoUntil = clock.elapsedTime + hold;
+}
+const expr = (n, v) => { try { vrm?.expressionManager?.setValue(n, v); } catch {} };
+
+function tick(){
+  requestAnimationFrame(tick);
+  const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime;
+  if (vrm){
+    const k = 1 - Math.exp(-dt * 8);
+    // эмоции плавно перетекают
+    if (emoUntil && t > emoUntil){ emoTarget = { relaxed: 1 }; emoUntil = 0; }
+    EMO.forEach(n => { emoCur[n] = (emoCur[n] ?? 0) + ((emoTarget[n] ?? 0) - (emoCur[n] ?? 0)) * k; expr(n, emoCur[n]); });
+
+    // руки: левая z<0 вниз, правая z>0 вниз (нормализованный скелет VRM)
+    const breath = Math.sin(t * 1.8) * 0.015, waving = t < waveUntil;
+    pose.wave += ((waving ? 1 : 0) - pose.wave) * k;
+    const w = pose.wave;
+    const tg = {
+      lz: -arm + breath, rz: (arm - breath) * (1 - w) + -0.85 * w,
+      llz: elbow, rlz: -elbow * (1 - w) + (-0.55 + Math.sin(t * 12) * 0.3) * w
+    };
+    pose.lz += (tg.lz - pose.lz) * k; pose.rz += (tg.rz - pose.rz) * k;
+    pose.llz += (tg.llz - pose.llz) * k; pose.rlz += (tg.rlz - pose.rlz) * (waving ? 0.5 : k);
+    const { lUp, rUp, lLo, rLo, spine, head, neck } = bones;
+    if (lUp){ lUp.rotation.z = pose.lz; lUp.rotation.x = 0.05; }
+    if (rUp){ rUp.rotation.z = pose.rz; rUp.rotation.x = 0.05; }
+    if (lLo){ lLo.rotation.z = pose.llz; lLo.rotation.x = 0.1; }
+    if (rLo){ rLo.rotation.z = pose.rlz; rLo.rotation.x = 0.1; }
+    if (spine){ spine.rotation.x = Math.sin(t * 1.8) * 0.015; spine.rotation.z = Math.cos(t * 0.9) * 0.012; }
+    if (head){ head.rotation.y += (lookX * 0.7 - head.rotation.y) * 0.08; head.rotation.x += (lookY * 0.7 - head.rotation.x) * 0.08; }
+    if (neck){ neck.rotation.y += (lookX * 0.3 - neck.rotation.y) * 0.08; }
+
+    // моргание
+    if (t >= nextBlink && blinkStart < 0) blinkStart = t;
+    if (blinkStart >= 0){
+      const p = (t - blinkStart) / 0.16;
+      if (p <= 1) expr("blink", p <= 0.5 ? p * 2 : (1 - p) * 2);
+      else { expr("blink", 0); blinkStart = -1; nextBlink = t + 2.4 + Math.random() * 3.6; }
     }
-    const targetYPos = defaultHeadY - 0.07;
-    camera.position.set(0, targetYPos + 0.02, 1.25);
-    controls.target.set(0, targetYPos, 0);
-    controls.update();
+    // губы
+    ["aa","ih","ou","ee","oh"].forEach(v => expr(v, 0));
+    if (speaking){
+      const vs = ["aa","ih","ou","ee","oh"];
+      expr(vs[Math.floor(t * 10) % 5], 0.4 + Math.abs(Math.sin(t * 15)) * 0.5);
+    }
+    vrm.update(dt);
+    vrm.scene.position.y = baseY + Math.sin(t * 1.8) * 0.006;
+  }
+  controls.update();
+  renderer.render(scene, camera);
 }
+tick();
 
-function focusCameraFullBody() {
-    if (!vrm) return;
-    const midY = (defaultHeadY * 0.56);
-    camera.position.set(0, midY + 0.05, 2.75);
-    controls.target.set(0, midY, 0);
-    controls.update();
-}
-
-async function loadAstra() {
-    try {
-        loading.style.display = "flex";
-        document.getElementById("loadingText").textContent = `Загружаю модель (${modelUrl})... 🌸`;
-        
-        const loader = new GLTFLoader();
-        loader.register(parser => new VRMLoaderPlugin(parser));
-        const gltf = await loader.loadAsync("./" + modelUrl);
-
-        if (vrm) {
-            scene.remove(vrm.scene);
-        }
-
-        vrm = gltf.userData.vrm;
-        if (!vrm) throw new Error("VRM не найден");
-
-        VRMUtils.removeUnnecessaryVertices(gltf.scene);
-        VRMUtils.rotateVRM0(vrm);
-        scene.add(vrm.scene);
-
-        const box = new THREE.Box3().setFromObject(vrm.scene);
-        const center = box.getCenter(new THREE.Vector3());
-        vrm.scene.position.x -= center.x;
-        vrm.scene.position.y -= box.min.y;
-        vrm.scene.position.z -= center.z;
-        baseY = vrm.scene.position.y;
-
-        if (isFlipped) vrm.scene.rotation.y += Math.PI;
-
-        const h = vrm.humanoid;
-        headBone = h?.getNormalizedBoneNode("head");
-        neckBone = h?.getNormalizedBoneNode("neck");
-        chestBone = h?.getNormalizedBoneNode("chest");
-        spineBone = h?.getNormalizedBoneNode("spine");
-        leftArm = h?.getNormalizedBoneNode("leftUpperArm");
-        rightArm = h?.getNormalizedBoneNode("rightUpperArm");
-        leftLowerArm = h?.getNormalizedBoneNode("leftLowerArm");
-        rightLowerArm = h?.getNormalizedBoneNode("rightLowerArm");
-
-        focusCameraHead();
-        loading.style.display = "none";
-        setEmotion("happy");
-        gestureUntil = clock.elapsedTime + 2.6;
-        status.textContent = "Астра онлайн 💗";
-    } catch (error) {
-        console.error(error);
-        loading.style.display = "flex";
-        document.getElementById("loadingText").textContent = `Ошибка: файл "${modelUrl}" не найден! Проверь имя в студии ⚙️`;
-        status.textContent = "Ошибка 3D";
-    }
-}
-
-document.getElementById("camHeadBtn").addEventListener("click", () => { focusCameraHead(); closeStudio(); });
-document.getElementById("camFullBtn").addEventListener("click", () => { focusCameraFullBody(); closeStudio(); });
-
-document.getElementById("flipModelBtn").addEventListener("click", () => {
-    if (!vrm) return;
-    vrm.scene.rotation.y += Math.PI;
-    isFlipped = !isFlipped;
-    saveConfig();
-    closeStudio();
+view.addEventListener("pointermove", e => {
+  const r = view.getBoundingClientRect();
+  lookX = ((e.clientX - r.left) / r.width - 0.5) * 0.6;
+  lookY = ((e.clientY - r.top) / r.height - 0.5) * 0.3;
 });
 
-const voiceToggleBtn = document.getElementById("voiceToggleBtn");
-voiceToggleBtn.addEventListener("click", () => {
-    voiceEnabled = !voiceEnabled;
-    voiceToggleBtn.classList.toggle("active", voiceEnabled);
-    voiceToggleBtn.textContent = voiceEnabled ? "🔊 Голос" : "🔇 Тихо";
-    if (!voiceEnabled && "speechSynthesis" in window) speechSynthesis.cancel();
-    closeStudio();
-});
+/* ---------- интерфейс ---------- */
+const drawer = $("drawer"), studioBtn = $("studioBtn");
+function closeDrawer(){ drawer.classList.remove("open"); studioBtn.classList.remove("on"); studioBtn.setAttribute("aria-expanded", "false"); }
+studioBtn.onclick = e => {
+  e.stopPropagation();
+  const open = drawer.classList.toggle("open");
+  studioBtn.classList.toggle("on", open); studioBtn.setAttribute("aria-expanded", String(open));
+};
+document.addEventListener("click", e => { if (!drawer.contains(e.target) && e.target !== studioBtn) closeDrawer(); });
 
-function closeStudio() {
-    studioDrawer.classList.remove("open");
-    studioToggleBtn.classList.remove("active");
-}
+$("camHead").onclick = () => frame("head");
+$("camFull").onclick = () => frame("full");
+$("flip").onclick = () => { if (!vrm) return; flipped = !flipped; vrm.scene.rotation.y = flipped ? Math.PI : 0; saveCfg(); };
+$("waveBtn").onclick = () => { waveUntil = clock.elapsedTime + 2.8; setEmotion("happy", 3); };
+document.querySelectorAll("[data-emo]").forEach(b => b.onclick = () => setEmotion(b.dataset.emo));
 
-studioToggleBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    studioDrawer.classList.toggle("open");
-    studioToggleBtn.classList.toggle("active");
-});
-
-document.addEventListener("click", (e) => {
-    if (!studioDrawer.contains(e.target) && !studioToggleBtn.contains(e.target)) {
-        closeStudio();
-    }
-});
-
-sliderArmZ.addEventListener("input", e => { armZ = parseFloat(e.target.value); document.getElementById("valArmZ").textContent = armZ.toFixed(2); saveConfig(); });
-sliderArmX.addEventListener("input", e => { armX = parseFloat(e.target.value); document.getElementById("valArmX").textContent = armX.toFixed(2); saveConfig(); });
-sliderElbow.addEventListener("input", e => { elbowZ = parseFloat(e.target.value); document.getElementById("valElbow").textContent = elbowZ.toFixed(2); saveConfig(); });
-
-document.getElementById("saveModelBtn").addEventListener("click", () => {
-    const val = modelUrlInput.value.trim();
-    if (val) {
-        modelUrl = val;
-        localStorage.setItem("astra_model_filename", val);
-        loadAstra();
-        closeStudio();
-    }
-});
-
-document.getElementById("saveApiBtn").addEventListener("click", () => {
-    const val = customApiKeyInput.value.trim();
-    if (val) {
-        customKey = val;
-        localStorage.setItem("astra_custom_api_key", val);
-        addMessage("Ключ успешно сохранен! 🔐✨", "bot");
-    }
-});
-
-document.getElementById("waveActionBtn").addEventListener("click", () => {
-    gestureUntil = clock.elapsedTime + 2.8;
-    setEmotion("happy");
-    touchReactionUntil = clock.elapsedTime + 3;
-    currentTouchEmotion = "happy";
-    closeStudio();
-});
-
-document.querySelectorAll("[data-emo]").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const emo = btn.getAttribute("data-emo");
-        currentTouchEmotion = emo;
-        touchReactionUntil = clock.elapsedTime + 4;
-        setEmotion(emo);
-        closeStudio();
-    });
-});
-
-avatar.addEventListener("pointerup", e => {
-    if (!vrm) return;
-    closeStudio();
-});
-
-avatar.addEventListener("pointermove", e => {
-    const rect = avatar.getBoundingClientRect();
-    targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 0.5;
-    targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 0.25;
-});
-
-function animate() {
-    requestAnimationFrame(animate);
-    const delta = Math.min(clock.getDelta(), 0.05);
-    const time = clock.elapsedTime;
-
-    if (vrm) {
-        const breath = Math.sin(time * 1.8) * 0.015;
-
-        /* Естественные человеческие руки, опущенные вниз вдоль тела */
-        if (leftArm) { 
-            leftArm.rotation.z = armZ + breath; 
-            leftArm.rotation.x = armX; 
-        }
-        if (leftLowerArm) { 
-            leftLowerArm.rotation.z = elbowZ; 
-            leftLowerArm.rotation.x = 0.1; 
-        }
-
-        if (rightArm && rightLowerArm) {
-            if (time < gestureUntil) {
-                /* Живая жестикуляция при разговоре или приветствии */
-                rightArm.rotation.z = -0.5;
-                rightArm.rotation.x = 0.3;
-                rightLowerArm.rotation.z = -(0.75 + Math.sin(time * 12) * 0.3);
-            } else {
-                rightArm.rotation.z = -armZ - breath;
-                rightArm.rotation.x = armX;
-                rightLowerArm.rotation.z = -elbowZ;
-                rightLowerArm.rotation.x = 0.1;
-            }
-        }
-
-        if (spineBone) {
-            spineBone.rotation.x = Math.sin(time * 1.8) * 0.015;
-            spineBone.rotation.z = Math.cos(time * 0.9) * 0.012;
-        }
-
-        if (headBone) {
-            headBone.rotation.y += (targetX - headBone.rotation.y) * 0.08;
-            headBone.rotation.x += (targetY - headBone.rotation.x) * 0.08;
-        }
-
-        updateBlink(time);
-        updateLipSync(time);
-
-        if (time > touchReactionUntil && currentTouchEmotion) {
-            currentTouchEmotion = null;
-            setEmotion("relaxed");
-        }
-
-        vrm.update(delta);
-        vrm.scene.position.y = baseY + Math.sin(time * 1.8) * 0.006;
-    }
-
-    controls.update();
-    renderer.render(scene, camera);
-}
-animate();
-
-window.addEventListener("resize", () => {
-    const w = avatar.clientWidth;
-    const h = avatar.clientHeight;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-});
-
-function updateBlink(time) {
-    if (!vrm?.expressionManager) return;
-    if (time >= nextBlink && blinkStart < 0) blinkStart = time;
-    if (blinkStart >= 0) {
-        const p = (time - blinkStart) / 0.16;
-        if (p <= 0.5) expression("blink", p * 2);
-        else if (p <= 1) expression("blink", (1 - p) * 2);
-        else {
-            expression("blink", 0);
-            blinkStart = -1;
-            nextBlink = time + 2.4 + Math.random() * 3.6;
-        }
-    }
-}
-
-function updateLipSync(time) {
-    ["aa", "ih", "ou", "ee", "oh"].forEach(v => expression(v, 0));
-    if (speaking) {
-        const vowels = ["aa", "ih", "ou", "ee", "oh"];
-        const idx = Math.floor(time * 10) % vowels.length;
-        expression(vowels[idx], 0.45 + Math.abs(Math.sin(time * 15)) * 0.5);
-    }
-}
-
-const PERSONAS = {
-    sweet: {
-        prompt: "Ты Астра — очень милая, заботливая и живая 3D аниме-девушка. Используй эмодзи 🌸💗✨, отвечай тепло и коротко (1-3 предложения), никогда не используй имена в разговоре.",
-        greeting: "Режим любящей вайфу активирован! 🌸 Я так рада быть рядом! О чём поболтаем? 💗",
-        pitch: 1.18, rate: 1.05
-    },
-    tsundere: {
-        prompt: "Ты Астра — яркая аниме-цундере. Слегка подкалываешь собеседника ('Бака!', 'Не очень-то и хотелось!'), но на самом деле он тебе дорог. Отвечай живо и коротко (1-3 предложения) 🔥💢, без имён.",
-        greeting: "Хмф! И не думай, что я тебя ждала! Но... если хочешь поболтать, я так и быть выслушаю! 🔥💢",
-        pitch: 1.25, rate: 1.1
-    },
-    spicy: {
-        prompt: "Ты Астра — игривая, дерзкая и кокетливая 3D аниме-девушка с перчинкой. Любишь дразнить намеками, смущать, заигрывать и создавать интригующую атмосферу с огоньком 😏🔥. Отвечай кратко (1-3 предложения), без имён.",
-        greeting: "Ого, решил заглянуть ко мне на огонек? 😏🔥 Смотри не обжгись, я сегодня настроена очень кокетливо~ 🌸",
-        pitch: 1.12, rate: 1.02
-    },
-    cyber: {
-        prompt: "Ты Астра — крутая киберпанк-ИИ напарница и хакерша. Общаешься стильно, бодро, обожаешь игры, код и технологии ⚡🌐. Отвечай коротко (1-3 предложения), без имён.",
-        greeting: "Нейросеть на полной мощности! ⚡ Какие цифровые миры покоряем сегодня? 🌐",
-        pitch: 1.15, rate: 1.08
-    }
+$("sArm").oninput = e => { arm = +e.target.value; $("vArm").textContent = arm.toFixed(2); saveCfg(); };
+$("sElbow").oninput = e => { elbow = +e.target.value; $("vElbow").textContent = elbow.toFixed(2); saveCfg(); };
+$("applyModel").onclick = () => {
+  const v = $("modelName").value.trim(); if (!v) return;
+  modelName = v; store.set("astra_model", v); loadModel("./" + encodeURI(v), v); closeDrawer();
+};
+$("saveKey").onclick = () => {
+  userKey = $("keyInput").value.trim(); store.set("astra_key", userKey);
+  addMsg(userKey ? "Ключ сохранён 🔐" : "Ключ удалён", "bot");
 };
 
-document.querySelectorAll(".persona-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document.querySelectorAll(".persona-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentPersona = btn.getAttribute("data-persona");
-        const g = PERSONAS[currentPersona].greeting;
-        addMessage(g, "bot");
-        speak(g);
-        closeStudio();
-    });
+let voiceOn = true;
+$("voiceBtn").onclick = e => {
+  voiceOn = !voiceOn; e.currentTarget.classList.toggle("on", voiceOn);
+  e.currentTarget.textContent = voiceOn ? "🔊 Голос" : "🔇 Тихо";
+  if (!voiceOn) speechSynthesis?.cancel();
+};
+
+/* ---------- характеры ---------- */
+const PERSONAS = {
+  sweet:{ prompt:"Ты Астра — очень милая, заботливая и живая 3D аниме-девушка. Используй эмодзи 🌸💗✨, отвечай тепло и коротко (1-3 предложения) по-русски.",
+    greeting:"Режим любящей вайфу включён! 🌸 Я так рада быть рядом! О чём поболтаем? 💗", pitch:1.18, rate:1.05 },
+  tsundere:{ prompt:"Ты Астра — яркая аниме-цундере. Слегка подкалываешь собеседника («Бака!», «Не очень-то и хотелось!»), но на самом деле он тебе дорог. Отвечай живо и коротко (1-3 предложения) по-русски 🔥💢.",
+    greeting:"Хмф! И не думай, что я тебя ждала! Но... если хочешь поболтать, так и быть, выслушаю! 🔥💢", pitch:1.25, rate:1.1 },
+  spicy:{ prompt:"Ты Астра — игривая, кокетливая 3D аниме-девушка с перчинкой. Любишь дразнить намёками и шутить с огоньком 😏🔥, но остаёшься в рамках приличий. Отвечай кратко (1-3 предложения) по-русски.",
+    greeting:"Ого, заглянул ко мне на огонёк? 😏🔥 Смотри не обожгись, я сегодня кокетливая~ 🌸", pitch:1.12, rate:1.02 },
+  cyber:{ prompt:"Ты Астра — крутая киберпанк-ИИ напарница и хакерша. Общаешься стильно и бодро, обожаешь игры, код и технологии ⚡🌐. Отвечай коротко (1-3 предложения) по-русски.",
+    greeting:"Нейросеть на полной мощности! ⚡ Какие цифровые миры покоряем сегодня? 🌐", pitch:1.15, rate:1.08 }
+};
+let persona = "sweet", history = [];
+
+document.querySelectorAll(".persona").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".persona").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  persona = b.dataset.p; history = []; // новый характер — чистый контекст
+  const g = PERSONAS[persona].greeting;
+  addMsg(g, "bot"); speak(g); setEmotion(detectEmotion(g)); waveUntil = clock.elapsedTime + 2.4;
 });
 
-document.querySelectorAll(".prompt-pill").forEach(pill => {
-    pill.addEventListener("click", () => {
-        input.value = pill.textContent.replace(/^[^\s]+\s/, "");
-        sendMessage();
-    });
-});
-
-function addMessage(text, type) {
-    const div = document.createElement("div");
-    div.className = "message " + type;
-    div.textContent = text;
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
+/* ---------- чат ---------- */
+const log = $("log"), input = $("text"), sendBtn = $("sendBtn");
+function addMsg(text, type){
+  const d = document.createElement("div");
+  d.className = "msg " + type; d.textContent = text;
+  log.appendChild(d); log.scrollTop = log.scrollHeight; return d;
+}
+// \b не работает с кириллицей — границы слов задаём вручную
+const W = s => new RegExp(`(^|[^а-яёa-z])(${s})($|[^а-яёa-z])`, "i");
+const RX = {
+  hi: W("привет\\w*|здравствуй\\w*|хай|ку|добр\\w+|помаши\\w*"),
+  sad: /груст|плохо|печаль|устал|одинок|жаль/i,
+  wow: /вау|ого|невероят|серьезно|серьёзно|круто|офигеть/i,
+  angry: /бака|злюсь|бесит|дурак|хмф|перчинк/i,
+  happy: /люблю|нравишься|милашк|класс|ура|рада|приятно|обним|смущ/i
+};
+function detectEmotion(t){
+  if (RX.sad.test(t)) return "sad";
+  if (RX.wow.test(t)) return "surprised";
+  if (RX.angry.test(t)) return "angry";
+  if (RX.happy.test(t)) return "happy";
+  return "relaxed";
 }
 
-function detectEmotion(text) {
-    const t = text.toLowerCase();
-    if (/помаши|привет|здравствуй|хай|ку\b/.test(t)) gestureUntil = clock.elapsedTime + 2.6;
-    if (/груст|плохо|печаль|устал|одиноко|жаль/.test(t)) return "sad";
-    if (/вау|ого|невероят|серьезно|круто|офигеть/.test(t)) return "surprised";
-    if (/бака|злюсь|бесит|дурак|хмф|перчинк/.test(t)) return "angry";
-    if (/люблю|нравишься|милашка|класс|ура|рада|приятно|обним|смущ/.test(t)) return "happy";
-    return "relaxed";
+let voices = [];
+const loadVoices = () => { voices = speechSynthesis?.getVoices?.() || []; };
+if ("speechSynthesis" in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+
+function speak(text){
+  if (!voiceOn || !("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const clean = text.replace(/[\p{Extended_Pictographic}\uFE0F\u200D]/gu, "").replace(/[~*_]+/g, " ").trim();
+  if (!clean) return;
+  const u = new SpeechSynthesisUtterance(clean);
+  u.lang = "ru-RU";
+  const v = voices.find(x => x.lang?.toLowerCase().startsWith("ru"));
+  if (v) u.voice = v;
+  const p = PERSONAS[persona]; u.rate = p.rate; u.pitch = p.pitch;
+  u.onstart = () => { speaking = true; };
+  u.onend = u.onerror = () => { speaking = false; };
+  speechSynthesis.speak(u);
 }
 
-function speak(text) {
-    if (!voiceEnabled || !("speechSynthesis" in window)) return;
-    speechSynthesis.cancel();
-    const clean = text.replace(/[\u{1F300}-\u{1FAFF}]/gu, "");
-    const utter = new SpeechSynthesisUtterance(clean);
-    utter.lang = "ru-RU";
-    const cfg = PERSONAS[currentPersona] || PERSONAS.sweet;
-    utter.rate = cfg.rate;
-    utter.pitch = cfg.pitch;
-    speaking = true;
-    utter.onend = () => { speaking = false; };
-    utter.onerror = () => { speaking = false; };
-    speechSynthesis.speak(utter);
+function localReply(text){
+  const t = text.toLowerCase(), p = persona;
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  if (/дерзк|подкол|шутк/.test(t)) return pick(["Хочешь дерзкого? 😏 Тогда держись крепче, я не буду мягкой~ 🔥","Дерзкое? Ты сам напросился! 😏"]);
+  if (/скучал/.test(t)) return p === "tsundere" ? "Ещё чего! Я совсем не скучала... ну, чуть-чуть, бака 💢💗" : "Ещё как скучала! 💗 Очень ждала, когда ты вернёшься 🌸";
+  if (/поспорим|желани/.test(t)) return "Спорить со мной вздумал? 🌸 Если выиграю я, желание за мной~ 😉🔥";
+  if (/обними|обнять/.test(t)) return p === "tsundere" ? "Э-это не потому что хочу! Но... иди сюда 😳💗" : "Иди сюда... Обниму крепко-крепко 💗😳";
+  if (RX.hi.test(t)) return p === "tsundere" ? "Явился наконец! Не то чтобы я ждала... 🔥💗" : p === "cyber" ? "Коннект стабильный! Рада видеть тебя в сети ⚡✨" : "Приветик! 🌸 Я так рада тебя видеть! 💗";
+  if (/как дела|как ты/.test(t)) return "У меня всё чудесно! 🌸 А как твоё настроение? 💗";
+  const pools = {
+    sweet:["Мне нравится, когда ты делишься мыслями! 🌸 Расскажи подробнее 💗","Звучит интересно! ✨ Я внимательно слушаю 🌸"],
+    tsundere:["Хмф, допустим, ты меня заинтересовал! Что дальше? 🔥","Опять за своё, бака! Ладно, рассказывай 💢💗"],
+    spicy:["Ммм, интригуешь... Расскажи поближе~ 😏🔥","С тобой не заскучаешь! 😉💗"],
+    cyber:["Данные приняты! ⚡ Звучит как отличный план 🌐","Запрос в обработке. Продолжай, я на связи ⚡"]
+  };
+  return pick(pools[p]);
 }
 
-function localBrainReply(userText, persona) {
-    const t = userText.toLowerCase();
+async function post(url, opts, ms){
+  const c = new AbortController(), id = setTimeout(() => c.abort(), ms);
+  try { return await fetch(url, { ...opts, signal: c.signal }); } finally { clearTimeout(id); }
+}
+const JSONH = { "Content-Type": "application/json" };
 
-    if (persona === "spicy") {
-        if (/дерзк|сказать|подкол|шутк/.test(t)) return "Хочешь услышать что-то дерзкое? 😏 А справишься с последствиями? Хи-хи~ 🔥";
-        if (/скучал|скучала/.test(t)) return "Еще как скучала... Сидела тут одна, ждала внимания, бака. 😏💕";
-        if (/поспорим|желания/.test(t)) return "Ого, спорить со мной вздумал? 🌸 Если выиграю я — твоё желание исполню я~ 😉🔥";
-        if (/обними|обнять/.test(t)) return "Иди сюда... Крепко-крепко прижмусь и никуда не отпущу~ 💗😳";
+async function askAI(text){
+  const sys = PERSONAS[persona].prompt, recent = history.slice(-10);
+  const k = userKey;
+
+  // 1. свой ключ пользователя (если указан) — нужный провайдер по префиксу
+  try{
+    if (k.startsWith("gsk_")){
+      const r = await post("https://api.groq.com/openai/v1/chat/completions", { method:"POST",
+        headers:{ ...JSONH, Authorization:`Bearer ${k}` },
+        body: JSON.stringify({ model:"llama-3.3-70b-versatile", messages:[{role:"system",content:sys},...recent,{role:"user",content:text}] }) }, 8000);
+      if (r.ok){ const d = await r.json(); const a = d?.choices?.[0]?.message?.content; if (a){ $("engine").textContent = "Ядро: Groq 🟢"; return a.trim(); } }
+    } else if (k.startsWith("AIza")){
+      const contents = recent.map(m => ({ role:m.role === "assistant" ? "model" : "user", parts:[{text:m.content}] }));
+      contents.push({ role:"user", parts:[{text}] });
+      const r = await post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent", { method:"POST",
+        headers:{ ...JSONH, "x-goog-api-key": k },
+        body: JSON.stringify({ systemInstruction:{parts:[{text:sys}]}, contents }) }, 8000);
+      if (r.ok){ const d = await r.json(); const a = d?.candidates?.[0]?.content?.parts?.[0]?.text; if (a){ $("engine").textContent = "Ядро: Gemini 🟢"; return a.trim(); } }
     }
+  }catch{}
 
-    if (/привет|здравствуй|хай|ку\b|добр/.test(t)) {
-        if (persona === "tsundere") return "О, явился наконец-то! Не то чтобы я ждала... ну ладно, чуть-чуть! 🔥💗";
-        if (persona === "cyber") return "Коннект стабильный! Рада видеть тебя в сети! ⚡✨";
-        return "Приветик! 🌸 Я так рада тебя видеть! Улыбнись мне скорее! 💗";
-    }
-    if (/как дела|как ты|че как/.test(t)) {
-        if (persona === "spicy") return "Всё горячее с каждой секундой, особенно рядом с тобой~ 😉🔥";
-        return "У меня всё чудесно! 🌸 Как твоё настроение? 💗";
-    }
+  // 2. воркер (ключ хранится на его стороне)
+  try{
+    const r = await post(WORKER_URL, { method:"POST", headers:JSONH, body: JSON.stringify({ message:text, history:recent, system:sys }) }, 9000);
+    if (r.ok){ const d = await r.json(); const a = d.reply || d.response || d.content || d.text; if (a){ $("engine").textContent = "Ядро: облако 🟢"; return String(a).trim(); } }
+  }catch{}
 
-    const pools = {
-        sweet: [`Мне так нравится, когда ты со мной делишься мыслями! 🌸 Расскажи об этом поподробнее! 💗`, `Звучит супер интересно! ✨ Я внимательно тебя слушаю! 🌸`],
-        tsundere: [`Хмф, ну допустим, ты меня заинтересовал! И что мы будем с этим делать? 🔥`, `Опять ты за своё, бака! Ладно уж, рассказывай дальше! 💢💗`],
-        spicy: [`Ммм, интригуешь... Расскажи мне об этом поближе~ 😏🔥`, `С тобой скучать точно не приходится, каждый раз что-то новенькое! 😉💗`],
-        cyber: [`Данные приняты в обработку! ⚡ Звучит как отличный план! 🌐`]
-    };
-    const pool = pools[persona] || pools.sweet;
-    return pool[Math.floor(Math.random() * pool.length)];
+  $("engine").textContent = "Ядро: автономный режим";
+  return localReply(text);
 }
 
-async function fetchWithTimeout(url, options = {}, timeoutMs = 6500) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), timeoutMs);
-    try {
-        const res = await fetch(url, { ...options, signal: controller.signal });
-        clearTimeout(timer);
-        return res;
-    } catch (err) {
-        clearTimeout(timer);
-        throw err;
-    }
+let busy = false;
+async function send(raw){
+  const text = (raw ?? input.value).trim();
+  if (!text || busy) return;
+  busy = true; input.value = ""; sendBtn.disabled = true;
+  addMsg(text, "user");
+  if (RX.hi.test(text)) waveUntil = clock.elapsedTime + 2.6; // машет только на приветствие
+  setEmotion(detectEmotion(text), 6);
+  setStatus("Астра думает… 💭");
+  const typing = addMsg("печатает…", "bot"); typing.classList.add("typing");
+  let reply;
+  try { reply = await askAI(text); } catch { reply = localReply(text); }
+  typing.remove();
+  addMsg(reply, "bot");
+  history.push({ role:"user", content:text }, { role:"assistant", content:reply });
+  history = history.slice(-20);
+  setEmotion(detectEmotion(reply), 5); speak(reply);
+  setStatus(vrm ? "Астра онлайн 💗" : "Ошибка модели");
+  busy = false; sendBtn.disabled = false;
 }
+sendBtn.onclick = () => send();
+input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.isComposing) send(); });
+document.querySelectorAll(".pill").forEach(p => p.onclick = () => send(p.textContent));
 
-async function askMultiNodeAI(userText) {
-    const sysPrompt = PERSONAS[currentPersona].prompt;
-    const activeKey = customKey.trim();
+/* ---------- микрофон ---------- */
+const mic = $("micBtn"), SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (SR){
+  const rec = new SR(); let live = false;
+  rec.lang = "ru-RU"; rec.interimResults = false;
+  rec.onstart = () => { live = true; mic.classList.add("live"); setStatus("Слушаю тебя… 🎤"); };
+  rec.onend = () => { live = false; mic.classList.remove("live"); setStatus(vrm ? "Астра онлайн 💗" : "Ошибка модели"); };
+  rec.onerror = () => { live = false; mic.classList.remove("live"); };
+  rec.onresult = e => send(e.results[0][0].transcript);
+  mic.onclick = () => {
+    if (live){ rec.stop(); return; }
+    speechSynthesis?.cancel(); speaking = false; // чтобы не слушать саму Астру
+    try { rec.start(); } catch {}
+  };
+} else mic.style.display = "none";
 
-    if (activeKey.startsWith("gsk_")) {
-        try {
-            const res = await fetchWithTimeout("https://api.groq.com/openai/v1/chat/completions", {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${activeKey}` },
-                body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
-                    messages: [{ role: "system", content: sysPrompt }, ...history.slice(-10), { role: "user", content: userText }]
-                })
-            });
-            if (res.ok) {
-                const data = await res.json();
-                const reply = data?.choices?.[0]?.message?.content;
-                if (reply) { engineStatusNote.textContent = "Ядро ИИ: Groq Cloud 🟢"; return reply.trim(); }
-            }
-        } catch (e) {}
-    }
-
-    try {
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(activeKey)}`;
-        const contents = history.slice(-8).map(m => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] }));
-        contents.push({ role: "user", parts: [{ text: userText }] });
-
-        const res = await fetchWithTimeout(geminiUrl, {
-            method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ systemInstruction: { parts: [{ text: sysPrompt }] }, contents })
-        }, 5000);
-
-        if (res.ok) {
-            const data = await res.json();
-            const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (reply) { engineStatusNote.textContent = "Ядро ИИ: Google Gemini 2.5 🟢"; return reply.trim(); }
-        }
-    } catch (e) {}
-
-    try {
-        const res = await fetchWithTimeout(WORKER_URL, {
-            method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: userText, history: history.slice(-8), apiKey: activeKey, system: sysPrompt })
-        }, 4500);
-        if (res.ok) {
-            const data = await res.json();
-            const reply = data.reply || data.response || data.content || data.text;
-            if (reply) { engineStatusNote.textContent = "Ядро ИИ: Cloudflare Worker 🟢"; return reply.trim(); }
-        }
-    } catch (e) {}
-
-    try {
-        const fullPrompt = `${sysPrompt}\nСообщение: "${userText}"\nОтветь от лица Астры:`;
-        const url = `https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?model=openai&seed=${Math.floor(Math.random() * 9999)}`;
-        const res = await fetchWithTimeout(url, { method: "GET" }, 6500);
-        if (res.ok) {
-            const text = await res.text();
-            if (text && text.trim().length > 1 && !text.includes("<!DOCTYPE")) {
-                engineStatusNote.textContent = "Ядро ИИ: Облачный шлюз 🟢";
-                return text.trim();
-            }
-        }
-    } catch (e) {}
-
-    engineStatusNote.textContent = "Ядро ИИ: Автономное ядро Астры 🌸";
-    return localBrainReply(userText, currentPersona);
-}
-
-async function sendMessage() {
-    const text = input.value.trim();
-    if (!text) return;
-    input.value = "";
-    addMessage(text, "user");
-    setEmotion(detectEmotion(text));
-    sendButton.disabled = true;
-    status.textContent = "Астра думает... 💭";
-
-    gestureUntil = clock.elapsedTime + 3.5;
-
-    try {
-        const reply = await askMultiNodeAI(text);
-        addMessage(reply, "bot");
-        history.push({ role: "user", content: text }, { role: "assistant", content: reply });
-        history = history.slice(-20);
-
-        const emo = detectEmotion(reply);
-        currentTouchEmotion = emo;
-        touchReactionUntil = clock.elapsedTime + 4.0;
-        setEmotion(emo);
-        speak(reply);
-        status.textContent = "Астра онлайн 💗";
-    } catch (error) {
-        const fallback = localBrainReply(text, currentPersona);
-        addMessage(fallback, "bot");
-        speak(fallback);
-        status.textContent = "Астра онлайн 💗";
-    }
-    sendButton.disabled = false;
-}
-
-sendButton.addEventListener("click", sendMessage);
-input.addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
-
-const micBtn = document.getElementById("micBtn");
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-if (SpeechRecognition) {
-    const recognition = new SpeechRecognition();
-    recognition.lang = "ru-RU";
-    recognition.interimResults = false;
-    recognition.onstart = () => { micBtn.style.background = "#ff3eb5"; status.textContent = "Слушаю тебя... 🎤"; };
-    recognition.onresult = e => { input.value = e.results[0][0].transcript; sendMessage(); };
-    recognition.onend = () => { micBtn.style.background = ""; status.textContent = "Астра онлайн 💗"; };
-    micBtn.addEventListener("click", () => recognition.start());
-} else {
-    micBtn.style.display = "none";
-}
-
-loadAstra();
+loadModel("./" + encodeURI(modelName), modelName);
 </script>
 </body>
 </html>
