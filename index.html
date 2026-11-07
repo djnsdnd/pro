@@ -189,7 +189,6 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 
 /* ---------- настройки ---------- */
-// Ключ API НЕ хранится на странице: его знает только воркер.
 const WORKER_URL = "https://astra-ai.fotopsh24.workers.dev/chat";
 const DEFAULT_MODEL = "5541654178067945302.vrm";
 
@@ -221,7 +220,7 @@ view.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; controls.dampingFactor = 0.08;
 controls.enablePan = false; controls.enableZoom = true;
-renderer.domElement.style.touchAction = "pan-y"; // вертикальный скролл страницы остаётся рабочим
+renderer.domElement.style.touchAction = "pan-y";
 
 scene.add(new THREE.HemisphereLight(0xffffff, 0x5c2778, 1.8));
 const key = new THREE.DirectionalLight(0xfff4fc, 2.1); key.position.set(2.2, 4, 3.5); scene.add(key);
@@ -286,7 +285,7 @@ async function loadModel(src, label){
     bones = { head:g("head"), neck:g("neck"), spine:g("spine"), chest:g("chest"),
       lUp:g("leftUpperArm"), rUp:g("rightUpperArm"), lLo:g("leftLowerArm"), rLo:g("rightLowerArm") };
     vrm = next;
-    pose.lz = -arm; pose.rz = arm; pose.llz = elbow; pose.rlz = -elbow; // сразу в позе без «T»
+    pose.lz = -arm; pose.rz = arm; pose.llz = elbow; pose.rlz = -elbow;
     frame("head");
     $("overlay").hidden = true;
     emoTarget = { happy: 1 }; waveUntil = clock.elapsedTime + 2.4;
@@ -323,11 +322,9 @@ function tick(){
   const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime;
   if (vrm){
     const k = 1 - Math.exp(-dt * 8);
-    // эмоции плавно перетекают
     if (emoUntil && t > emoUntil){ emoTarget = { relaxed: 1 }; emoUntil = 0; }
     EMO.forEach(n => { emoCur[n] = (emoCur[n] ?? 0) + ((emoTarget[n] ?? 0) - (emoCur[n] ?? 0)) * k; expr(n, emoCur[n]); });
 
-    // руки: левая z<0 вниз, правая z>0 вниз (нормализованный скелет VRM)
     const breath = Math.sin(t * 1.8) * 0.015, waving = t < waveUntil;
     pose.wave += ((waving ? 1 : 0) - pose.wave) * k;
     const w = pose.wave;
@@ -346,14 +343,12 @@ function tick(){
     if (head){ head.rotation.y += (lookX * 0.7 - head.rotation.y) * 0.08; head.rotation.x += (lookY * 0.7 - head.rotation.x) * 0.08; }
     if (neck){ neck.rotation.y += (lookX * 0.3 - neck.rotation.y) * 0.08; }
 
-    // моргание
     if (t >= nextBlink && blinkStart < 0) blinkStart = t;
     if (blinkStart >= 0){
       const p = (t - blinkStart) / 0.16;
       if (p <= 1) expr("blink", p <= 0.5 ? p * 2 : (1 - p) * 2);
       else { expr("blink", 0); blinkStart = -1; nextBlink = t + 2.4 + Math.random() * 3.6; }
     }
-    // губы
     ["aa","ih","ou","ee","oh"].forEach(v => expr(v, 0));
     if (speaking && useAudio && analyser){
       analyser.getByteTimeDomainData(buf); let sum = 0;
@@ -428,7 +423,7 @@ let persona = "sweet", history = [];
 document.querySelectorAll(".persona").forEach(b => b.onclick = () => {
   document.querySelectorAll(".persona").forEach(x => x.classList.remove("active"));
   b.classList.add("active");
-  persona = b.dataset.p; history = []; store.set("astra_hist", "[]"); // новый характер — чистый контекст
+  persona = b.dataset.p; history = []; store.set("astra_hist", "[]");
   const g = PERSONAS[persona].greeting;
   addMsg(g, "bot"); speak(g); setEmotion(detectEmotion(g)); waveUntil = clock.elapsedTime + 2.4;
 });
@@ -440,7 +435,6 @@ function addMsg(text, type){
   d.className = "msg " + type; d.textContent = text;
   log.appendChild(d); log.scrollTop = log.scrollHeight; return d;
 }
-// \b не работает с кириллицей — границы слов задаём вручную
 const W = s => new RegExp(`(^|[^а-яёa-z])(${s})($|[^а-яёa-z])`, "i");
 const RX = {
   hi: W("привет\\w*|здравствуй\\w*|хай|ку|добр\\w+|помаши\\w*"),
@@ -490,15 +484,25 @@ $("sPitch").oninput = e => { pitchBase = +e.target.value; $("vPitch").textConten
 $("sRate").oninput  = e => { rateBase = +e.target.value;  $("vRate").textContent  = rateBase.toFixed(2);  saveVoice(); };
 $("testVoice").onclick = () => speak("Привет! Я Астра. Хи-хи, нравится мой голосок? 🌸");
 
-/* облачный голос: mp3 из Fish Audio / воркера / Pollinations, рот двигается по громкости */
+/* облачный голос через прокси */
 const TTS_URL = WORKER_URL.replace(/\/chat$/, "/tts");
 let cloudVoice = store.get("astra_cloud", "1") === "1", ttsDownUntil = 0, speakToken = 0;
 const player = new Audio(); let actx = null, analyser = null, buf = null;
-$("fKey").value = store.get("astra_fkey", ""); $("fVoice").value = store.get("astra_fvoice", "");
+
+// Записываем твой ключ в поле Студии по умолчанию, если он еще не сохранен
+if (!store.get("astra_fkey")) {
+  store.set("astra_fkey", "Sk-fish-6V2Di-KA6qg_rBM4WoJt8PevVfLTz6U7I-MmwcXWXms");
+}
+
+$("fKey").value = store.get("astra_fkey", ""); 
+$("fVoice").value = store.get("astra_fvoice", "");
 $("fKey").onchange = e => store.set("astra_fkey", e.target.value.trim());
 $("fVoice").onchange = e => store.set("astra_fvoice", e.target.value.trim());
-$("cloudChk").checked = cloudVoice; $("pKey").value = store.get("astra_pkey", ""); $("pKey").onchange = e => store.set("astra_pkey", e.target.value.trim());
+$("cloudChk").checked = cloudVoice; 
+$("pKey").value = store.get("astra_pkey", ""); 
+$("pKey").onchange = e => store.set("astra_pkey", e.target.value.trim());
 $("cloudChk").onchange = e => { cloudVoice = e.target.checked; store.set("astra_cloud", cloudVoice ? "1" : "0"); };
+
 function setupAnalyser(){
   if (analyser) return;
   try {
@@ -508,23 +512,35 @@ function setupAnalyser(){
     src.connect(analyser); analyser.connect(actx.destination);
   } catch {}
 }
-// 1) Fish Audio напрямую (если введены ключ и ID) 2) воркер /tts 3) Pollinations
+
 async function getAudioBlob(text){
   const pk = store.get("astra_pkey", "").trim(), q = encodeURIComponent(text);
-  const fk = store.get("astra_fkey", "").trim(), fv = store.get("astra_fvoice", "").trim();
+  const fk = store.get("astra_fkey", "").trim() || "Sk-fish-6V2Di-KA6qg_rBM4WoJt8PevVfLTz6U7I-MmwcXWXms";
+  const fv = store.get("astra_fvoice", "").trim();
+
   const tries = [
-    ...(fk && fv ? [() => post("https://api.fish.audio/v1/tts", { method:"POST",
-      headers:{ ...JSONH, Authorization:`Bearer ${fk}` },
-      body: JSON.stringify({ text, reference_id: fv, format: "mp3" }) }, 15000)] : []),
+    ...(fk && fv ? [async () => {
+      // CORS-прокси для обхода блокировок на телефоне
+      const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent("https://api.fish.audio/v1/tts");
+      return await post(proxyUrl, { 
+        method:"POST",
+        headers:{ 
+          "Content-Type": "application/json", 
+          "Authorization": `Bearer ${fk}` 
+        },
+        body: JSON.stringify({ text, reference_id: fv, format: "mp3" }) 
+      }, 15000);
+    }] : []),
     () => post(TTS_URL, { method:"POST", headers:JSONH, body: JSON.stringify({ text }) }, 12000),
-    () => post(`https://gen.pollinations.ai/audio/${q}?voice=nova${pk ? "&key=" + encodeURIComponent(pk) : ""}`, { method:"GET" }, 15000),
-    () => post(`https://text.pollinations.ai/${q}?model=openai-audio&voice=nova`, { method:"GET" }, 15000)
+    () => post(`https://gen.pollinations.ai/audio/${q}?voice=nova${pk ? "&key=" + encodeURIComponent(pk) : ""}`, { method:"GET" }, 15000)
   ];
+
   for (const t of tries){
     try { const r = await t(); if (r.ok && /audio/.test(r.headers.get("content-type") || "")) return await r.blob(); } catch {}
   }
   throw new Error("tts");
 }
+
 async function speakCloud(text, token){
   const blob = await getAudioBlob(text.slice(0, 300));
   if (token !== speakToken) return;
@@ -568,7 +584,7 @@ function browserSpeak(clean){
   });
 }
 
-/* ---------- мозг: память, правила, теги действий ---------- */
+/* ---------- память, логика ---------- */
 let mem = {};
 try { mem = JSON.parse(store.get("astra_mem", "{}")); } catch {}
 const saveMem = () => store.set("astra_mem", JSON.stringify(mem));
@@ -633,7 +649,6 @@ async function askAI(text){
   const sys = buildSys(), recent = history.slice(-10);
   const k = userKey;
 
-  // 1. свой ключ пользователя (если указан) — нужный провайдер по префиксу
   try{
     if (k.startsWith("gsk_")){
       const r = await post("https://api.groq.com/openai/v1/chat/completions", { method:"POST",
@@ -650,7 +665,6 @@ async function askAI(text){
     }
   }catch{}
 
-  // 2. воркер (ключ хранится на его стороне)
   try{
     const r = await post(WORKER_URL, { method:"POST", headers:JSONH, body: JSON.stringify({ message:text, history:recent, system:sys }) }, 9000);
     if (r.ok){ const d = await r.json(); const a = d.reply || d.response || d.content || d.text; if (a){ $("engine").textContent = "Ядро: облако 🟢"; return String(a).trim(); } }
@@ -668,7 +682,7 @@ async function send(raw){
   if (!text || busy) return;
   lastAct = Date.now(); busy = true; input.value = ""; sendBtn.disabled = true;
   addMsg(text, "user"); learn(text);
-  if (RX.hi.test(text)) waveUntil = clock.elapsedTime + 2.6; // машет только на приветствие
+  if (RX.hi.test(text)) waveUntil = clock.elapsedTime + 2.6;
   setEmotion(detectEmotion(text), 6);
   setStatus("Астра думает… 💭");
   const typing = addMsg("печатает…", "bot"); typing.classList.add("typing");
@@ -715,7 +729,7 @@ if (SR){
   rec.onresult = e => send(e.results[0][0].transcript);
   mic.onclick = () => {
     if (live){ rec.stop(); return; }
-    speechSynthesis?.cancel(); player.pause(); speaking = false; // чтобы не слушать саму Астру
+    speechSynthesis?.cancel(); player.pause(); speaking = false;
     try { rec.start(); } catch {}
   };
 } else mic.style.display = "none";
