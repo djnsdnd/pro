@@ -189,7 +189,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 
 /* ---------- настройки ---------- */
-const WORKER_URL = "https://astra-ai.fotopsh24.workers.dev/chat";
+const WORKER_URL = "https://astra-aii.fotopsh24.workers.dev/chat";
 const DEFAULT_MODEL = "5541654178067945302.vrm";
 
 const $ = id => document.getElementById(id);
@@ -484,7 +484,7 @@ $("sPitch").oninput = e => { pitchBase = +e.target.value; $("vPitch").textConten
 $("sRate").oninput  = e => { rateBase = +e.target.value;  $("vRate").textContent  = rateBase.toFixed(2);  saveVoice(); };
 $("testVoice").onclick = () => speak("Привет! Я Астра. Хи-хи, нравится мой голосок? 🌸");
 
-/* облачный голос через прокси */
+/* облачный голос через твой воркер /tts */
 const TTS_URL = WORKER_URL.replace(/\/chat$/, "/tts");
 let cloudVoice = store.get("astra_cloud", "1") === "1", ttsDownUntil = 0, speakToken = 0;
 const player = new Audio(); let actx = null, analyser = null, buf = null;
@@ -522,18 +522,13 @@ async function getAudioBlob(text){
   const fv = store.get("astra_fvoice", "").trim() || "1a79e1288b834b81bd46b1607cf7d165";
 
   const tries = [
-    ...(fk && fv ? [async () => {
-      const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent("https://api.fish.audio/v1/tts");
-      return await post(proxyUrl, { 
-        method:"POST",
-        headers:{ 
-          "Content-Type": "application/json", 
-          "Authorization": `Bearer ${fk}` 
-        },
-        body: JSON.stringify({ text, reference_id: fv, format: "mp3" }) 
-      }, 15000);
-    }] : []),
-    () => post(TTS_URL, { method:"POST", headers:JSONH, body: JSON.stringify({ text }) }, 12000),
+    // Прямой запрос на твой личный Cloudflare Worker (/tts)
+    () => post(TTS_URL, { 
+      method:"POST", 
+      headers:JSONH, 
+      body: JSON.stringify({ text, reference_id: fv }) 
+    }, 15000),
+    // Резервный через pollinations если воркер капризничает
     () => post(`https://gen.pollinations.ai/audio/${q}?voice=nova${pk ? "&key=" + encodeURIComponent(pk) : ""}`, { method:"GET" }, 15000)
   ];
 
